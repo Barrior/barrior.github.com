@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script>
+			window.onload=function(){
+				
+				var oAudio=document.querySelector('#audio');
+				
+				document.onclick=function(){
+					  if('Notification' in window){
+						Notification.requestPermission(function(prem){
+							if(prem='granted'){
+								new Notification('First Notification Title',{
+									dir:'ltr',
+									tag:'name',
+									icon:'1.png',
+									body:'some content'
+								});
+								oAudio.load();
+								oAudio.play()
+							}
+						});
+					}else{
+						alert('您的浏览器不支持桌面提醒功能，请下载chrome浏览器')
+					}
+				}
+			};
+		</script>
+	</head>
+	<body>
+		单击页面显示提醒
+		<audio id="audio" src="audio.mp3"></audio>
+	</body>
+</html>

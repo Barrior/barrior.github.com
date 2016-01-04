@@ -12,19 +12,19 @@
 					  if('Notification' in window){
 						Notification.requestPermission(function(prem){
 							if(prem='granted'){
-								new Notification('First Notification Title',{
+								var o = new Notification('First Notification Title',{
 									dir:'ltr',
 									tag:'name',
 									icon:'1.png',
 									body:'some content'
 								});
 								oAudio.load();
-								oAudio.play()
+								oAudio.play();
+							}
+							o.onclick = function(){
+								window.focus();
 							}
 						});
-						Notification.onclick = function(){
-							window.focus();
-						}
 					}else{
 						alert('您的浏览器不支持桌面提醒功能，请下载chrome浏览器')
 					}

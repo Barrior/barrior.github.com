@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.clearfix:after{content: ""; display: block; clear: both;}
+			.fl{float: left;}
+			.fr{float: right;}
+			#player-box{width: 700px; background-color: #000; margin: 50px auto; position: relative;}
+			#player-box:fullscreen{width: 100%; height: 100%; margin: 0;}
+			#player-box:-ms-fullscreen{width: 100%; height: 100%; margin: 0;}
+			#player-box:-moz-full-screen{width: 100%; height: 100%; margin: 0;}
+			#player-box:-webkit-full-screen{width: 100%; height: 100%; margin: 0;}
+			
+			.control{width: 100%; height: 48px; background: rgba(0,0,0,.8); position: absolute; left: 0; bottom: 0;}
+			.control .progress,
+			.control-pos .volume-adjust{height: 4px; position: relative; cursor: pointer;}
+			.control small,
+			.control-pos>*{position: absolute; height: 100%;}
+			.control .gray-bg{width: 100%; background-color: #575757;}
+			.control .load{background-color: #808080; transition: 0.2s;}
+			.control .light{background-color: #ccc; transition: 0.2s;}
+			.control .circle{width: 6px; height: 6px; border-radius: 50%; background-color: #ccc; border: 2px solid #fff; top: -3px; transition: 0.2s; cursor: default;}
+			.control-pos{position: relative; height: 44px;}
+			.control-pos .pause,
+			.control-pos .volume-icon,
+			.control-pos .full-screen{width: 44px; background: url(icon.png); cursor: pointer; transition: 0.2s;}
+			.control-pos .play{background: url(icon.png) 0 -44px;}
+			.control-pos .time{color: #ccc; line-height: 44px; font-family: Tahoma; transform: scale(0.72); left: 40px;}
+			.control-pos .volume{width: 126px; right: 44px;}
+			.control-pos .volume-icon{height: 100%; background-position: -44px 0;}
+			.control-pos .volume-icon-mute{background-position: -44px -44px;}
+			.control-pos .volume-adjust{width: 80px; top: 20px;}
+			.control-pos .full-screen{background-position: -88px 0; right: 0; margin-left: 10px;}
+			.control-pos .full-screen-yes{background-position: -88px -44px;}
+		</style>
+	</head>
+	<body>
+		<div id="player-box">
+			<video width="100%" height="100%" poster="poster.webp" preload="auto">
+			    <source src="http://vjs.zencdn.net/v/oceans.mp4"></source>
+			</video>
+			
+			<div class="control">
+				<div class="progress">
+					<small class="gray-bg"></small>
+					<small class="load"></small>		<!--width: 60%-->
+					<small class="light"></small>		<!--width: 30%-->
+					<small class="circle"></small>	<!--left: calc(30% - 5px)-->
+				</div>
+				<div class="control-pos clearfix">
+					<span class="pause" title="播放"></span>
+					<span class="time">00:00 / 00:00</span>
+					<span class="volume clearfix">
+						<em class="volume-icon fl" title="静音"></em>
+						<em class="volume-adjust fl">
+							<small class="gray-bg"></small>
+							<small class="light" style="width: 100%;"></small>
+							<small class="circle" style="left: calc(100% - 10px);"></small>
+						</em>
+					</span>
+					<span class="full-screen" title="全屏"></span>
+				</div>
+			</div>
+			<script>
+				window.onload=function(){
+					var oBox=document.getElementById('player-box'),
+						oVideo=document.querySelector('video'),
+						oPause=document.querySelector('.pause'),
+						oTime=document.querySelector('.time'),
+						oVolume=document.querySelector('.volume .volume-icon'),
+						oVolAdjust=document.querySelector('.volume .volume-adjust'),
+						oFullscreen=document.querySelector('.full-screen'),
+						oPro=document.querySelector('.progress'),
+						aLoad=oPro.querySelectorAll('.progress small'),
+						aVolume=oVolAdjust.querySelectorAll('small'),
+						
+						totalTime=oVideo.duration,
+						_totalTime,h,_h,m,s;
+						
+					oPause.onclick=function(){
+						oVideo.paused ?
+						(this.classList.add('play'), oVideo.play(),this.title='暂停') :
+						(this.classList.remove('play'), oVideo.pause(),this.title='播放')
+					};
+					oVideo.onclick=function(){
+						this.paused ?
+						(oPause.classList.add('play'), this.play(),oPause.title='暂停') :
+						(oPause.classList.remove('play'), this.pause(),oPause.title='播放')
+					};
+					
+					oFullscreen.onclick=function(){
+						fs.isFullScreen ?
+						(fs.exitFullScreen(),this.classList.remove('full-screen-yes'),this.title='全屏') :
+						(fs.requestFullScreen(oBox),this.classList.add('full-screen-yes'),this.title='退出全屏')
+					};
+					
+					fs.fullscreenchange(function(){
+						fs.isFullScreen ?
+						(oFullscreen.classList.add('full-screen-yes'),oFullscreen.title='退出全屏') :
+						(oFullscreen.classList.remove('full-screen-yes'),oFullscreen.title='全屏')
+					});
+					
+					h=plusZero( parseInt(totalTime/3600) );
+					m=plusZero( parseInt(totalTime/60) );
+					s=plusZero( (totalTime%60).toFixed() );
+					_h=h-0 > 0 ? true : false;	//判断是否存在小时
+					
+					_totalTime=' / '+( _h ? h+':' : '' )+m+':'+s;	//时间格式：02:45:12 || 06:37 || 00:09
+					oTime.innerHTML='00:00'+_totalTime;
+					
+					oVideo.addEventListener('timeupdate',function(){	//当前目前的播放位置已改变事件
+						var t=this.currentTime,
+							m,s,n;
+						
+						m = t>=60 ? plusZero( parseInt(t/60) ) : '00';
+						s=plusZero( (t%60).toFixed() );
+						
+						if(_h){
+							var h = t>=3600 ? plusZero( parseInt(t/3600) ) : '00';
+							oTime.innerHTML=h+':'+m+':'+s+_totalTime
+						}else{
+							oTime.innerHTML=m+':'+s+_totalTime
+						}
+						
+						n=t/totalTime*100+'%';
+						aLoad[2].style.width=n;
+						aLoad[3].style.left='calc('+n+' - 5px)';
+					},false);
+					
+					drag(aLoad[3],aLoad[2],oVideo,totalTime);	//进度条
+					oPro.onclick=function(e){
+						var x=e.clientX-offset(this).left,
+							w=this.offsetWidth;
+						
+						aLoad[2].style.width=x/w*100 + '%';
+						aLoad[3].style.left=x/w*100 + '%';
+						oVideo.currentTime=x/w*totalTime
+					};
+					
+					drag(aVolume[2],aVolume[1],oVideo);	//音量
+					oVolAdjust.onclick=function(e){
+						var x=e.clientX-offset(this).left,
+							w=this.offsetWidth;
+						
+						aVolume[1].style.width=x/w*100 + '%';
+						aVolume[2].style.left=x/w*100 + '%';
+						oVideo.volume=x/w
+					};
+					/*
+					_h ? c(function(t,m,s){
+							var h = t>=3600 ? plusZero( parseInt(t/3600) ) : '00';
+							oTime.innerHTML=h+':'+m+':'+s+totalTime
+						}) :
+						c(function(t,m,s){
+							oTime.innerHTML=m+':'+s+totalTime
+						});
+					function c(fn){
+						oVideo.ontimeupdate=function(){
+							var t=this.currentTime,
+								m,s;
+							
+							m = t>=60 ? plusZero( parseInt(t/60) ) : '00';
+							s=plusZero( (t%60).toFixed() );
+							fn(t,m,s)
+						};
+					}*/
+					
+					oVideo.onprogress=function(){	//当浏览器下载音视频事件
+						var b=oVideo.buffered,
+							scale=b.end(0)/totalTime;
+						aLoad[1].style.width=scale*100+'%';	//缓冲部分
+					};
+					
+					oVolume.onclick=function(){
+						oVideo.muted ?
+						(oVideo.muted=false,this.classList.remove('volume-icon-mute'),this.title='静音') :
+						(oVideo.muted=true,this.classList.add('volume-icon-mute'),this.title='开启音量')
+					}
+					
+				};
+				
+				!function(w,d){
+					var fs={
+							supportsFullScreen:false,
+							isFullScreen:false,
+							requestFullScreen:'',
+							exitFullScreen:'',
+							fullscreenchange:'',
+							prefix:''
+						},
+						aP=['webkit','moz','ms'],	//opera 15 支持全屏是webkit内核
+						len=aP.length,
+						i=0;
+					
+					if(d.exitFullscreen){
+						fs.supportsFullScreen=true
+					}else{
+						for(; i<len; i++){
+							if(d[aP[i]+'ExitFullscreen'] || d[aP[i]+'CancelFullScreen']){
+								fs.supportsFullScreen=true;
+								fs.prefix=aP[i];
+								break
+							}
+						}
+					}
+					
+					if(fs.supportsFullScreen){
+						var p=fs.prefix;
+						fs.fullscreenchange=function(fn){
+							d.addEventListener(p=='ms' ? 'MSFullscreenChange' : p+'fullscreenchange',function(){
+								fn && fn()
+							},false)
+						};
+						fs.fullscreenchange(function(){
+							fs.isFullScreen=(function(p){
+								switch (p) {
+									case '':
+										return d.fullscreen;
+									case 'webkit':
+										return d.webkitIsFullScreen;
+									case 'moz':
+										return d.mozFullScreen;
+									case 'ms':
+										return d.msFullscreenElement ? true : false
+								}
+							})(p)
+						});
+						fs.requestFullScreen=function(elem){
+							var elem=elem || d.documentElement;
+							try{
+								p ? elem[p+'RequestFullScreen']() : elem.requestFullScreen()	//chrome，ff，标准
+							}catch(e){
+								elem[p+'RequestFullscreen']()	//elem.msRequestFullscreen
+							}
+						};
+						fs.exitFullScreen=function(){
+							try{
+								p ? d[p+'ExitFullscreen']() : d.exitFullscreen()	//ie，新版chrome或标准
+							}catch(e){
+								d[p+'CancelFullScreen']()	//老版chrome 火狐
+							}
+						}
+					}
+					w.fs=fs
+				}(window,document);
+				
+				function plusZero(num){
+					return (num-0) >= 10 ? num : '0'+num
+				}
+				
+				function drag(obj,light,video,totalTime){
+					obj.onmousedown=function(e){
+						var disX=e.clientX-this.offsetLeft,
+							w=parseInt(getComputedStyle(obj.offsetParent, null).width) - 10;
+						
+						document.onmousemove=function(e){
+							var l=e.clientX-disX;
+							
+							l<0 && (l=0);
+							l>w && (l=w-10);
+							
+							obj.style.left=l/w*100+'%';
+							light.style.width=l/w*100+'%';
+							
+							if(totalTime){
+								video.currentTime=l/w * totalTime
+							}else{
+								video.volume=l/w
+							}
+						}
+						
+						document.onmouseup=function(){
+							this.onmousemove=this.onmouseup=null
+						}
+						return false
+					}
+				}
+				
+				function offset(obj){
+					var pos={left:0,top:0};
+					while(obj){
+						pos.left+=obj.offsetLeft;
+						pos.top+=obj.offsetTop;
+						obj=obj.offsetParent
+					}
+					return pos
+				}
+			</script>
+		</div>
+	</body>
+</html>

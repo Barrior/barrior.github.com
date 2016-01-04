@@ -58,7 +58,7 @@ YCharts.prototype.KChart=function(KData,Options){
 	if(this.settings.hasHist){
 		this.createHist()
 	}
-	//this.createBalloon();
+	this.createBalloon();
 	
 };
 
@@ -257,7 +257,7 @@ YCharts.prototype.createHist=function(){
 	this.svg[0][0].insertBefore(oGHist[0][0],this.gMask[0][0])	//将【柱状图】放置【遮罩】的前面
 };
 
-/*YCharts.prototype.createBalloon=function(){
+YCharts.prototype.createBalloon=function(){
 	var oGBalloon,o,oG,
 		i=0,
 		rectWidth=this.iKWidth+this.iSpaceWidth,
@@ -290,7 +290,7 @@ YCharts.prototype.createHist=function(){
 			oG.append('title').text(o.title)
 		}
 	}
-};*/
+};
 
 function maxOrMin(len,KData){
 	var arr=[];

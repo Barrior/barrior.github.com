@@ -10,17 +10,17 @@
 		<script src="tools.js"></script><!--接着引入工具库所使用到的js文件-->
 		<script>
 			$(function(){
-				$('#to-top').on('touchend',function(){
+				$('#to-top').on('touchend, click',function(){
 					D.toTop();
 				});
 				
-				$('#alert').on('touchend',function(){
+				$('#alert').on('touchend, click',function(){
 					D.alert({
 						content:'css3动画模拟alert框'
 					});
 				});
 				
-				$('#confirm').on('touchend',function(){
+				$('#confirm').on('touchend, click',function(){
 					D.confirm({
 						content:'很多很多内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',	//必需
 						fOk:function(){

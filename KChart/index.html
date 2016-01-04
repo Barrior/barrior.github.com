@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>k-show</title>
+		<title>KChart</title>
 		<style>
 			html,body{width: 100%; height: 100%; margin: 0; overflow: hidden;}
-			#container{width: 90%; height: 600px; border: 1px solid black; margin: 20px;}
+			#container{width: 80%; height: 80%; border: 1px solid black; margin: 20px auto;}
 		</style>
 	</head>
 	<body>
@@ -21,15 +21,14 @@
 			 time，open，high，low，close，turnover
 		*/
 			(function(){
-				var d=KData;
-				Y('#container').KChart(d,{
+				Y('#container').KChart(KData,{
 					hasHist:true,
 					cross:true
 				});
 				
 				window.onresize=function(){
 					d3.select('svg').remove();
-					Y('#container').KChart(d,{
+					Y('#container').KChart(KData,{
 						hasHist:true,
 						cross:true
 					});

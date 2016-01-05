@@ -109,10 +109,11 @@
             <h3>jQuery插件</h3>
             <nav>
                 <a href="DDSort/demo.html">jQuery拖拽排序插件：DDSort</a>
-                <a href="#">图片懒加载插件：ImgLazyLoad</a>
+                <a href="img_lazyload/lazyload.html">图片懒加载插件：ImgLazyLoad</a>
                 <a href="MTools/index.html">移动端Zpeto对话框插件</a>
-                <a href="#">仿3D焦点图特效</a>
-                <a href="#">瀑布流</a>
+                <a href="focus_picture/index.html">仿3D焦点图特效</a>
+                <a href="pinterest/index.html">瀑布流</a>
+                <a href="zoom/index.html">商城放大镜</a>
             </nav>
         </section>
 
@@ -121,7 +122,8 @@
             <nav>
                 <a href="404/404.htm">404模板页</a>
                 <a href="#">柯睿创意设计官网，视觉交互设计</a>
-                <a href="#">css3 loading动画</a>
+                <a href="loading_css3/index.html">css3 loading动画</a>
+                <a href="css_clock.html">css3时钟</a>
             </nav>
         </section>
 
@@ -138,8 +140,6 @@
     </div>
     
     <script>
-    
-        document.querySelector( 'nav' ).className = 'show';
         
         document.onclick = function( e ){
 
@@ -151,6 +151,14 @@
             }
 
         };
+
+        setTimeout(function(){
+
+            document.querySelector( 'nav' ).className = 'show';
+
+        }, 30 );
+
+       
 
     </script>
 </body>

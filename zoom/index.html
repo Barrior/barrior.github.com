@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>商城放大镜效果</title>
+		<style>
+			#small,#big{position: absolute; left: 400px; top: 60px; border: 1px solid #000; width: 300px; height: 414px;}
+			#block{width: 100px; height: 100px; background-color: pink; position: absolute; top: 0; left: 0;  opacity: 0.4; filter: alpha(opacity:40);}
+			#big{left: 720px; overflow: hidden;}
+			#big img{position: absolute; top: 0; left: 0;}
+		</style>
+		<script src="jquery.js"></script>
+		<script>
+			$(function(){
+				var oSmall=$('#small'),
+					oSImg=oSmall.find('img'),
+					oBlock=$('#block'),
+					oBig=$('#big'),
+					oBImg=oBig.find('img');
+				
+				disX=oSmall.offset().left+oBlock.width()/2;
+				disY=oSmall.offset().top+oBlock.height()/2;
+				iLeft=oSmall.width()-oBlock.width();
+				iTop=oSmall.height()-oBlock.height();
+				lScale=oBImg.width()/oSImg.width();
+				tScale=oBImg.height()/oSImg.height();
+				wScale=oBImg.width()-oBig.width();
+				hScale=oBImg.height()-oBig.height();
+				
+				//初始化
+				oBlock.add(oBig).hide();
+				
+				oSmall.hover(function(){
+					oBlock.add(oBig).show();
+				},function(){
+					oBlock.add(oBig).hide();
+				});
+				
+				oSmall.mousemove(function(e){
+					var l=e.pageX-disX,
+						t=e.pageY-disY;
+					if(l<0)l=0;
+					if(l>iLeft)l=iLeft;
+					if(t<0)t=0;
+					if(t>iTop)t=iTop;
+					oBlock.css({left:l,top:t});
+					
+					l=-l*lScale;
+					t=-t*tScale;
+					if(l<-wScale)l=-wScale;
+					if(t<-hScale)t=-hScale;
+					oBImg.css({left:l,top:t});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="small">
+			<img src="small.jpg" alt="" />
+			<div id="block"></div>
+		</div>
+		<div id="big">
+			<img src="big.jpg" alt="" />
+		</div>
+	</body>
+</html>

@@ -96,7 +96,7 @@
 
         <section>
             <h3>Html5新特性</h3>
-            <nav class="show">
+            <nav>
                 <a href="KChart/index.html">SVG可视化图表开发之K线图</a>
                 <a href="player/index.html">WEB播放器</a>
                 <a href="Drag-sorting.html">H5拖拽排序</a>
@@ -138,7 +138,9 @@
     </div>
     
     <script>
-
+    
+        document.querySelector( 'nav' ).className = 'show';
+        
         document.onclick = function( e ){
 
             if( e.target.tagName === 'H3' ){

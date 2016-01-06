@@ -19,6 +19,7 @@
             width: 400px;
             margin: 50px auto;
         }
+
         section{
             margin-bottom: 1em;
             border: 1px solid green;
@@ -38,16 +39,19 @@
             -moz-animation-delay: .2s;
             animation-delay: .2s;
         }
+
         section:nth-of-type( 3 ){
             -webkit-animation-delay: .3s;
             -moz-animation-delay: .3s;
             animation-delay: .3s;
         }
+
         section:nth-of-type( 4 ){
             -webkit-animation-delay: .4s;
             -moz-animation-delay: .4s;
             animation-delay: .4s;
         }
+
         section:nth-of-type( 5 ){
             -webkit-animation-delay: .5s;
             -moz-animation-delay: .5s;
@@ -70,6 +74,7 @@
                 opacity: 1;
             }
         }
+
         @-moz-keyframes bounceIn{
             from{
                 -moz-transform: scale( 0 );
@@ -86,6 +91,7 @@
                 opacity: 1;
             }
         }
+
         @keyframes bounceIn{
             from{
                 transform: scale( 0 );
@@ -124,6 +130,7 @@
             outline: none;
             overflow: hidden;
         }
+
         a:hover{
             background-color: green;
             color: #fff;
@@ -133,9 +140,11 @@
             height: 0;
             overflow: hidden;
         }
+
         #love footer{
             text-align: right;
         }
+
         #love.show div{
             height: 76px;
             padding: 10px;
@@ -219,7 +228,7 @@
     
     <script>
         
-        document.onclick = function( e ){
+        document.documentElement.onclick = function( e ){
 
             if( e.target.tagName === 'H3' ){
 
@@ -230,13 +239,59 @@
 
         };
 
-        /*document.querySelector( 'section:last-of-type' )
-        .addEventListener( 'webkitAnimationEnd', function(){
+        if( !supports( 'animation' ) ){
 
-            document.querySelector( 'nav' ).className = 'show';
+            var elem = document.getElementsByTagName( 'section' ),
+                len = elem.length;
 
-        }, false );*/
+            while( len-- ){
 
+                elem[ len ].style.opacity = 1;
+
+            }
+
+        }
+
+        function supports( attr ){
+
+            var prefix = 'webkit moz ms o'.split( ' ' ),
+                length = prefix.length,
+
+                style = document.body.style;
+
+            supports =  function( attr ){
+
+                if( attr in style ){
+
+                    return true;
+
+                }
+
+                attr = attr.replace( /^[a-z]/, function( val ){
+
+                    return val.toUpperCase();
+
+                });
+
+                var len = length;
+
+                while( len-- ){
+
+                    if( prefix[ len ] + attr in style ){
+
+                       return true;
+
+                    }
+
+                }
+
+                return false;
+
+            };
+
+            return supports( attr );
+        }
+        
     </script>
 </body>
 </html>

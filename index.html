@@ -179,7 +179,7 @@
 <body>
     <div id="container">
 
-        <h2>Barrior Projects:</h2>
+        <h2 title="点击进入3D模式">Barrior Projects:</h2>
 
         <section>
             <h3>Html5新特性</h3>
@@ -196,7 +196,7 @@
             <h3>jQuery插件</h3>
             <nav>
                 <a href="DDSort/demo.html">jQuery拖拽排序插件：DDSort</a>
-                <a href="img_lazyload/lazyload.html">图片懒加载插件：ImgLazyLoad</a>
+                <a href="imglazyload/Demo.html">图片懒加载插件：ImgLazyLoad</a>
                 <a href="MTools/index.html">移动端Zpeto对话框插件</a>
                 <a href="focus_picture/index.html">仿3D焦点图特效</a>
                 <a href="pinterest/index.html">瀑布流</a>
@@ -228,6 +228,8 @@
     
     <script>
         
+        'use strict';
+
         document.documentElement.onclick = function( e ){
 
             if( e.target.tagName === 'H3' ){
@@ -236,6 +238,12 @@
                 e.target.nextElementSibling.className = 'show';
 
             }
+
+        };
+
+        document.getElementsByTagName( 'h2' )[ 0 ].onclick = function(){
+
+            alert( '骗你的，(*^__^*) 嘻嘻……\n功能还在开发中\\(≧▽≦)/' );
 
         };
 

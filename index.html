@@ -247,7 +247,7 @@
 
         };
 
-        if( !supports( 'animation' ) ){
+        if( !cssProperty( 'animation' ) ){
 
             var elem = document.getElementsByTagName( 'section' ),
                 len = elem.length;
@@ -260,14 +260,14 @@
 
         }
 
-        function supports( attr ){
+        function cssProperty( attr ){
 
-            var prefix = 'webkit moz ms o'.split( ' ' ),
+            var prefix = [ 'O', 'ms', 'Moz', 'Webkit' ],
                 length = prefix.length,
 
-                style = document.body.style;
+                style = document.createElement( 'i' ).style;
 
-            supports =  function( attr ){
+            cssProperty =  function( attr ){
 
                 if( attr in style ){
 
@@ -297,7 +297,7 @@
 
             };
 
-            return supports( attr );
+            return cssProperty( attr );
         }
         
     </script>

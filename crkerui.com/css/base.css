@@ -17,6 +17,8 @@ em{font-style: normal;}
 
 .fl{float:left}
 .fr{float:right}
+.pr{position: relative;}
+.pa{position: absolute;}
 .comWidth{width: 1118px; margin: 0 auto;}
 .shadown{height: 100%; background-color: #fff; box-shadow: 0 1px 1px #ccc;}
 .anim{
@@ -55,10 +57,10 @@ transition: 0.4s ease-out;
 #header img{margin-top: 54px;}
 #header .nav{margin-top: 57px;}
 #header .nav a{padding: 6px 8px; line-height: 12px; color: #006f7f; margin-left: 10px; border-radius: 4px;
--o-transition: 0.4s cubic-bezier(0,.86,.47,1.27);
--moz-transition: 0.4s cubic-bezier(0,.86,.47,1.27);
--webkit-transition: 0.4s cubic-bezier(0,.86,.47,1.27);
-transition: 0.4s cubic-bezier(0,.86,.47,1.27);
+-o-transition: 0.6s cubic-bezier(0,.86,.47,1.27);
+-moz-transition: 0.6s cubic-bezier(0,.86,.47,1.27);
+-webkit-transition: 0.6s cubic-bezier(0,.86,.47,1.27);
+transition: 0.6s cubic-bezier(0,.86,.47,1.27);
 }
 #header .nav a.active, #header .nav a:hover{background-color: #006f7f; color: #fff;}
 
@@ -106,7 +108,18 @@ transition: 0.4s cubic-bezier(0,.86,.47,1.27);
 transition: 0.28s ease-out;
 }
 .wrap .detail{line-height: 12px; padding-top: 14px;}
-.wrap .detail span{color: #0ABCD6;}
+.wrap .detail div{
+	height: 12px;
+	padding-right: 48px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.wrap .detail .pa{
+	color: #0ABCD6;
+	top: 14px;
+	right: 0;
+}
 
 .wrap h3 a:hover{color: #000;}
 .wrap .case:hover .img img{

@@ -239,8 +239,16 @@
 
             if( e.target.tagName === 'H3' ){
 
-                document.querySelector( '.show' ).removeAttribute( 'class' );
-                e.target.nextElementSibling.className = 'show';
+                var show = document.querySelector( '.show' ),
+                    nextElem = e.target.nextElementSibling;
+
+                if( show && show !== nextElem ){
+
+                    show.removeAttribute( 'class' );
+
+                }
+
+                nextElem.className = nextElem.className === 'show' ? '' : 'show';
 
             }
 

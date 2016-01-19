@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+	
+	<script>
+		'use strict';
+
+		var c = document.getElementById( 'c' );
+		var cxt = c.getContext( '2d' );
+
+		cxt.fillStyle = 'red';
+		cxt.font = '100px 微软雅黑';
+		cxt.textBaseline = 'hanging';
+		cxt.fillText( '像素字', 0, 0 );
+
+		//获取图像数据，属性为只读
+		var imgData = cxt.getImageData( 0, 0, 300, 100 );
+		var num = 0.02;
+
+		function draw(){
+			cxt.clearRect( 0, 0, c.width, c.height );
+
+			//所以创建新的图像数据对象，供putImageData用
+			var newImgData = cxt.createImageData( 300, 100 );
+			var arr = randomArr( 300 * 100, 300 * 100 * num );
+
+			arr.forEach(function( v ){
+
+				newImgData.data[ v * 4 ] = imgData.data[ v * 4 ];
+				newImgData.data[ v * 4 + 1 ] = imgData.data[ v * 4 + 1 ];
+				newImgData.data[ v * 4 + 2 ] = imgData.data[ v * 4 + 2 ];
+				newImgData.data[ v * 4 + 3 ] = imgData.data[ v * 4 + 3 ];
+
+			});
+
+			//通过每次设置不同的像素点做出特效
+			cxt.putImageData(
+				newImgData,
+				( c.width - 300 ) / 2,
+				( c.height - 100 ) / 2
+			);
+
+			num += 0.02;
+
+			if( num <= 1  ){
+
+				requestAnimationFrame( draw );
+
+			}
+		}
+
+		requestAnimationFrame( draw );
+		
+
+		//从一组数组随机取部分值
+		function randomArr( max, num ){
+
+			var arr = [];
+			var reArr = [];
+
+			for( var i = 0; i < max; i++ ){
+
+				arr.push( i );
+
+			}
+
+			for( var i = 0; i < num; i++ ){
+
+				reArr.push(
+					arr.splice( Math.floor( Math.random() * arr.length ), 1 )[0]
+				);
+
+			}
+
+			return reArr;
+		}
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+
+	<script>
+		'use strict';
+
+		var canvas = document.getElementById( 'c' );
+		var gc = canvas.getContext( '2d' );
+
+		//[font style][font weight][font size][font face]同css一样，少了字体大小和字体名字都不行
+		gc.font = 'Italic bold 40px Arial';
+		gc.textAlign = 'start';
+
+		//实心文本
+		//( text, x, y, [ maxWidth(当文本的宽度大于设置的宽度，就会被横向压缩) ] )
+		gc.fillText( 'FillText', 300, 200, 100 );
+
+		//空心文本
+		gc.strokeStyle = 'red';
+		gc.font = 'normal 40px 微软雅黑';
+		//横向对齐
+		gc.textAlign = 'center';
+		//基线，竖向对齐
+		//top，bottom，ideographic 对齐有空格,对于无g这样的字母的情况，下同
+		//hanging，middle，alphabetic 基线对齐，无间隙
+		gc.textBaseline = 'bottom';
+		
+		gc.strokeText( 'strokeText', 350, 100 );
+
+		gc.moveTo( 350.5, 0 );
+		gc.lineTo( 350.5, 300 );
+		gc.moveTo( 0, 100.5 );
+		gc.lineTo( 500, 100.5 );
+		gc.stroke();
+
+		//阴影
+		gc.shadowColor = '#ccc';
+		gc.shadowOffsetX = 6;
+		gc.shadowOffsetY = 6;
+		gc.shadowBlur = 2;
+
+		gc.textAlign = 'start';
+		gc.strokeText( 'shadow', 60, 180 );
+
+		//返回包含指定文本宽度的对象
+		console.log( '"shadow" width: ' + gc.measureText( 'shadow' ).width );
+		console.log( 'measure list: ', gc.measureText( 'shadow' ) );
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+
+	<script>
+
+		var canvas = document.getElementById( 'c' );
+		var gc = canvas.getContext( '2d' );
+
+		gc.fillRect( 100, 100, 200, 150 );
+		
+		//stroke是里外分别增加边框的，不是只向外增加边框
+		gc.strokeStyle = 'rgba( 255, 0, 0, .5 )';
+		gc.lineWidth = 10;
+		gc.strokeRect( 100, 100, 200, 150 );
+
+
+		gc.arc( 420, 60, 40, 0, 2 * Math.PI );
+		gc.fill();
+
+		//清除画布的某块区域
+		gc.clearRect( 420, 60, 200, 200 );
+
+	</script>
+</body>
+</html>

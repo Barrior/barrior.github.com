@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+	
+	<script>
+		'use strict';
+
+		var c = document.getElementById( 'c' );
+		var cxt = c.getContext( '2d' );
+		var cWidth = c.width;
+		var cHeight = c.height;
+		var num = 0;
+		var scaleNum = 0;
+		var speed = 0.02;
+
+		function draw(){
+
+			cxt.clearRect( 0, 0, cWidth, cHeight );
+			cxt.save();
+			cxt.translate( 100, 100 );
+			cxt.scale( num, num );
+			cxt.rotate( scaleNum * Math.PI / 180 );
+			cxt.translate( -50, -50 );
+			cxt.fillRect( 0, 0, 100, 100 );
+			cxt.restore();
+
+			scaleNum += 2;
+
+			if( num >= 2 ){
+
+				speed = -0.02;
+
+			}else if( num <= 0 ){
+
+				speed = 0.02;
+
+			}
+
+			num += speed;
+
+			requestAnimationFrame( draw );
+
+		}
+
+		requestAnimationFrame( draw );
+
+	</script>
+</body>
+</html>

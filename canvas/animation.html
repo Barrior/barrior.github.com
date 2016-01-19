@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+
+	<script type="text/javascript">
+
+		window.requestAnimationFrame = (function( window ) {
+			return	window.requestAnimationFrame ||
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame ||
+					function( fn ) {
+
+			        	window.setTimeout( fn, 1000 / 60 );
+
+			        };
+		})( window );
+
+		var c = document.getElementById( 'c' );
+		var cxt = c.getContext( '2d' );
+
+		var num = 0;
+		var speed = 2;
+
+		console.log( window.requestAnimationFrame );
+
+		function draw(){
+
+			cxt.clearRect( 0, 0, c.width, c.height );
+			cxt.fillRect( num, 20, 100, 100 );
+
+			num += speed;
+
+			if( num >= c.width - 100 || num <= 0 ){
+				speed = -speed;
+			}
+
+			requestAnimationFrame( draw );
+			
+			// 下面这样写会堆栈溢出
+			// draw();
+
+		}
+
+      	requestAnimationFrame( draw );
+
+	</script>
+</body>
+</html>

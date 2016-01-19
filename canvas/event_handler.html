@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			color: #fff;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<p>点击canvas内的元素</p>
+	<canvas id="c" width="500px" height="500px"></canvas>
+
+	<script type="text/javascript">
+
+		function ShapeCircle( x, y, r ){
+
+			this.x = x;
+			this.y = y;
+			this.r = r;
+
+			cxt.beginPath();
+			cxt.arc( this.x, this.y, this.r, 0, 360 * Math.PI / 180, false );
+			cxt.closePath();
+			cxt.fill();
+
+		}
+
+		ShapeCircle.prototype.reDraw = function( x, y ){
+
+			cxt.beginPath();
+			cxt.arc( this.x, this.y, this.r, 0, 360 * Math.PI / 180, false );
+			cxt.closePath();
+
+			if( cxt.isPointInPath( x, y ) ){
+
+				this.click();
+
+			}
+
+		};
+
+		var c = document.getElementById( 'c' );
+		var cxt = c.getContext( '2d' );
+
+		var c1 = new ShapeCircle( 100, 100, 50 );
+		var c2 = new ShapeCircle( 200, 200, 50 );
+
+		c1.click = function(){
+
+			alert( '第一个圆' );
+
+		};
+
+		c2.click = function(){
+
+			alert( 2 );
+
+		};
+
+		c.onclick = function( e ){
+
+			var x = e.pageX - this.offsetLeft,
+				y = e.pageY - this.offsetTop;
+
+			c1.reDraw( x, y );
+			c2.reDraw( x, y );
+
+		};
+
+
+	</script>
+</body>
+</html>

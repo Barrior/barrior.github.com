@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+	
+	<div style="margin-top: 20px;">
+		<button type="button">点击输出图片</button>
+		<button type="button">下载图片</button>
+	</div>
+
+	<script>
+		'use strict';
+
+		var canvas = document.getElementById( 'c' );
+		var gc = canvas.getContext( '2d' );
+
+		var centerX = canvas.width / 2;
+		var centerY = canvas.height / 2;
+		var maxR = 120;
+
+		'#FF0000 #FF7F00 #FFFF00 #00FF00 #00FFFF #0000FF #8B00FF #fff'.split( ' ' )
+		.forEach(function( v, i ){
+
+			gc.beginPath();
+			gc.arc( centerX * .7, centerY, maxR - i * 10, 0, 180 * Math.PI / 180, true );
+			gc.fillStyle = v;
+			gc.fill();
+
+		});
+
+		var img = new Image();
+		img.src = 'http://www.w3school.com.cn/i/ct_html5_canvas_image.gif';
+
+		img.addEventListener( 'load', function(){
+			/*
+			drawImage(image, dx, dy);
+			drawImage(image, dx, dy, dw, dh);
+			drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
+			源目标裁剪值
+			sourceX, sourceY
+			sourceWidth, sourceHeight
+			*/
+			//gc.drawImage( img, canvas.width - img.width, canvas.height - img.height );
+
+			var imgW = this.width;
+			var imgH = this.height;
+
+			gc.drawImage(
+				img,
+				//从源图片2,2坐标开始裁剪
+				2, 2,
+				//裁剪成这么宽高的图片
+				imgW - 4, imgH - 4,
+				//实际显示的x，y
+				canvas.width - imgW + 4, canvas.height - imgH + 4,
+				//实际显示的大小，上面源图片切割后的大小不足会被相应压缩或放大
+				imgW - 4, imgH - 4
+			);
+
+		}, false );
+		
+		/**
+		 * toDataURL( type, qa );
+		 * type：图片输出格式，string类型
+		 * qa：图片输出质量，值为0-1，如果图片是jpeg或webp的格式，其他格式将被忽略，以默认0.9的质量输出
+		 */
+		var dataUrl = canvas.toDataURL( 'image/jpeg', 1 );
+		console.log( dataUrl );
+
+		//输出图片
+		document.getElementsByTagName( 'button' )[ 0 ].onclick = function(){
+
+			var x = ( window.screen.availWidth - 500 ) / 2;
+			var y = ( window.screen.availHeight - 58 - 300 ) / 2;
+
+			window.open( dataUrl, 'canvas image', 'width=500, height=300, top='+ y +', left='+ x )
+
+		};
+
+		//下载图片
+		document.getElementsByTagName( 'button' )[ 1 ].onclick = function(){
+
+			//此方法保存的文件无后缀
+			/*var image = dataUrl.replace("image/jpeg", "image/octet-stream");
+			window.location.href = image;*/
+			
+			//ie ff不兼容
+			var a = document.createElement( 'a' );
+			a.href = dataUrl;
+			a.download = 'canvas.jpeg';
+			a.click();
+			
+		};
+
+
+		/*var imageData = gc.getImageData( 0, 0, canvas.width, canvas.height );
+		console.log( imageData )
+		console.log( imageData.data )
+
+		gc.putImageData( imageData, 0, 0 );*/
+	</script>
+</body>
+</html>

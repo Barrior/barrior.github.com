@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		canvas{
+			display: inline-block;
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+	<canvas id="c2" width="500px" height="300px"></canvas>
+
+	<script>
+		'use strict';
+
+		var canvas = document.getElementById( 'c' );
+		var gc = canvas.getContext( '2d' );
+
+		//注意，这个x,y,x1,y1是相对canvas画布计算的，不是填充的元素
+		var lg = gc.createLinearGradient( 30, 30, 200, 0 );
+		lg.addColorStop( 0, 'red' );
+		lg.addColorStop( 1, 'yellow' );
+
+		gc.fillStyle = lg;
+
+		gc.fillRect( 30, 30, 200, 80 );
+		gc.fillRect( 240, 30, 80, 80 );
+		gc.fillRect( 10, 30, 10, 80 );
+
+		gc.font = '60px 微软雅黑';
+		gc.fillText( 'linearGradient', 10, 220 );
+
+
+		//----------------------------------------------------
+		var c2 = document.getElementById('c2' );
+		var gc2 = c2.getContext( '2d' );
+		var c2Width = c2.width;
+		var c2Height = c2.height;
+
+		//createRadialGradient(x,y,r,x1,y1,r1) - 创建一个径向/圆渐变
+		//圆心到半径20都是red填充，
+		//圆心半径20 - 100 径向渐变
+		//100以后yellow填充
+		var rg = gc.createRadialGradient( 250, 150, 20, 250, 200, 100 );
+		rg.addColorStop( 0, 'red' );
+		rg.addColorStop( 0.5, 'blue' );
+		rg.addColorStop( 1, 'yellow' );
+
+		gc2.fillStyle = rg;
+		gc2.fillRect( 0, 0, c2Width, c2Height );
+
+		//下面的画线都是对上面的rg的圆和半径的补充，便于理解
+		gc2.beginPath();
+		gc2.moveTo( 0, 150.5 );
+		gc2.lineTo( c2Width, 150.5 );
+		gc2.moveTo( 250.5, 0 );
+		gc2.lineTo( 250.5, c2Height );
+		gc2.closePath();
+		gc2.strokeStyle = 'red';
+		gc2.stroke();
+
+		gc2.beginPath();
+		gc2.moveTo( 0, 200.5 );
+		gc2.lineTo( c2Width, 200.5 );
+		gc2.arc( 250, 200, 100, 2 * Math.PI, false );
+		gc2.closePath();
+		gc2.strokeStyle = '#000';
+		gc2.stroke();
+		
+	</script>
+</body>
+</html>

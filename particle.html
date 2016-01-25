@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	html,body{
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		background-color: #000;
+		text-align: center;
+		overflow: hidden;
+	}
+	#c{
+		background-color: #000;
+	}
+	#info{
+		font: 20px "微软雅黑";
+		color: #ececec;
+		text-shadow: 2px 2px 0 #333;
+		position: absolute;
+		left: 20px;
+		top: 20px;
+	}
+	</style>
+</head>
+<body>
+	<canvas id="c"></canvas>
+	<div id="info">canvas粒子运动 @Barrior 2016</div>
+
+	<script type="text/javascript">
+		var c = document.getElementById( 'c' );
+		var cxt = c.getContext( '2d' );
+
+		var cw = c.width = document.body.clientWidth;
+		var ch = c.height = document.body.clientHeight;
+
+		function randomColor(){
+			return "#" + ( (1<<24) * Math.random() | 0 ).toString( 16 );
+			/*return 'rgba('+
+					Math.round(Math.random() * 255) +','+
+					Math.round(Math.random() * 255) +','+
+					Math.round(Math.random() * 0) +','+
+					( Math.random() * 1 + .5 ) +')';*/
+		}
+
+		function Dot(){
+
+			this.x = Math.random() * cw;
+			this.y =  Math.random() * ch;
+			this.r =  Math.random() + 1;
+			this.speedX = Math.random() - .5;
+			this.speedY = Math.random() - .5;
+			this.color = randomColor();
+
+		}
+
+		var arr = [];
+
+		for( var i = 0, num = cw * .15; i < num; i++ ){
+
+			arr.push( new Dot() );
+
+		}
+
+		function draw(){
+
+			cxt.clearRect( 0, 0, cw, ch );
+
+			arr.forEach(function( v ){
+
+				cxt.save();
+				cxt.beginPath();
+				cxt.arc( v.x, v.y, v.r, 0, 2 * Math.PI, false );
+				cxt.fillStyle = v.color;
+				cxt.fill();
+				cxt.restore();
+
+				v.x += v.speedX;
+				v.y += v.speedY;
+
+				if( v.x + v.r >= cw || v.x - v.r <= 0 ){
+					v.speedX *= -1;
+				}
+
+				if( v.y + v.r >= ch || v.y - v.r <= 0 ){
+					v.speedY *= -1;
+				}
+			});
+
+			connectDot();
+
+			requestAnimationFrame( draw );
+
+		}
+
+		window.requestAnimationFrame = (function( window ) {
+			return	window.requestAnimationFrame ||
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame ||
+					function( fn ) {
+
+			        	window.setTimeout( fn, 1000 / 60 );
+
+			        };
+		})( window );
+
+		requestAnimationFrame( draw );
+
+		var dis = 140;
+		var posX = Math.random() * cw;
+		var posY = Math.random() * ch;
+		var posR = 240;
+		cxt.lineWidth = .2;
+		cxt.globalAlpha = .4;
+
+		function connectDot(){
+
+			var posDot = [];
+
+			arr.forEach(function( v ){
+
+				if( Math.abs( v.x - posX ) <= posR &&
+					Math.abs( v.y - posY ) <= posR ){
+
+					posDot.push( v );
+
+				}
+
+			});
+
+			posDot.forEach(function( v ){
+
+				posDot.forEach(function( sib ){
+
+					if( Math.abs( v.x - sib.x ) <= dis &&
+						Math.abs( v.y - sib.y ) <= dis ){
+
+						cxt.save();
+						cxt.beginPath();
+						cxt.moveTo( v.x, v.y );
+						cxt.lineTo( sib.x, sib.y );
+						cxt.closePath();
+						cxt.strokeStyle = v.color;
+						// cxt.fillStyle = v.color;
+						cxt.fill();
+						cxt.stroke();
+						cxt.restore();
+
+					}
+
+				});
+
+			});
+
+		}
+
+		document.onmousemove = function( e ){
+
+			posX = e.pageX;
+			posY = e.pageY;
+
+		};
+	</script>
+</body>
+</html>

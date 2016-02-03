@@ -1,38 +1,107 @@
 /**
- * particleground v1.0.0.开发者版本
+ * particleground v1.0.0
  * https://github.com/Barrior/particleground
  * Copyright 2016 Barrior <Barrior@qq.com>
  * 采用 知识共享署名 3.0 中国大陆许可协议 进行许可。
  * 可自由转载、引用，但需保留作者及插件信息。
  * http://creativecommons.org/licenses/by/3.0/cn/
  */
-/**
- * 为什么很多人都不缓存this，这样不利于压缩，每次都要去查找this对象，也不利于代码执行效率
- * 但是为什么很多人都不缓存this呢，不明白，希望高手指教，鄙人愚笨，不敢妄自缓存，故先全部都未做局部变量缓存，希望能得到高手教导。感谢您的伟大的不吝赐教！
- */
-//异步
-/*;(function( win, doc, math, factor ){
+(function ( root, factory ){
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        // 没有依赖为什么这里总加一个空数组呢，向后兼容？
+        define( factory );
 
-	if( typeof win.define === 'function' && define.amd ){
-		
-		define( [], factor.bind( win, win, doc, math ) );
-		define( [], function(){
-			
-			return factor( win, doc, math );
+    } else if ( typeof module === 'object' && module.exports ) {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    } else {
+        // Browser globals (root is window)
+        root.Particleground = factory();
+    }
+}( this, function ( doc, math ){
 
-		});
+	'use strict';
 
-	}else{
+	var win = this,
+		random = math.random,
+		floor = math.floor,
+		abs = math.abs,
+		sin = math.sin,
+		pi = math.PI,
+		pi2 = 2 * pi,
+		toRadian = pi / 180;
 
-		win.Particleground = factor( win, doc, math );
+	function pInt( s ){
+
+		return parseInt( s, 10 );
+
+	}
+	function randomColor(){
+		//来源http://stackoverflow.com/questions/1484506/random-color-generator-in-javascript
+		return "#" + random().toString( 16 ).slice( -6 );
+	}
+	function limitRandom( max, min ){
+
+		return random() * (max - min) + min;
+
+	}
+	function extend( a, b ){
+
+		for( var i in b ){
+
+			a[ i ] = b[ i ];
+
+		}
+
+		return a;
+	}
+	function getCss( elem, attr ){
+
+		return pInt( getComputedStyle( elem )[ attr ] );
+
+	}
+	function on( elem, evtName, handler ){
+
+		elem.addEventListener( evtName, handler );
+
+	}
+	function off( elem, evtName, handler ){
+
+		elem.removeEventListener( evtName, handler );
 
 	}
 
-}( window, document, Math, function(){
+	function addCanvas( selector, context ){
+		var container = context.container = doc.querySelector( selector ),
+			c = context.c = doc.createElement( 'canvas' );
 
-}));*/
-;(function( win, doc, math ){
-	'use strict';
+		context.cw = c.width = getCss( container, 'width' );
+		context.ch = c.height = getCss( container, 'height' );
+		container.appendChild( c );
+
+		context.cxt = c.getContext( '2d' );
+		context.paused = false;
+	}
+	function pause( context, fn ){
+		if( !context.paused ){
+			context.paused = true;
+			fn && fn.call( context );
+		}
+	}
+	function open( context, fn ){
+		if( context.paused ){
+			fn && fn.call( context );
+			context.paused = false;
+			context.draw();
+		}
+	}
+	function drawAnimation( context ){
+		!context.paused && requestAnimationFrame( context.draw.bind( context ) );
+	}
+
 	win.requestAnimationFrame = (function( win ) {
 		return	win.requestAnimationFrame ||
 				win.webkitRequestAnimationFrame ||
@@ -44,178 +113,100 @@
 		        };
 	})( win );
 
-	var random = math.random,
-		floor = math.floor,
-		abs = math.abs,
-		sin = math.sin,
-		PI = math.PI,
-		radian = PI / 180,
-		full = 2 * PI,
+	var Particleground = {
+		particle: function( selector, options ){
+			var set = this.set = extend({
+				//全局透明度
+				opacity: .8,
+				//粒子颜色数组，默认随机色
+				color: [],
+				speed: 1,
+				//粒子个数，默认为容器的0.1倍
+				//传入[0, 1)显示容器相应倍数的值，或传入具体个数[1, +∞)
+				num: .1,
+				//粒子最大半径
+				max: 2.4,
+				//粒子最小半径
+				min: .6,
+				//连接线段最大距离
+				dis: 180,
+				//连接线段的宽度
+				lineWidth: .2,
+				//范围越大，连接的点越多
+				r: 240,
+				//移动事件的元素,false为canvas
+				eventElem: false
+			}, options );
 
-		pInt = function( s ){
+			addCanvas( selector, this );
 
-			return parseInt( s, 10 );
-
-		},
-		randomColor = function(){
-			//来源http://stackoverflow.com/questions/1484506/random-color-generator-in-javascript
-			return "#" + random().toString( 16 ).slice( -6 );
-		},
-		limitRandom = function( max, min ){
-
-			return random() * (max - min) + min;
-
-		},
-		extend = function( a, b ){
-
-			for( var i in b ){
-
-				a[ i ] = b[ i ];
-
+			if( typeof set.eventElem != 'object' ){
+				set.eventElem = this.c;
 			}
+			//移动点X坐标
+			this.posX = random() * this.cw;
+			//移动点Y坐标
+			this.posY = random() * this.ch;
 
-			return a;
+			this.createDot();
+			this.draw();
+			this.event();
 		},
-		getCss = function( elem, attr ){
+		wave: function( selector, options ){
+			var set = this.set = extend({
+				//全局透明度
+				opacity: .8,
+				//粒子颜色
+				color: '#fff',
+				//线条个数
+				num: 1,
+				//线条最大宽度(粒子最大半径)
+				max: 1.4,
+				//线条最小宽度
+				min: .2,
+				//波峰，取值[0-1]
+				crest: .8,
+				//线条运动速度
+				speed: 1.4,
+			}, options );
 
-			return pInt( getComputedStyle( elem, null )[ attr ] );
+			addCanvas( selector, this );
 
+			this.createDot();
+			this.draw();
+			this.event();
 		},
-		on = function( elem, evtName, handler ){
+		snow: function( selector, options ){
+			var set = this.set = extend({
+				//雪花颜色
+				color: '#fff',
+				//雪花最大半径
+				max: 6.5,
+				//雪花最小半径
+				min: .4,
+				//运动速度
+				speed: .4,
+			}, options );
 
-			elem.addEventListener( evtName, handler );
+			addCanvas( selector, this );
 
+			this.dot = [];
+			this.createDot();
+			this.draw();
+			this.event();
+		}
+	};
+	var util = {
+		pause: function(){
+			pause( this );
 		},
-		off = function( elem, evtName, handler ){
-
-			elem.removeEventListener( evtName, handler );
-
-		},
-
-		Particleground = {
-			particle: function( selector, options ){
-					
-				var set = this.set = extend({
-
-					//全局透明度
-					opacity: .8,
-					//粒子颜色数组，默认随机色
-					color: [],
-					speed: 1,
-					//粒子个数，默认为容器的0.1倍
-					//传入[0, 1)显示容器相应倍数的值，或传入具体个数[1, +∞)
-					num: .1,
-					//粒子最大半径
-					max: 2.4,
-					//粒子最小半径
-					min: .6,
-					//连接线段最大距离
-					dis: 180,
-					//连接线段的宽度
-					lineWidth: .2,
-					//范围越大，连接的点越多
-					r: 240,
-					//移动事件的元素,false为canvas
-					eventElem: false
-
-				}, options );
-
-				var container = this.container = doc.querySelector( selector ),
-					c = this.c = doc.createElement( 'canvas' );
-
-				this.cw = c.width = getCss( container, 'width' );
-				this.ch = c.height = getCss( container, 'height' );
-				container.appendChild( c );
-
-				if( typeof set.eventElem != 'object' ){
-
-					set.eventElem = this.c;
-
-				}
-
-				this.cxt = c.getContext( '2d' );
-				//移动点的X坐标
-				this.posX = random() * this.cw;
-				//移动点的Y坐标
-				this.posY = random() * this.ch;
-				this.paused = false;
-
-				this.createDot();
-				this.draw();
-				this.event();
-
-			},
-			wave: function( selector, options ){
-
-				var set = this.set = extend({
-
-					//全局透明度
-					opacity: .8,
-					//粒子颜色
-					color: '#fff',
-					//线条个数
-					num: 1,
-					//线条最大宽度(粒子最大半径)
-					max: 1.4,
-					//线条最小宽度
-					min: .2,
-					//波峰，取值[0-1]
-					crest: .8,
-					//线条运动速度
-					speed: 1.4,
-
-				}, options );
-
-				var container = this.container = doc.querySelector( selector ),
-					c = this.c = doc.createElement( 'canvas' );
-
-				this.cw = c.width = getCss( container, 'width' );
-				this.ch = c.height = getCss( container, 'height' );
-				container.appendChild( c );
-
-				this.cxt = c.getContext( '2d' );
-				this.paused = false;
-
-				this.createDot();
-				this.draw();
-			},
-			snow: function( selector, options ){
-
-				var set = this.set = extend({
-
-					//雪花颜色
-					color: '#fff',
-					//雪花最大半径
-					max: 6.5,
-					//雪花最小半径
-					min: .4,
-					//运动速度
-					speed: .4,
-
-				}, options );
-
-				var container = this.container = doc.querySelector( selector ),
-					c = this.c = doc.createElement( 'canvas' );
-
-				this.cw = c.width = getCss( container, 'width' );
-				this.ch = c.height = getCss( container, 'height' );
-				container.appendChild( c );
-
-				this.cxt = c.getContext( '2d' );
-				this.paused = false;
-				this.dot = [];
-
-				this.createDot();
-				this.draw();
-			}
-		};
+		open: function(){
+			open( this );
+		}
+	};
 
 	Particleground.particle.prototype = {
-
-		constructor: Particleground.particle,
-
 		createDot: function(){
-			
 			var cw = this.cw,
 				ch = this.ch,
 				set = this.set,
@@ -231,15 +222,12 @@
 			}
 
 			if( colorLength ){
-
 				color = function(){
 					return set.color[ floor( random() * colorLength ) ];
 				};
-
 			}
 
 			for( ; i < num; i++ ){
-
 				var r = limitRandom( set.max, set.min );
 
 				dot.push({
@@ -250,11 +238,9 @@
 					vy: limitRandom( speed, -speed * .5 ) || speed,
 					color: color()
 				});
-
 			}
 
 			this.dot = dot;
-
 		},
 		draw: function(){
 			var set = this.set,
@@ -269,12 +255,11 @@
 			cxt.globalAlpha = set.opacity;
 
 			this.dot.forEach(function( v ){
-
 				var r = v.r;
 
 				cxt.save();
 				cxt.beginPath();
-				cxt.arc( v.x, v.y, r, 0, full );
+				cxt.arc( v.x, v.y, r, 0, pi2 );
 				cxt.fillStyle = v.color;
 				cxt.fill();
 				cxt.restore();
@@ -286,25 +271,18 @@
 					y = v.y;
 
 				if( x + r >= cw || x - r <= 0 ){
-
 					v.vx *= -1;
-				
 				}
-
 				if( y + r >= ch || y - r <= 0 ){
-
 					v.vy *= -1;
-
 				}
 			});
 
 			this.connectDot();
 
-			!this.paused && requestAnimationFrame( this.draw.bind( this ) );
-
+			drawAnimation( this );
 		},
 		connectDot:function(){
-
 			var cxt = this.cxt,
 				set = this.set,
 				dis = set.dis,
@@ -314,20 +292,14 @@
 				scopeDot = [];
 
 			this.dot.forEach(function( v ){
-
 				if( abs( v.x - posX ) <= posR &&
 					abs( v.y - posY ) <= posR ){
-
 					scopeDot.push( v );
-
 				}
-
 			});
 
 			scopeDot.forEach(function( v ){
-
 				scopeDot.forEach(function( sib ){
-
 					var x = v.x,
 						y = v.y,
 						sibX = sib.x,
@@ -335,7 +307,6 @@
 
 					if( abs( x - sibX ) <= dis &&
 						abs( y - sibY ) <= dis ){
-
 						cxt.save();
 						cxt.beginPath();
 						cxt.moveTo( x, y );
@@ -343,30 +314,21 @@
 						cxt.strokeStyle = v.color;
 						cxt.stroke();
 						cxt.restore();
-
 					}
-
 				});
-
 			});
-
 		},
 		event: function(){
-
 			this.handler = function( e ){
-
 				this.posX = e.clientX;
 				this.posY = e.clientY;
-
 			}.bind( this );
 
 			on( this.c, 'mousemove', this.handler );
 
 			//让画布宽高自适应窗口大小的改变，为减少文件大小，在配置中省略
-			if( this.set.adapt ){
-
+			if( this.set.resize ){
 				on( win, 'resize', function(){
-
 					var oldCW = this.cw,
 						oldCH = this.ch;
 
@@ -380,50 +342,28 @@
 					this.posY *= scaleY;
 
 					this.dot.forEach(function( v ){
-
 						v.x *= scaleX;
 						v.y *= scaleY;
-
 					});
 
 					this.paused && this.draw();
-
 				}.bind( this ));
-
 			}
-
 		},
 		pause: function(){
-
-			if( !this.paused ){
-
-				this.paused = true;
+			pause( this, function(){
 				off( this.set.eventElem, 'mousemove', this.handler );
-
-			}
-
+			});
 		},
 		open: function(){
-
-			if( this.paused ){
-
+			open( this, function(){
 				on( this.set.eventElem, 'mousemove', this.handler );
-				this.paused = false;
-				this.draw();
-
-			}
-
+			});
 		}
-
 	};
 
-
 	Particleground.wave.prototype = {
-
-		constructor: Particleground.wave,
-
 		createDot: function(){
-			
 			var set = this.set,
 				ch = this.ch,
 				// crest = this.ch / 2 * set.crest,
@@ -435,12 +375,10 @@
 				calc = ( set.max - set.min ) / dotNum;
 
 			for( var i = 0; i < num; i++ ){
-
 				// var scale = 1 - i / set.num;
 				var	arr = [];
 
 				for( var j = 0; j < dotNum; j++ ){
-
 					arr.push({
 						x: j * 2,
 						// y: j / dotNum * crest * scale,
@@ -448,18 +386,14 @@
 						angle: j,
 						r: j * calc  + set.min
 					});
-
 				}
 
 				dot.push( arr );
-
 			}
 
 			this.dot = dot;
-
 		},
 		draw: function(){
-			
 			var set = this.set,
 				cxt = this.cxt,
 				cw = this.cw,
@@ -472,59 +406,54 @@
 			cxt.fillStyle = set.color;
 
 			this.dot.forEach(function( arr ){
-				
 				arr.forEach(function( v ){
-
 					cxt.save();
 					cxt.beginPath();
 					cxt.arc(
 						v.x,
 
 						//y = A sin（ ωx + φ ）+ h
-						v.y * sin( v.angle * radian ) + halfCH,
+						v.y * sin( v.angle * toRadian ) + halfCH,
 
-						v.r, 0, full
+						v.r, 0, pi2
 					);
 					cxt.fill();
 					cxt.restore();
 
 					v.angle -= speed;
-
 				});
-
 			});
 
-			!this.paused && requestAnimationFrame( this.draw.bind( this ) );
-
+			drawAnimation( this );
 		},
-		pause: function(){
+		event: function(){
+			if( this.set.resize ){
+				on( win, 'resize', function(){
+					var oldCW = this.cw,
+						oldCH = this.ch;
 
-			if( !this.paused ){
+					this.cw = this.c.width = getCss( this.container, 'width' );
+					this.ch = this.c.height = getCss( this.container, 'height' );
 
-				this.paused = true;
+					var scaleX = this.cw / oldCW,
+						scaleY = this.ch / oldCH;
 
+					this.dot.forEach(function( arr ){
+						arr.forEach(function( v ){
+							v.x *= scaleX;
+							v.y *= scaleY;
+						});
+					});
+
+					this.paused && this.draw();
+				}.bind( this ));
 			}
-
-		},
-		open: function(){
-
-			if( this.paused ){
-
-				this.paused = false;
-				this.draw();
-
-			}
-			
 		}
-
 	};
+	extend( Particleground.wave.prototype, util );
 
 	Particleground.snow.prototype = {
-
-		constructor: Particleground.snow,
-
 		snowShape: function(){
-
 			var set = this.set,
 				r = limitRandom( set.max, set.min );
 
@@ -535,20 +464,16 @@
 				vx: random() || .4,
 				vy: r * set.speed
 			};
-
 		},
 		createDot: function(){
 			//随机创建0-6个雪花
 			var count = random() * 6;
 
 			for( var i = 0; i < count; i++ ){
-
 				this.dot.push( this.snowShape() );
-
 			}
 		},
 		draw: function(){
-			
 			var THIS = this,
 				set = THIS.set,
 				cxt = THIS.cxt,
@@ -560,10 +485,9 @@
 			cxt.fillStyle = set.color;
 
 			dot.forEach(function( v, i ){
-				
 				cxt.save();
 				cxt.beginPath();
-				cxt.arc( v.x, v.y, v.r, 0, full );
+				cxt.arc( v.x, v.y, v.r, 0, pi2 );
 				cxt.fill();
 				cxt.restore();
 
@@ -572,61 +496,48 @@
 
 				//雪花反方向
 				if( random() > .99 && random() > .5 ){
-
 					v.vx *= -1;
-
 				}
 
 				//雪花从侧边出去，删除
 				if( v.x < 0 || v.x - v.r > cw ){
-
 					dot.splice( i, 1 );
 					dot.push( THIS.snowShape() );
-
 				//雪花从底部出去
 				}else if( v.y - v.r >= ch ){
-
 					dot.splice( i, 1 );
-
 				}
-
 			});
-
 			//添加雪花
 			if( random() > .9 ){
-
 				THIS.createDot();
-
 			}
-			
-			!THIS.paused && requestAnimationFrame( THIS.draw.bind( THIS ) );
+
+			drawAnimation( this );
 		},
-		pause: function(){
+		event: function(){
+			if( this.set.resize ){
+				on( win, 'resize', function(){
+					var oldCW = this.cw,
+						oldCH = this.ch;
 
-			if( !this.paused ){
+					this.cw = this.c.width = getCss( this.container, 'width' );
+					this.ch = this.c.height = getCss( this.container, 'height' );
 
-				this.paused = true;
+					var scaleX = this.cw / oldCW,
+						scaleY = this.ch / oldCH;
 
+					this.dot.forEach(function( v ){
+						v.x *= scaleX;
+						v.y *= scaleY;
+					});
+
+					this.paused && this.draw();
+				}.bind( this ));
 			}
-
-		},
-		open: function(){
-
-			if( this.paused ){
-
-				this.paused = false;
-				this.draw();
-
-			}
-			
 		}
-
 	};
+	extend( Particleground.snow.prototype, util );
 
-
-	win.Particleground = Particleground;
-
-})( window, document, Math );
-
-
-
+	return Particleground;
+}.bind( this, document, Math )));

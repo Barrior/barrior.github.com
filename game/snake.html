@@ -38,12 +38,46 @@
 	#ctrl b{
 		margin-right: 20px;
 	}
+	#game-over{
+		width: 100%;
+		height: 100%;
+		background-color: rgba( 0, 0, 0, .9 );
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	#game-over h1{
+		margin: 100px 0 10px;
+	}
+	#game-over h3{
+		margin: 0 0 20px;
+		font: bold 70px cursive;
+	}
+	#btn{
+		display: inline-block;
+		padding: 6px 20px;
+		border: 1px solid #ccc;
+		font-size: 20px;
+		border-radius: 2px;
+		cursor: pointer;
+		transition: 600ms;
+	}
+	#btn:hover{
+		background-color: #ddd;
+		border-color: #ddd;
+		color: #333;
+	}
 	</style>
 </head>
 <body>
 	<h1 id="game-name">经典贪吃蛇，看你能玩多少分！</h1>
 	<div id="box">
 		<canvas id="c" width="600" height="400"></canvas>
+		<div id="game-over">
+			<h1>游戏结束，<small>得分：</small></h1>
+			<h3>93</h3>
+			<span id="btn">再玩一次</span>
+		</div>
 		<div id="score">0</div>
 	</div>
 	<div id="ctrl">
@@ -68,6 +102,8 @@
 	var girdColor = '#444';
 	var snakeColor = '#E0E0E0';
 	var snake = [];
+	var dir = 'r';
+	var oldDir = 'r';
 	var food = {
 		x: 0,
 		y: 0
@@ -94,18 +130,14 @@
 	function randomPointY(){
 		return Math.floor( Math.random() * yGirdNum );
 	}
-	function getPoint(){
-
-	}
 	function initSnake(){
 		var x = Math.floor( Math.random() * (xGirdNum - 3) * .3 ) + 3;
 		var y = Math.floor( Math.random() * yGirdNum );
 		for( var i = 0; i < 3; i++ ){
 			snake.push({
-				x: x - i,
-				y: y,
-				vx: 1,
-				vy: 0
+				//多了一个初始化时就有的r
+				x: x - i - 1,
+				y: y
 			});
 		}
 		food.x = Math.floor( Math.random() * (xGirdNum - xGirdNum * .5) + xGirdNum * .5 );
@@ -119,19 +151,38 @@
 			food.x * girdSize + 1, food.y * girdSize + 1,
 			girdSize - 1, girdSize - 1
 		);
-		//snake
-		snake.forEach(function( v ){
-			/*if( v. ){
 
-			}*/
-			v.x += v.vx;
-			v.y += v.vy;
-
+		//蛇身
+		for( var i = snake.length-1; i > 0; i-- ){
+			var cur = snake[ i ];
+			cur.x = snake[ i-1 ].x;
+			cur.y = snake[ i-1 ].y;
 			cxt.fillRect(
-				v.x * girdSize + 1, v.y * girdSize + 1,
+				cur.x * girdSize + 1, cur.y * girdSize + 1,
 				girdSize - 1, girdSize - 1
 			);
-		});
+		}
+		//蛇头
+		var head = snake[ 0 ];
+		switch( dir ){
+			case 'l':
+				head.x--;
+				break;
+			case 'r':
+				head.x++;
+				break;
+			case 't':
+				head.y--;
+				break;
+			case 'b':
+				head.y++;
+				break;
+		}
+		cxt.fillRect(
+			head.x * girdSize + 1, head.y * girdSize + 1,
+			girdSize - 1, girdSize - 1
+		);
+		oldDir = dir;
 	}
 
 	function startSnake(){
@@ -152,18 +203,27 @@
 		switch( e.keyCode ){
 			//上
 			case 38:
-				if(  ){
-
+				if( oldDir !== 'b' ){
+					dir = 't';
 				}
 				break;
 			//下
 			case 40:
+				if( oldDir !== 't' ){
+					dir = 'b';
+				}
 				break;
 			//左
 			case 37:
+				if( oldDir !== 'r' ){
+					dir = 'l';
+				}
 				break;
 			//右
 			case 39:
+				if( oldDir !== 'l' ){
+					dir = 'r';
+				}
 				break;
 			//空格
 			case 32:

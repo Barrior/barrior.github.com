@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="angular.min.js"></script>
+    <script>
+        //模块化，amd规范
+        var app = angular.module('app', []);
+        app.controller('nameCtrl', ['$scope', function($scope) {
+            $scope.goods = {
+                price: 20,
+                num: 1,
+                freight: 10
+            };
+
+            $scope.sum = function(){
+                return $scope.goods.price * $scope.goods.num;
+            };
+
+            //监听一个函数，监听的是函数返回值
+            $scope.$watch($scope.sum, function (newVal, oldVal) {
+                $scope.goods.freight  = newVal >= 200 ? 0 : 10;
+            });
+
+            //监听单个数值
+            $scope.$watch('goods.price', function (newVal, oldVal) {
+                console.log( 'newVal: ' + newVal + ' oldVal: ' + oldVal )
+            });
+
+            //监听整个对象
+            $scope.$watch('goods', function (newVal, oldVal) {
+                console.log( 'newVal: ', newVal, ' oldVal: ', oldVal )
+            }, true );
+
+        }]);
+    </script>
+</head>
+<body>
+<div ng-controller="nameCtrl">
+    <p>价格：<input type="text" ng-model="goods.price"></p>
+    <p>个数：<input type="text" ng-model="goods.num"></p>
+    <p>费用：<span>{{sum() | currency:'￥' }}</span></p>
+    <p>运费：<span>{{goods.freight | currency:'￥'}}</span></p>
+    <p>总额：<span>{{sum() + goods.freight | currency:'￥'}}</span></p>
+</div>
+</body>
+</html>

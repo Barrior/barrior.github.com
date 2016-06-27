@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('ctrl',['$scope', function( $scope ){
+            
+        }]);
+
+    </script>
+</head>
+<body>
+<div ng-controller="ctrl">
+    <input type="checkbox" ng-model="selectEvent">
+    <select>
+        <option>1111</option>
+        <option ng-selected="selectEvent">222</option>
+    </select>
+
+    <input type="text" ng-change="name='change name'" ng-model="name">
+    {{name}}
+
+    <input type="text" value="cut me" ng-cut="cutVal='you cut me!'">
+    {{cutVal}}
+
+
+</div>
+</body>
+</html>

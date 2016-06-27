@@ -1,0 +1,83 @@
+doctype html
+html(lang='zh-cn')
+    head
+        meta(charset='UTF-8')
+        title= title
+        link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/css/index.css')
+    body
+        section#container.clearfix
+            .pull-left
+                header.header.clearfix.btn-primary
+                    .pull-left
+                        span.glyphicon.glyphicon-user
+                        |                     在线成员
+                    .pull-right 当前人数：
+                        span#cur-user-num= onlineUser.length
+                ul.member.list-unstyled
+                    - each val in onlineUser
+                        li.ellipsis
+                            img(src='/img/#{val.avatarNum}.jpg', alt=val.username)
+                            b=val.username
+            .pull-right
+                header.content.header.clearfix.btn-primary
+                    .pull-left
+                        span.glyphicon.glyphicon-comment
+                        |                     其乐融融的简易聊天室~(*^__^*)~~
+                    #wellcome.pull-right.ellipsis
+                section#chat-content
+                    .friends
+                        img.pull-left(src='/img/#{onlineUser[1].avatarNum}.jpg', alt=onlineUser[1].username)
+                        p= onlineUser[1].username
+                        .msg
+                            span
+                                | Hello nice day!
+                                | If you can't win, lose like a champion.
+                                | --如果你无法赢，那么就输得像个冠军一样。
+                                .text-right -- こんにちは，私は #{onlineUser[1].username}
+                    .friends
+                        img.pull-left(src='/img/#{onlineUser[0].avatarNum}.jpg', alt=onlineUser[0].username)
+                        p= onlineUser[0].username
+                        .msg
+                            span
+                                | 今天不小心滑了一跤，呜呜~~~~(>_<) -- 大家好，我是#{onlineUser[0].username}
+                footer#send-msg.text-center
+                    form.form-inline
+                        .input-group
+                            .input-group-addon(data-toggle="tooltip" data-placement="top" title="暂未开放(*^__^*)") ☺
+                            .input-group-addon(data-toggle="tooltip" data-placement="top" title="暂未开放(*^__^*)")
+                                span.glyphicon.glyphicon-picture
+                            input.form-control(type='text', placeholder='鸡冻的感慨一下~~\(≧▽≦)/', required='')
+                            .input-group-addon.btn-primary
+                                input(type='submit', value='发送/Send')
+        footer.info.text-right
+            | ©2016 nodejs with mongodb, create by
+            a(href='https://github.com/Barrior') @Barrior
+        // 模态框
+        #modal-user.modal.fade(role='dialog')
+            .modal-dialog(role='document')
+                .modal-content
+                    .modal-header
+                        h4.modal-title 用户
+                    .modal-body.clearfix.create-user
+                        .pull-left
+                            p
+                                img(src='/img/16.jpg', alt='')
+                            p.text-center
+                                em.glyphicon.glyphicon-arrow-up
+                                |                             点击头像更换
+                        section
+                            form(id="init-username-form")
+                                h3 来一个风一样的昵称：
+                                .form-group
+                                    input#init-username.form-control(type='text', placeholder='n(*≧▽≦*)n，1-20个字符哦~')
+                                #no-init-username-hint.hidden 来一个风一样的昵称吧(～￣▽￣)～
+                                .text-right
+                                    input.btn.btn-primary(type='submit', value="想好了~")
+                // /.modal-content
+            // /.modal-dialog
+        // /.modal
+        script(src='/js/jquery-2.1.3.min.js')
+        script(src='/bootstrap/js/bootstrap.min.js')
+        script(src='https://cdn.socket.io/socket.io-1.4.5.js')
+        script(src='/js/index.js')

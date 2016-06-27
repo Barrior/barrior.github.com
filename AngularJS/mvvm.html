@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('nameCtrl', ['$scope', '$timeout', function($scope, $timeout) {
+            $scope.name = 'Barrior';
+            $timeout(function(){
+                $scope.name = 'coco';
+            }, 2000 );
+
+            $scope.changeName = function(){
+                $scope.name = 'changeName'
+            }
+        }]);
+    </script>
+</head>
+<body>
+    <div ng-controller="nameCtrl">
+        <h1 ng-click="changeName()">name：{{name}}，2s后自动更新name数据；点击还能改变哟</h1>
+        <div><input type="text" ng-model="text"></div>
+        <div contenteditable="true" ng-model="text">H5 contenteditable属性的可编辑不支持V2M</div>
+        <h3>text：{{text}}</h3>
+    </div>
+</body>
+</html>

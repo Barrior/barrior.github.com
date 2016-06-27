@@ -1,0 +1,28 @@
+extends layout
+
+block content
+    style.
+        td{
+            padding: 10px;
+        }
+    h1 Welcome to Info Page !
+    img(src='http://img.7139.com/file/201206/16/118a73e8efafb1fc6029b5e7c4293f3b.gif')
+    h3 select * from user table:
+    table(border="1" style='font-size: 20px;')
+        tr
+            td ID
+            td loginname
+            td password
+            td email
+            td realname
+            td nickname
+            td age
+        each v, i in content
+            tr
+                td= v.ID
+                td= v.loginname
+                td= v.password
+                td= v.email
+                td= v.realname
+                td= v.nickname
+                td= v.age

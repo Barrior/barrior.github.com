@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html ng-app="runApp">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="angular.min.js"></script>
+    <script>
+        angular.module('runApp', []).run(['$rootScope', function (r) {
+            r.info = '我是用run方法出来的全局数据,省略了控制器指令操作(*^__^*)';
+            console.log( r )
+        }]);
+    </script>
+</head>
+<body>
+    <div>
+        <h3>{{info}}</h3>
+    </div>
+</body>
+</html>

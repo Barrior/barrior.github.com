@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="angular.min.js"></script>
+    <script>
+        //模块化，amd规范
+        var app = angular.module('app', []);
+        app.controller('nameCtrl', ['$scope', function($scope) {
+
+        }]);
+
+    </script>
+</head>
+<body>
+    <div ng-controller="nameCtrl">
+
+    </div>
+</body>
+</html>

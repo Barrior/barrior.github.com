@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="angular.min.js"></script>
+    <script>
+        //http://jingyan.baidu.com/article/eae07827ae12b91fec548597.html
+        var app = angular.module('app', []);
+        app.controller('nameCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
+            $scope.name = 'Hello';
+            $rootScope.age = 23;
+        }]);
+        app.controller('Bbb',['$scope', function ($scope) {
+            $scope.age = 24;
+        }]);
+    </script>
+</head>
+<body>
+    <div ng-controller="nameCtrl">
+        <h1>{{name}}</h1>
+        <h3>使用真正的name，传入字符串即可，{{'name'}}</h3>
+    </div>
+    <div ng-controller="Bbb">小作用域的属性权重大：{{age}}</div>
+    <div>{{age}}</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+        function wait(){
+        	var d = $.Deferred();
+
+            setTimeout(function () {
+
+                alert('async');
+
+                //顾名思义：解决，将deferred对象的状态从未完成改为【已完成】
+                d.resolve();
+                //顾名思义：拒绝，将deferred对象的状态从未完成改为【已失败】
+                d.reject();
+
+            }, 1000 );
+
+            //jQuery提供了deferred.promise()方法。它的作用是，在原来的deferred对象上返回另一个deferred对象，后者只开放与改变执行状态无关的方法（比如done()方法和fail()方法），屏蔽与改变执行状态有关的方法（比如resolve()方法和reject()方法），从而使得执行状态不能被改变。
+            return d.promise();
+        }
+
+        $.when( wait() )
+        	.done(function(){
+        		alert('done')
+        	})
+        	.fail(function(){
+        		alert('fail')
+        	})
+
+
+	</script>
+</body>
+</html>

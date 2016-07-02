@@ -1,14 +1,19 @@
 html,body{
     font-family: "微软雅黑";
 }
-button{
-    outline: none;
+a, button, input, select {
+    outline: 0 !important;
 }
 .pr{
     position: relative;
 }
 .pa{
     position: absolute;
+}
+.ellipsis{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 #container{
@@ -46,6 +51,10 @@ button{
 .member li{
     padding: 10px 20px;
     border-bottom: 1px solid #ccc;
+}
+#wellcome{
+    max-width: 190px;
+    height: 100%;
 }
 
 #chat-content img,

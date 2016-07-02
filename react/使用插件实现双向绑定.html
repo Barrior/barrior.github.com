@@ -10,31 +10,27 @@
     <script src="react/react.min.js"></script>
     <script src="react/react-dom.min.js"></script>
     <script src="react/browser.min.js"></script>
-
+    <script src="react/react-with-addons.min.js"></script>
 
     <script type="text/babel">
         var Component = React.createClass({
-            render: function () {
-                console.log( this )
+            render: function(){
                 return (
                     <div>
-                        <h1>{this.props.title}</h1>
-                        <h4>{this.props.subTitle}</h4>
-                        <div>{this.props.content}</div>
+                        <h1>Hello addons!</h1>
+
                     </div>
                 )
             }
         })
 
-        var title = 'Hello React!';
         var data = {
-            subTitle: '我是副标题',
-            content: 'React是个好东西(*^_^*)'
-        };
+
+        }
 
         ReactDOM.render(
-                <Component title={title} {...data}></Component>,
-                document.getElementById('demo')
+            <Component {...data} />,
+            document.getElementById('demo')
         )
     </script>
 </body>

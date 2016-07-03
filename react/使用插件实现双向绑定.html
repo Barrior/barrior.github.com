@@ -13,12 +13,24 @@
     <script src="react/react-with-addons.min.js"></script>
 
     <script type="text/babel">
+        console.log( React )
         var Component = React.createClass({
+            //注册插件？
+            mixins: [React.addons.LinkedStateMixin],
+            getInitialState: function(){
+                return {
+                    value: '请输入留言'
+                }
+            },
             render: function(){
                 return (
                     <div>
-                        <h1>Hello addons!</h1>
-
+                        <h1>Hello addons!{this.state.value}</h1>
+                        //简写了onChange的改变形式<br/><br/>
+                        <input type="text" valueLink={this.linkState('value')} />
+                        <input type="button" value="发布内容" /><br/><br/>
+                        //数据使用还是得使用state，因为数据只在state上面，只是插件让改变操作变得简单点了
+                        <p>{this.state.value}</p>
                     </div>
                 )
             }

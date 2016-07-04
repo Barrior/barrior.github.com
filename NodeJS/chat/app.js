@@ -1,26 +1,61 @@
-/**
- * Created by Heart on 2016/2/17.
- */
-
 var express = require('express');
-var fs = require('fs');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+var routes = require('./routes/index');
+var users = require('./routes/users');
+
 var app = express();
 
-app.get( '/', function ( req, res ) {
-    console.log( '有客户端请求了...' );
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-    //res.send( '<h1><img src="http://img.7139.com/file/201206/16/118a73e8efafb1fc6029b5e7c4293f3b.gif">Hello Sunny Day!</h1>' )
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-    fs.readFile( './views/index.jade', function ( err, data ) {
-        if( err ){
+app.use('/', routes);
+app.use('/users', users);
+app.use('/info', require('./routes/info') );
 
-            res.end( '404' );
-
-        }else{
-
-            res.end( data );
-        }
-    })
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-app.listen( 8080, 'localhost' );
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
+
+
+module.exports = app;

@@ -5,43 +5,38 @@
     <title>Title</title>
 </head>
 <body>
-    <div id="container"></div>
+    <div id="demo"></div>
 
-    <script src="react/react.js"></script>
-    <script src="react/react-dom.js"></script>
+    <script src="react/react.min.js"></script>
+    <script src="react/react-dom.min.js"></script>
     <script src="react/browser.min.js"></script>
 
     <script type="text/babel">
         //组件名首字母必须大写
-        var FirstComponent = React.createClass({
-                render: function(){
-                    console.log( this )
-                    return (
-                            <h1>{this.props.title}</h1>
-                    )
-                }
-            });
+        var Component = React.createClass({
+            render: function () {
+                console.log( this )
+                return (
+                    <div>
+                        <h1>{this.props.title}</h1>
+                        <h4>{this.props.subTitle}</h4>
+                        <div>{this.props.content}</div>
+                    </div>
+                )
+            }
+        })
 
+        var title = 'Hello React!';
         var data = {
-            title: 'Hello React!!!'
+            subTitle: '我是副标题',
+            content: 'React是个好东西(*^_^*)'
         };
 
         ReactDOM.render(
                 //没内容可以写成单标签
-                <FirstComponent title={data.title} />,
-                document.getElementById('container')
-        );
-
-
-/*
-        //最简单的实例，直接渲染
-        ReactDOM.render(
-                <h1>Hello React!</h1>,
-                document.getElementById('container'),
-                function(){
-                    console.log( 'done' )
-                }
-        );*/
+                <Component title={title} {...data} />,
+                document.getElementById('demo')
+        )
     </script>
 </body>
 </html>

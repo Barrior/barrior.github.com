@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="xui.css">
+	<link rel="stylesheet" type="text/css" href="comments.css">
+	<style type="text/css">
+		html,body{
+			background-color: #fff;
+		}
+		#test{
+			padding: 2rem 2.33333rem;
+		    overflow-y: auto;
+		}
+	</style>
+</head>
+<body>
+<div id="test">
+	<div class="comments" data-newsid="{{newsid}}">
+	    <div class="textarea">
+	        <h4 class="normal-text">评论（{{count}}）</h4>
+	        <textarea class="form-control" rows="3"
+	                  placeholder="发表评论，至少输入5个字"></textarea>
+	        <div class="text-right">
+	            <i class="btn btn-success" data-type="0" v-if="isSignin">评论</i>
+	            <i class="btn btn-success" data-type="0"
+	               data-toggle="modal" data-target="#login-modal"
+	               v-else>评论</i>
+	        </div>
+	    </div>
+
+	    <div class="comments-wrap">
+	        <ul class="comments-list list-unstyled">
+	            <li class="comments-info" v-for="item in info">
+	                <div class="comment-user">
+	                    <img :src="item.user_image">
+	                    <span class="normal-text">{{item.nickname}}</span>
+	                </div>
+	                <div class="comment-con">
+	                    {{item.content}}
+	                </div>
+	                <div class="comment-footer cf">
+	                    <time class="fl">{{item.day}}</time>
+	                    <span class="fr" data-reply-id="{{item.id}}">回复({{item.replay && item.replay.length || 0}})</span>
+	                </div>
+	                <div id="comment-reply-{{item.id}}">
+	                    <div>
+	                        <textarea class="form-control" rows="3"></textarea>
+	                        <div class="text-right">
+	                            <i class="btn btn-success" data-type="{{item.id}}"
+	                               v-if="isSignin">回复</i>
+	                            <i class="btn btn-success" data-type="{{item.id}}"
+	                               data-toggle="modal" data-target="#login-modal"
+	                               v-else>回复</i>
+	                        </div>
+	                    </div>
+	                    <ul class="list-unstyled" v-if="item.replay">
+	                        <li class="comments-info clearfix" v-for="list in item.replay">
+	                            <div class="comment-user">
+	                                <img :src="list.user_iamge">
+	                                <span>{{list.nickname}}</span>
+	                            </div>
+	                            <div class="comment-con">
+	                                {{list.content}}
+	                            </div>
+	                            <div class="comment-footer cf">
+	                                <time class="fl">{{list.day}}</time>
+	                            </div>
+	                        </li>
+	                    </ul>
+	                </div>
+	            </li>
+	        </ul>
+	    </div>
+	</div>
+</div>
+	<script type="text/javascript" src="jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="xui.js"></script>
+	<script type="text/javascript" src="vue.js"></script>
+	<script type="text/javascript">
+		$(document)
+        .on('click.comments', '[data-reply-id]', function(){
+            $('#comment-reply-' + $(this).attr('data-reply-id'))
+                .stop().slideToggle(function(){
+                    $(this).find('textarea').focus();
+                });
+        })
+        .on('click.replay.comments', '.btn-success', function(){
+            if( $(this).attr('data-toggle') == 'modal' ){
+                return;
+            }
+            var $this = $(this);
+            var thisText = $this.text();
+            var $textarea = $this.parent().prev();
+            var con = $textarea.val().trim();
+            if( con.length < 5 || con.length > 500 ){
+                $textarea.focus();
+                return XUI.hint({
+                    content: thisText + (con.length < 5 ? '不能小于5个字' : '不能大于500个字'),
+                    color: 'red'
+                });
+            }
+
+            $this.waiting( thisText + '中...', function( complete ){
+            	setTimeout(function(){
+            		complete();
+            		var content = $textarea.val();
+                    $textarea.val('');
+
+                    vm.count++;
+                    Vue.set(vm.info, '9679', {
+							cid: "0",
+							content: content,
+							day: "2016-05-13 16:11",
+							id: "9678",
+							nickname: "nickname222",
+							user_image: "http://yuncaijingrest.oss-cn-hangzhou.aliyuncs.com/upload/touxiang/logo53608.jpg"
+                    });
+            	}, 1000 );
+            });
+        });
+
+		var vm = new Vue({
+			el: '.comments',
+		    data: {
+		        newsid: 123456,
+		        count: 4,
+		        isSignin: true,
+		        info: {
+		        	9677:{
+						cid: "0",
+						content: "先别删，测试用例2222222",
+						day: "2016-05-13 16:11",
+						id: "9677",
+						nickname: "Excellent",
+						replay: [
+							{
+								cid: "9677",
+								content: "1111111111111",
+								day: "2016-05-13 20:01",
+								id: "9702",
+								nickname: "用户16208640",
+								user_iamge: "http://www.yuncaijing.com/templates/default/assets/image/user.jpg"
+							},
+							{
+								cid: "9677",
+								content: "22222",
+								day: "2016-05-13 20:01",
+								id: "9702",
+								nickname: "用户16208640",
+								user_iamge: "http://www.yuncaijing.com/templates/default/assets/image/user.jpg"
+							},
+						],
+						user_image: "http://yuncaijingrest.oss-cn-hangzhou.aliyuncs.com/upload/touxiang/logo53608.jpg"
+		        	},
+		        	9678:{
+						cid: "0",
+						content: "content test",
+						day: "2016-05-13 16:11",
+						id: "9678",
+						nickname: "nickname",
+						user_image: "http://yuncaijingrest.oss-cn-hangzhou.aliyuncs.com/upload/touxiang/logo53608.jpg"
+		        	}
+		        }
+		    }
+		});
+	</script>
+</body>
+</html>

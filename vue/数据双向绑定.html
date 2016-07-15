@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <h3>{{ msg | addAuthor }}</h3>
+        <input type="text" v-model="msg">
+        <textarea cols="30" rows="10" v-model="msg"></textarea>
+        <!--$data即new里的data，通过过滤器过滤成json数据打印出来-->
+        <pre>{{ $data | json }}</pre>
+    </div>
+
+    <script src="js/vue.js"></script>
+    <script>
+        //自定义过滤器
+        Vue.filter('addAuthor', function( val ){
+            return val + ' --by Barrior';
+        });
+        new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello world!'
+            }
+        });
+    </script>
+</body>
+</html>

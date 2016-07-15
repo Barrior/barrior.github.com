@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <ul>
+        <li v-for="d in list">
+            {{d.content}}
+            <div>
+                <img v-bind:src="d.url" v-bind:style="{width: '200px'}">
+                <img :src="d.url" :style="{width: '200px'}">
+            </div>
+        </li>
+    </ul>
+</div>
+
+<script src="js/vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            list: [{
+                content: 'hello world!',
+                url: 'http://img.ivsky.com/img/tupian/li/201507/02/shenlinxi_nvhai.jpg'
+            },{
+                content: 'I am vue',
+                url: 'http://img.ivsky.com/img/tupian/li/201507/02/shenlinxi_nvhai.jpg'
+            },{
+                content: 'buling something in this',
+                url: 'http://img.ivsky.com/img/tupian/li/201507/02/shenlinxi_nvhai.jpg'
+            }]
+        }
+    });
+</script>
+</body>
+</html>

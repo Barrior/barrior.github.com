@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #app{
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: #999;
+            font: 14px/1.5 normal "微软雅黑";
+            color: #fff;
+        }
+        #app.red{
+            background-color: red;
+        }
+        #app.blue{
+            background-color: blue;
+        }
+        #app.green{
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" v-bind:class="{ 'red': isRed, 'green': isGreen, 'blue': isBlue }">
+        我会按钮，我会切换颜色哟~
+    </div>
+
+    <script src="js/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                isRed: true,
+                isGreen: false,
+                isBlue: false
+            }
+        });
+    </script>
+</body>
+</html>

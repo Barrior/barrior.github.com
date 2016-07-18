@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <h3>
+            {{{title}}}
+        </h3>
+        <h3>
+            a = {{ a }}, b = {{ b }}
+        </h3>
+    </div>
+
+    <script src="js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                title: '&nbsp;',
+                a: 1
+            },
+            computed: {
+                b: {
+                    get: function(){
+                        return this.a + 1;
+                    },
+                    //通过set同步更新a的值
+                    set: function( val ){
+                        this.a = val - 1;
+                    }
+                }
+            }
+        });
+
+        setTimeout(function(){
+            vm.title = '改变a的值，触发更新b的值：'
+            vm.a = 2;
+            setTimeout(function(){
+                vm.title = '改变b的值，一样触发更新a的值：'
+                vm.b = 10;
+            }, 5000 );
+        }, 3000 );
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="app">
+    <!--使用v-show的两个元素都会渲染并存在DOM中，只是display设置成了none-->
+    <div v-show="Math.random() > .5">is-show-show</div>
+    <div v-else>is-show-else</div>
+    <div v-if="Math.random() > .5">is-if-show</div>
+    <div v-else>is-if-else</div>
+
+    <!--
+
+        v-if 是局部编译然后再渲染，
+        v-show 是属性display的切换
+        所以从性能角度讲，频繁切换使用 v-show 比较好
+        运行时条件不太可能改变用 v-if 比较好
+
+    -->
+    <script src="js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app'
+        });
+
+    </script>
+</body>
+</html>

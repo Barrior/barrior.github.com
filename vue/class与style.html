@@ -20,11 +20,18 @@
         #app.blue{
             background-color: blue;
         }
+        .black{
+            color: #000;
+        }
+        .bold{
+            font-weight: 900;
+        }
     </style>
 </head>
 <body>
-    <div id="app" v-bind:class="{ 'red': isRed, 'green': isGreen, 'blue': isBlue }">
+    <div id="app" v-bind:class="classObj">
         我会按钮，我会切换颜色哟~
+        <span v-bind:class="[ black, bold ]">span</span>
     </div>
 
     <script src="js/vue.js"></script>
@@ -32,21 +39,25 @@
         var vm = new Vue({
             el: '#app',
             data: {
-                isRed: true,
-                isGreen: false,
-                isBlue: false
+                classObj: {
+                    red: true,
+                    green: false,
+                    blue: false
+                },
+                black: 'black',
+                bold: 'bold'
             }
         });
 
-        var color = [ 'isRed', 'isGreen', 'isBlue' ];
+        var color = [ 'red', 'green', 'blue' ];
         var i = 0;
 
         function changeColor(){
             setTimeout(function(){
                 color.forEach(function( v ){
-                    vm[ v ] = false;
+                    vm.classObj[ v ] = false;
                 });
-                vm[ color[ i % 3 ] ] = true;
+                vm.classObj[ color[ i % 3 ] ] = true;
                 i++;
                 changeColor();
             }, 1000 );

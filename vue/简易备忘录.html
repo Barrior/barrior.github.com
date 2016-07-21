@@ -7,7 +7,7 @@
 <body>
     <div id="app">
         <textarea rows="6" v-model="newTodo" v-on:keyup.enter="addTodo"></textarea>
-        <textarea rows="6" v-ref="newTodo" v-on:keyup.enter="addTodo"></textarea>
+        <textarea rows="6" v-on:keyup.enter="addTodo"></textarea>
         <ul>
             <li v-for="d in todos">
                 <span>{{d.title}}</span>
@@ -28,15 +28,20 @@
                 }]
             },
             methods: {
-                addTodo: function(){
-                    console.log( this )
-                    console.log( this.$refs )
+                addTodo: function( ev ){
                     var text = this.newTodo.trim();
                     if( text ){
                         this.todos.unshift({
                             title: text
                         });
                         this.newTodo = '';
+                    }else{
+                        var target = ev.target;
+                        console.log( target )
+                        this.todos.unshift({
+                            title: target.value
+                        });
+                        target.value = '';
                     }
                 },
                 removeTodo: function( index ){

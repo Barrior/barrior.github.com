@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <h3>{{title}}</h3>
+        <!--通过事件修饰符阻止事件冒泡，还有其他形式，查看API-->
+        <button type="button" v-on:click.stop="clickHandler('Hi', $event)">click me!</button>
+    </div>
+
+    <script src="js/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                title: 'Hello vue'
+            },
+            methods: {
+                clickHandler: function( msg, ev ){
+                    //访问原生事件对象
+                    ev.preventDefault();
+                    this.title = msg;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

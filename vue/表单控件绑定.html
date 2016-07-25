@@ -48,6 +48,11 @@
             Aliya
         </label>
         <p>Checked names: {{ checkedNames | json }}</p>
+        <ul>
+            <li v-for="name in checkedNames" data-name="{{name}}">
+                {{ name }}
+            </li>
+        </ul>
     </div>
 
     <div>

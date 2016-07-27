@@ -1,5 +1,11 @@
 
-alert('I am dev.js');
+let sum = (...vals) => {
+    let sum = 0;
+    vals.forEach( v => sum += v );
+    return sum;
+};
+
+alert( `sum's ${ sum( 1, 2, 3 ) }` );
 
 //loading js
 require('./second.js');

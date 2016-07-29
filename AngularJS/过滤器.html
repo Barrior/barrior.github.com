@@ -8,14 +8,20 @@
         var app = angular.module('runApp', []);
 
         //依赖$filter，并注入，即依赖注入咯
-        app.controller('filter',['$scope','$filter',function( $scope, $filter ){
+        app.controller('filter',['$scope','$filter','$interval', function( $scope, $filter, $interval ){
             $scope.info = {
                 name: 'Barrior',
                 age: 23
             };
 
             $scope.num = $filter( 'currency' )( '1213123', '￥' );
-            $scope.myFilterData = '520'
+            $scope.myFilterData = '520';
+
+            $scope.timestamp = Date.now();
+
+            $interval(function(){
+                $scope.timestamp += 1000;
+            }, 1000 );
         }]);
 
         //自定义filter方法，使用模块下的filter
@@ -34,6 +40,7 @@
     <pre>{{info | json}}</pre>
     <p>通过js使用过滤器$filter： {{ num }}</p>
     <p>添加filter方法：{{myFilterData | myFilter : '哈哈'}}</p>
+    <p>时间过滤器：{{ timestamp | date: 'yyyy-MM-dd HH:mm:ss'}}</p>
 </div>
 </body>
 </html>

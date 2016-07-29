@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('ctrl',['$scope', function( $scope ){
+
+            $scope.arr = [
+                    ['Barrior', 'Cico'],
+                    ['Jacke', 'Alice']
+            ];
+
+        }]);
+
+    </script>
+</head>
+<body>
+<div ng-controller="ctrl">
+
+    <!--
+        ng-init初始化一个没在$scope上定义的变量
+    -->
+    <ul ng-repeat="outer in arr" ng-init="outerIndex = $index">
+        <li ng-repeat="inner in outer" ng-init="innerIndex = $index">
+            {{ inner }} index is: {{ outerIndex }} {{ innerIndex }} {{ $index }}
+        </li>
+    </ul>
+    <!--
+        ng-include: 加载模板，注意用单引号包裹，不然就成了变量
+            加载出来的模板继承父级的数据
+    -->
+    <div ng-include="'temp/member-info.html'"></div>
+
+    <!--
+        ng-model-options: 参数为一个对象，如下：设置更新的数据的事件为blur
+        https://docs.angularjs.org/api/ng/directive/ngModelOptions
+    -->
+    <div>
+        <input type="text" ng-model="text" ng-model-options="{ updateOn: 'blur' }">
+        离开【blur】才更新数据
+        <h3>{{text}}</h3>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <style>
+        html{
+            line-height: 2;
+        }
+        dd{
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('ctrl',['$scope', function( $scope ){
+
+            $scope.text = 'Hello Directive';
+
+        }]);
+
+    </script>
+</head>
+<body>
+<div ng-controller="ctrl">
+
+    <dl>
+        <dt ng-non-bindable>{{}}号模板形式解析数据：</dt>
+        <dd>{{text}}, {{text}}</dd>
+
+        <dt>ng-bind属性形式解析数据：</dt>
+        <dd ng-bind="text"></dd>
+
+        <dt>ng-bind-tempalet属性形式解析多个数据数据：</dt>
+        <dd ng-bind-template="{{text}}, {{text}}"></dd>
+
+        <dt>ng-cloak属性形式解析数据，切换元素的display属性达到显示与否的效果，用户体验优化：</dt>
+        <dd ng-cloak>{{text}}</dd>
+
+        <dt ng-non-bindable>ng-non-bindable指令不将{{}}作为angular的解析，直接输出文本：</dt>
+        <dd ng-non-bindable>{{text}}</dd>
+    </dl>
+
+</div>
+</body>
+</html>

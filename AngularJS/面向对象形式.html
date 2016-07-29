@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('Fn', ['$scope', Fn]);
+
+        function Fn( $scope ){
+
+        }
+        Fn.prototype.name = 'Barrior';
+        Fn.prototype.showName = function(){
+            return this.name
+        };
+
+        //使用面向对象的形式，在大型应用中更容易管理
+    </script>
+</head>
+<body ng-controller="Fn as obj">
+
+    <h3>My name is : {{ obj.name }} {{ obj.showName() }}</h3>
+
+</body>
+</html>

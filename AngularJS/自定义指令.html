@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('ctrl', ['$scope', function(){
+
+        }]);
+
+        //自定义指令，驼峰式写法，在html用横线表示
+        app.directive('myDir', function(){
+            /*
+
+             restrict(限制) 的取值可以有三种 - 区分大小写：
+                 A 用于元素的 Attribute，这是默认值
+                    <div my-dir></div>
+                 E 用于元素的名称
+                    <my-dir></my-dir>
+                 C 用于 CSS 中的 class
+                    <div class="my-dir"></div>
+                 M 注释
+                    <!-- directvie:my-dir -->
+
+             replace:
+                true: 替换父级元素，
+                false: 不替换，默认
+
+             */
+            return {
+                restrict: 'AE',
+                replace: true,
+//                template: '<div>use template by angular</div>',
+                templateUrl: 'temp/my-dir.html'
+            };
+
+        });
+    </script>
+</head>
+<body ng-controller="ctrl">
+
+    <my-dir></my-dir>
+    <div my-dir></div>
+
+</body>
+</html>

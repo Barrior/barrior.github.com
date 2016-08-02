@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *, :after, :before {
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        body{
+            font: 12px/1.5 "微软雅黑";
+            color: #333;
+        }
+        .tabs {
+            min-width: 300px;
+            display: inline-block;
+        }
+        .tabs .tab-nav {
+            padding-left: 0;
+            border-bottom: .33333rem solid #e0e0e0;
+        }
+        .tabs .tab-nav:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+        .tabs .tab-nav li.active,
+        .tabs .tab-nav li:hover {
+            color: #148fcc;
+            border-bottom-color: #148fcc;
+        }
+        .tabs .tab-nav li{
+            float: left;
+            list-style: none;
+            margin-right: 1em;
+            padding-bottom: .5em;
+            border-bottom: .33333rem solid transparent;
+            position: relative;
+            top: .33333rem;
+            cursor: pointer;
+        }
+        .tabs .tab-nav li.anim{
+            -webkit-transition: .4s cubic-bezier(.175,.885,.32,1);
+            -moz-transition: .4s cubic-bezier(.175,.885,.32,1);
+            transition: .4s cubic-bezier(.175,.885,.32,1);
+        }
+        .tabs .tab-content {
+            width: 100%;
+            overflow: hidden;
+        }
+        .tabs .tab-content .tab-panel.active {
+            display: block;
+        }
+        .tabs .tab-content .tab-panel {
+            display: none;
+        }
+        .container{
+            width: 360px;
+            margin: 50px auto;
+        }
+    </style>
+    <script src="jquery.js"></script>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('outerCtrl', ['$scope', function( $scope ){
+
+            $scope.data1 = [{
+                title: '沪深A股',
+                content: '【青春】那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。经过青春的草地，彩虹忽然升起。即使视线渐渐模糊，它也在我心里。就像爱过的旋律，没人能抹去。因为生命存在失望，歌唱，所以才要歌唱。'
+            },{
+                title: '上海A股',
+                content: '【彩虹】那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。经过青春的草地，彩虹忽然升起。即使视线渐渐模糊，它也在我心里。就像爱过的旋律，没人能抹去。因为生命存在失望，歌唱，所以才要歌唱。'
+            },{
+                title: '深圳A股',
+                content: '【歌唱】那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。经过青春的草地，彩虹忽然升起。即使视线渐渐模糊，它也在我心里。就像爱过的旋律，没人能抹去。因为生命存在失望，歌唱，所以才要歌唱。'
+            }];
+
+            $scope.data2 = [{
+                title: '&nbsp;&nbsp; 语文 &nbsp;&nbsp;',
+                content: '【语文语文语文语文语文语文语文语文语文语文语文语文】'
+            },{
+                title: '&nbsp;&nbsp; 数学 &nbsp;&nbsp;',
+                content: '【数学数学数学数学数学数学数学数学数学数学数学数学数学数学数学数学数】'
+            },{
+                title: '&nbsp;&nbsp; 英语 &nbsp;&nbsp;',
+                content: '【英语英语英语英语英语英语英语英语英语英语英语英语英语英语英语英语】'
+            }];
+
+            $scope.show = function( msg ){
+                console.log( msg )
+            }
+        }]);
+
+        //所谓sce即“Strict Contextual Escaping”的缩写。
+        //翻译成中文就是“严格的上下文模式”也可以理解为安全绑定吧
+        app.filter('useHTML', ['$sce', function( $sce ){
+            return function( val ){
+                return $sce.trustAsHtml( val );
+            }
+        }]);
+
+        app.directive('myTab', function(){
+            return {
+                templateUrl: 'temp/tab.html',
+                /*
+                 scope: 写成对象形式，申明隔离作用域
+                     @ 表示字符串数据传递
+                     = 表示变量数据传递
+                     & 表示函数传递
+                 */
+                scope: {
+                    //声明一个anim字段，在模板使用字段数据
+                    //【@】符号后面接 属性指令传递的【字符串】，如果名字相同，则可以简写为@即可
+                    anim: '@classname',
+                    //【=】表示取属性指令传递的【变量数据】
+                    data: '=',
+                    myFn: '&'
+                },
+                controller: ['$scope', function( $scope ){
+                    //当前的作用域，写一些公共的数据
+                    /*$scope.data = [{
+                        title: '沪深A股',
+                        content: '【青春】那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。经过青春的草地，彩虹忽然升起。即使视线渐渐模糊，它也在我心里。就像爱过的旋律，没人能抹去。因为生命存在失望，歌唱，所以才要歌唱。'
+                    },{
+                        title: '上海A股',
+                        content: '【彩虹】那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。经过青春的草地，彩虹忽然升起。即使视线渐渐模糊，它也在我心里。就像爱过的旋律，没人能抹去。因为生命存在失望，歌唱，所以才要歌唱。'
+                    },{
+                        title: '深圳A股',
+                        content: '【歌唱】那时候有多好，任雨打湿裙角。忍不住哼起，心爱的旋律。绿油油的树叶，自由地在说笑。燕子忙归巢，风铃在舞蹈。经过青春的草地，彩虹忽然升起。即使视线渐渐模糊，它也在我心里。就像爱过的旋律，没人能抹去。因为生命存在失望，歌唱，所以才要歌唱。'
+                    }]*/
+                }],
+                /*
+                 link：用于DOM操作
+                     scope              当前作用域
+                     element            父级的元素，简化版jquery
+                     attr               当前标签对应的属性列表
+                     reController
+                 */
+                link: function( scope, elem, attr ){
+                    /*
+                    console.log( scope );
+                    //elem模板生成之前就执行完了，所以需要用事件委托
+                    console.log( elem );
+                    console.log( attr );
+                    */
+                    //引入jquery后就可以使用jquery的形式操作DOM了
+                    elem.on('click', '.tab-nav li', function(){
+                        var $this = $(this);
+                        $this.addClass('active').siblings().removeClass('active');
+                        $this.parent().next()
+                                .find('.tab-panel').eq( $this.index() ).addClass('active')
+                                .siblings().removeClass('active');
+                    });
+                }
+            };
+
+        });
+    </script>
+</head>
+<body ng-controller="outerCtrl">
+
+    <div class="container">
+        <my-tab classname="anim" data="data1" my-fn="show( msg )"></my-tab>
+        <div my-tab classname="anim" data="data2"></div>
+    </div>
+
+</body>
+</html>

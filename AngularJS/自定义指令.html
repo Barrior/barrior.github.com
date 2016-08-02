@@ -15,7 +15,8 @@
             /*
 
              restrict(限制) 的取值可以有三种 - 区分大小写：
-                 A 用于元素的 Attribute，这是默认值
+                默认值为EA
+                 A 用于元素的 Attribute
                     <div my-dir></div>
                  E 用于元素的名称
                     <my-dir></my-dir>
@@ -32,6 +33,7 @@
             return {
                 restrict: 'AE',
                 replace: true,
+                scope: true,
 //                template: '<div>use template by angular</div>',
                 templateUrl: 'temp/my-dir.html'
             };

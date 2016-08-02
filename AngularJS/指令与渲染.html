@@ -15,9 +15,11 @@
     <script>
         var app = angular.module('app', []);
 
-        app.controller('ctrl',['$scope', function( $scope ){
+        app.controller('ctrl',['$scope', '$sce', function( $scope, $sce ){
 
             $scope.text = 'Hello Directive';
+            //要使用html模板解析，需注册$sce服务转换，真够垃圾的
+            $scope.myHTML = $sce.trustAsHtml( '<h3>H3</h3>我是Html标签模板哟' );
 
         }]);
 
@@ -41,6 +43,9 @@
 
         <dt ng-non-bindable>ng-non-bindable指令不将{{}}作为angular的解析，直接输出文本：</dt>
         <dd ng-non-bindable>{{text}}</dd>
+
+        <dt>ng-bind-html属性形式解析数据，将数据做html格式输出：</dt>
+        <dd ng-bind-html="myHTML"></dd>
     </dl>
 
 </div>

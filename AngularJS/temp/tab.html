@@ -1,0 +1,20 @@
+<div class="tabs {{ anim }}">
+    <ul class="tab-nav">
+        <li ng-repeat="item in data"
+            ng-class="{ 'active': $first ? true : false }"
+            data-tab="{{ $index }}"
+            ng-click="myFn({ msg: $index + ' - tab msg' })"
+            ng-bind-html="item.title | useHTML">
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div ng-repeat="item in data"
+             ng-class="{ 'tab-panel': true, 'active': $first ? true : false }"
+             data-panel="{{ $index }}">
+            {{ item.content }}
+        </div>
+    </div>
+</div>
+<!--
+    对象形式的函数传参，好傻
+-->

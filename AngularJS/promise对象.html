@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+
+        //angular里的延迟对象跟jQuery的延迟对象雷同，用$q表示
+        app.controller('body', ['$scope','$q', ( $scope, $q ) => {
+            //申明一个延迟对象
+            let dfd = $q.defer();
+            let show = () => {
+
+                setTimeout( () => {
+                    //成功
+                    dfd.resolve();
+
+                    //失败
+                    //dfd.reject();
+
+                }, 1000 );
+
+                return dfd.promise;
+            };
+
+            //1s后执行成功或失败后的函数
+            show().then( () => alert( 'success' ), () => alert( 'error' ) )
+
+        }]);
+    </script>
+</head>
+<body ng-controller="body">
+
+
+</body>
+</html>

@@ -2,9 +2,9 @@
     <ul class="tab-nav">
         <li ng-repeat="item in data"
             ng-class="{ 'active': $first ? true : false }"
-            data-tab="{{ $index }}"
             ng-click="myFn({ msg: $index + ' - tab msg' })"
-            ng-bind-html="item.title | useHTML">
+            ng-bind-html="item.title | useHTML"
+            data-tab="{{ $index }}">
         </li>
     </ul>
     <div class="tab-content">

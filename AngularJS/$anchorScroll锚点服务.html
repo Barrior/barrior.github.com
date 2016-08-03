@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            width: 300px;
+            height: 400px;
+            margin: 50px auto;
+            border: 1px solid #333;
+        }
+        ul{
+            position: fixed;
+            right: 100px;
+            top: 100px;
+        }
+        li{
+            cursor: pointer;
+        }
+    </style>
+    <script src="angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('body', ['$scope','$location','$anchorScroll', function( $scope, $location, $anchorScroll ){
+
+            $scope.hashChange = ( id ) => {
+                $location.hash( id )
+                //anchor author
+                //调用$anchorScroll服务，可以保证每次点击锚点都触发滚动到相应锚点ID
+                $anchorScroll()
+            }
+
+        }]);
+    </script>
+</head>
+<body ng-controller="body">
+
+    <ul>
+        <li ng-repeat="id in [1, 2, 3, 4, 5]" ng-click="hashChange( 'div-' + id )"> {{ id }} - lililili </li>
+    </ul>
+
+    <div ng-repeat="id in [1, 2, 3, 4, 5]" ng-attr-id="div-{{ id }}"> {{id}} </div>
+
+</body>
+</html>

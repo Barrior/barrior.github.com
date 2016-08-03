@@ -36,14 +36,17 @@
             return {
                 restrict: 'A',
                 link: function( scope, elem, attr ){
-                    var options = attr.myDrag === 'true';
+
+                    var options = scope.$eval( attr.myDrag );
+                    var borderline = options.border;
+
                     elem.on('mousedown', function( e ){
                         var $elem = $(this);
                         var disX = e.clientX - $(this).offset().left;
                         var disY = e.clientY - $(this).offset().top;
                         var left;
                         var top;
-                        if( options ){
+                        if( borderline ){
                             $elem = $('<div>').css({
                                 width: $elem.outerWidth(),
                                 height: $elem.outerHeight(),
@@ -62,7 +65,7 @@
                         });
                         $(document).on('mouseup', function(){
                             $(this).off();
-                            if( options ){
+                            if( borderline ){
                                 elem.css({
                                     left: left,
                                     top: top
@@ -80,8 +83,8 @@
 </head>
 <body>
 
-    <div class="div1" my-drag="true"></div>
-    <div class="div2" my-drag="false"></div>
+    <div class="div1" my-drag="{ border: true }"></div>
+    <div class="div2" my-drag="{ border: false }"></div>
 
 
 </body>

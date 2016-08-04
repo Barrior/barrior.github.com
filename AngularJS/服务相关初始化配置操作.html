@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="js/angular.min.js"></script>
+    <script>
+        let app = angular.module('app', []);
+        /*
+         interpolate：篡改，插入
+         provider：供应者，养家者
+
+         */
+
+        //通过配置方法将默认的模板符号换成了@@
+        app.config(['$interpolateProvider', ( $interpolateProvider ) => {
+
+            $interpolateProvider.startSymbol( '@@' );
+            $interpolateProvider.endSymbol( '@@' );
+
+        }]);
+
+        app.controller('nameCtrl', ['$scope', ( $scope ) => {
+
+            $scope.showText = 'some text';
+
+        }]);
+    </script>
+</head>
+<body>
+    <div ng-controller="nameCtrl">
+
+        <h3> @@ showText @@ </h3>
+
+    </div>
+</body>
+</html>

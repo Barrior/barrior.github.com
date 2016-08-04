@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="js/angular.min.js"></script>
+    <script>
+        let app = angular.module('app', []);
+        /*
+         service同factory雷同
+         */
+        app.service('arrExtends', function(){
+            return {
+                unique: aData => {
+                    let arr = [];
+                    let hash = {};
+                    if( Array.isArray( aData ) ){
+                        aData.forEach( ( v ) => {
+                            if( !hash[ v ] ){
+                                hash[ v ] = [ v ];
+                                arr.push( v );
+                            }else if( hash[ v ].indexOf( v ) == -1 ){
+                                hash[ v ].push( v );
+                                arr.push( v );
+                            }
+                        });
+                    }
+                    return arr;
+                }
+            };
+        });
+
+        //另一种方式，则是写成构造函数的方式
+        app.service('myService', mysFn);
+        function mysFn(){
+            this.name = 'Barrior';
+        }
+        mysFn.prototype.showName = function(){
+            return this.name;
+        };
+
+        app.controller('nameCtrl', ['$scope', 'arrExtends', 'myService',
+            ( $scope, arrExtends, myService ) => {
+
+            //数组去重
+            $scope.info = arrExtends.unique( [ 2, 4, 3, 3, 5, 4, 7, 2, 9 ] );
+            $scope.name = myService.showName();
+
+        }]);
+    </script>
+</head>
+<body>
+    <div ng-controller="nameCtrl">
+
+        <h3> {{ info }} - {{ name }} </h3>
+
+    </div>
+</body>
+</html>

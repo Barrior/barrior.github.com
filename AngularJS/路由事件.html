@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <style>
+        ul{
+            position: fixed;
+            left: 200px;
+            top: 100px;
+            line-height: 2;
+        }
+        .container{
+            padding: 100px 0 0 400px;
+        }
+    </style>
+    <script src="js/angular.min.js"></script>
+    <!--引入对应版本的route模板-->
+    <script src="js/angular-route.js"></script>
+    <script>
+        var app = angular.module('app', ['ngRoute']);
+
+        app.config(['$routeProvider', function( $routeProvider ){
+
+            $routeProvider
+                    .when('/index', {
+                        template: '<h3>这里是【{{ pagename }}】页</h3>',
+                        controller: 'indexCtrl'
+                    })
+                    .when('/user', {
+                        template: '<h3>这里是【{{ pagename }}】页</h3>',
+                        controller: 'userCtrl'
+                    })
+                    .when('/finance', {
+                        template: '<h3>这里是【财务管理】页</h3>'
+                    })
+                    //当没找到已配置的路由时，走这个路由，相当于默认路由，然而没有404了，
+                    .otherwise({
+                        //redirect：使改方向，重新寄送
+                        redirectTo: '/index'
+                    })
+        }]);
+
+        app.run(['$rootScope', function( $rootScope ){
+
+            //路由改变的时候出发此事件
+            $rootScope.$on('$routeChangeStart', function( event, current, pre ){
+                console.log( event );
+                console.log( current );
+                console.log( pre );
+            });
+
+        }]);
+
+        app.controller('routeCtrl', ['$scope', '$location', function( $scope, $location ) {
+
+        }]);
+
+        //通过controller设置模板里的数据，事件等
+        app.controller('indexCtrl', ['$scope', function( $scope ) {
+            $scope.pagename = '首页';
+        }]);
+
+        app.controller('userCtrl', ['$scope', function( $scope ) {
+            $scope.pagename = '用户中心';
+        }]);
+
+    </script>
+</head>
+<body ng-controller="routeCtrl">
+    <ul>
+        <li>
+            <a href="#index">首页</a>
+        </li>
+        <li>
+            <a href="#user">用户中心</a>
+        </li>
+        <li>
+            <a href="#finance">财务管理</a>
+        </li>
+    </ul>
+
+    <div class="container">
+        <div ng-view></div>
+    </div>
+</body>
+</html>

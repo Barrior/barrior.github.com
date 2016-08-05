@@ -5,10 +5,13 @@
     <title>ng</title>
     <script src="js/angular.min.js"></script>
     <script>
-        angular.module('runApp', []).run(['$rootScope', function (r) {
-            r.info = '我是用run方法出来的全局数据,省略了控制器指令操作(*^__^*)';
-            console.log( r )
-        }]);
+        //run方法初始化全局的数据 ,只对全局作用域起作用 如$rootScope
+        //设置根数据，便于使用
+        angular.module('runApp', [])
+            .run(['$rootScope', function (r) {
+                r.info = '我是用run方法出来的全局数据,省略了控制器指令操作(*^__^*)';
+                console.log( r )
+            }]);
     </script>
 </head>
 <body>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>ng</title>
+    <script src="js/angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('ctrl', ['$scope', function( $scope ){
+
+            $scope.count = 1;
+
+            $scope.$on('myEvent', function( event ){
+
+                $scope.count++;
+                console.log( event.targetScope );
+                console.log( event.currentScope );
+
+            });
+        }]);
+
+    </script>
+</head>
+<body>
+    <!--
+        控制器之间嵌套，并使用相同的字段，默认只会更新当前作用域的字段数据，其他保持不变
+        如若需要都更新，则需要使用事件传播
+    -->
+    <div ng-controller="ctrl">
+        {{ count }}
+        <!--
+            //这样子就是默认不传播
+            <div ng-controller="ctrl" ng-click=" count = count + 1 ">
+            $emit: 向上传播
+            $broadcast: 向下传播
+        -->
+        <div ng-controller="ctrl" ng-click="$emit( 'myEvent' )">
+            {{ count }}
+            <div ng-controller="ctrl">
+                {{ count }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

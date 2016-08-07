@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            transition: .4s;
+        }
+        /*
+            angular动画通过css3实现
+                ng-enter: 刚进入时的状态
+                ng-enter-active: 进入完成时的状态
+                ng-leave: 刚消失时的状态
+                ng-leave-active: 消失完成时的状态
+
+            支持命令：
+                if, view, repeat, include, switch
+            repeat命令特殊运动classname( 使用方式请看演示页：$animate百度下拉框动效.html )
+                ng-enter-stagger    也分enter和leave两种方式
+                animation-delay     延迟显示效果
+        */
+        div.ng-enter{
+            opacity: 0;
+        }
+        div.ng-enter-active{
+            opacity: 0;
+        }
+        div.ng-leave{
+            opacity: 1;
+        }
+        div.ng-leave-active{
+            opacity: 0;
+        }
+    </style>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.js"></script>
+    <script>
+        var app = angular.module('app', ['ngAnimate']);
+        app.controller('ctrl', ['$scope', function( $scope ){
+
+        }]);
+    </script>
+</head>
+<body ng-controller="ctrl">
+
+    <label>
+        <input type="checkbox" ng-model="in">
+        点我显示隐藏
+    </label>
+    <div ng-if="in"></div>
+
+</body>
+</html>

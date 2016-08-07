@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('ctrl', ['$scope', function(){
+
+        }]);
+        app.directive('parentComponent', function(){
+            return {
+                restrict: 'AE',
+                //replace好像不能用，会报错
+                //replace: true,
+                scope: true,
+                //让子组件可以被包含进来，在模板用ng-translcude引用子组件
+                transclude: true,
+                controller: function( $scope ){
+                    //$scope.name = 'Parent name';
+                    //通过挂载到this上，给子组件访问，需要在子组件上用require请求
+                    this.name = 'Parent name';
+                },
+                template:   '<h2>父组件parent-component' +
+                                '<h3 ng-transclude></h3>' +
+                            '</h2>'
+            };
+        });
+        app.directive('childComponent', function(){
+            return {
+                replace: true,
+                scope: true,
+                //?可以去掉没找到父组件，避免报错
+                //^表示寻找父组件，默认为自身组件
+                require: '^parentComponent',
+                template: '<h3>子组件{{ name }}</h3>',
+                link: function( scope, elem, attr, requireController ){
+                    //requireController就是父级的控制器
+                    console.log( requireController )
+                    console.log( requireController.name )
+                    scope.name = ' - 继承父级的name数据：' + requireController.name
+                }
+            }
+        });
+    </script>
+</head>
+<body ng-controller="ctrl">
+
+    <parent-component>
+        <child-component></child-component>
+    </parent-component>
+
+    <div parent-component>
+        <child-component></child-component>
+    </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container{
+            width: 300px;
+            margin: 50px auto;
+        }
+        li{
+            transition: .6s;
+        }
+        li.ng-enter{
+            opacity: 0;
+        }
+        li.ng-enter-active{
+            opacity: 1;
+        }
+        li.ng-leave{
+            display: none;
+        }
+        li.ng-enter-stagger{
+            animation-delay: .1s;
+        }
+    </style>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.js"></script>
+    <script>
+        var app = angular.module('app', ['ngAnimate']);
+
+        app.controller('body', ['$scope','$http','$timeout', function( $scope, $http, $timeout ){
+            var timer = null;
+            $scope.list = [];
+            $scope.search = function( keyword ){
+                $http({
+                    method: 'JSONP',
+                    url: `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${ keyword }&cb=JSON_CALLBACK`
+                })
+                .success(function ( msg ){
+
+                    $timeout.cancel( timer );
+                    timer = $timeout(function(){
+                        $scope.list = msg.s;
+                    }, 400 );
+
+                });
+            };
+
+        }]);
+    </script>
+</head>
+<body ng-controller="body">
+
+    <div class="container">
+        <input type="text" ng-model="keyword" ng-keyup="search( keyword )">
+        <input type="button" value="搜索" ng-click="search( keyword )">
+        <ul>
+            <li ng-repeat="d in list" ng-bind=" d "></li>
+        </ul>
+    </div>
+
+</body>
+</html>

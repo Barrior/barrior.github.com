@@ -65,6 +65,8 @@
                 maxlength: '密码长度不能大于30位'
             };
 
+            $scope.confirmPassword = angular.extend( {}, $scope.passwordHint );
+
             $scope.change = function( type, $error ){
                 console.log( type, $error );
                 if( $error.required ){
@@ -111,6 +113,22 @@
                    ng-model="passwordText"
                    ng-blur="change( 'passwordHint', myForm.password.$error )">
             <div class="hint">{{ passwordHint.hint }}</div>
+        </aside>
+
+        <aside>
+            <input type="password" name="confirmPassword" placeholder="确认密码" required
+                   ng-minlength="6"
+                   ng-maxlength="30"
+                   ng-model="confirmPasswordText"
+                   ng-blur="change( 'confirmPassword', myForm.confirmPassword.$error )">
+            <div class="hint">{{ confirmPassword.hint }}</div>
+            <div class="hint" ng-show="
+                myForm.password.$valid &&
+                myForm.confirmPassword.$valid &&
+                (passwordText !== confirmPasswordText)
+            ">
+                两次密码输入不一致
+            </div>
         </aside>
 
         <aside>

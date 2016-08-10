@@ -4,6 +4,7 @@
 
 //函数的默认参数
 //参数变量是默认声明的，所以不能用let或const再次声明。
+//定义默认值的参数必须是尾参数，因为定义默认值后该参数可忽略
 function person( name = 'Barrior', age = 23, info = { sex: 'male' } ){
     console.log( name );
     console.log( age );
@@ -43,3 +44,16 @@ let sum = ( ...vals ) => {
     return sum;
 }
 console.log( sum(1, 2, 3) );
+/*
+
+ 扩展运算符（spread）是三个点（...）。它好比rest参数的逆运算，将一个数组转为用逗号分隔的参数序列。
+    ①、...扩展运算符，将数组[ 1, 2, 3, 4, 5 ]转成( 1, 2, 3, 4, 5 )进行传参了
+    ②、利用扩展运算符将字符串快速转成数组，扩展运算符需要【有遍历接口的】数据
+ */
+//①
+let requireArr = [ 1, 2, 3, 4, 5 ];
+console.log( '最大值是：' + Math.max( ...requireArr ) );
+
+//②
+let string = 'Barrior';
+console.log( [ ...string ] );   //[ 'B', 'a', 'r', 'r', 'i', 'o', 'r' ]

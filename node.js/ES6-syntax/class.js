@@ -25,6 +25,7 @@ let me = new class {
     }
     showName(){
         console.log( this.name );
+
     }
 }( 'Barrior' );
 

@@ -12,15 +12,14 @@ function fn( x, y ){
 console.log( fn( 2, 4 ) );
 
 
-//表达式变量
+//属性，方法的简洁模式 & 表达式变量
+let name = 'Barrior';
 let person = {
-    name: 'Barrior',
+    name,
     [ 'sex' ]: 'male',
     [ 'a' + 'ge' ]: 23,
-    [ 'showName' ](){
-        //注意，箭头函数的this，指向定义时所在的对象，而不是使用时所在的对象。
-        //箭头函数的this是固定不变的。
-        console.log(this);
+    [ 'showName' ]() {
+        console.log( 'this: ', this );
         console.log( person.name );
     }
 };

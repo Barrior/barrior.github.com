@@ -89,8 +89,8 @@
                 content: '【英语英语英语英语英语英语英语英语英语英语英语英语英语英语英语英语】'
             }];
 
-            $scope.show = function( msg ){
-                console.log( msg )
+            $scope.show = function( msg, customData ){
+                console.log( msg, customData )
             }
         }]);
 
@@ -163,7 +163,7 @@
 <body ng-controller="outerCtrl">
 
     <div class="container">
-        <my-tab classname="anim" data="data1" my-fn="show( msg )"></my-tab>
+        <my-tab classname="anim" data="data1" my-fn="show( msg, '外层自定义数据' )"></my-tab>
         <div my-tab classname="anim" data="data2"></div>
     </div>
 

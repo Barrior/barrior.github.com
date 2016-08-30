@@ -1,5 +1,5 @@
-
-let unique = aData => {
+let arr = {};
+arr.unique = aData => {
     let arr = [];
     let hash = {};
     if( Array.isArray( aData ) ){
@@ -16,4 +16,4 @@ let unique = aData => {
     return arr;
 };
 
-export default unique;
+export default arr;

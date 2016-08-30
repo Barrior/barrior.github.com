@@ -1,33 +1,27 @@
-
-let path = require('path');
 let webpack = require('webpack');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        main: './src/js/dev.js'
+        main: './src/js/main.js'
     },
     output: {
         path: './assets/js/',
-        //[name]表示entry对象下对应值
+        //[name]表示entry对象的key值
         filename: '[name].js'
     },
     module: {
         loaders: [
             {
-                test: /\.js$/,
+                test: /\.jsx?$/,
                 //排除node.js模块的js文件
                 exclude: /node_modules/,
                 loader: 'babel'
             },
             {
-                test: /\.css$/,
-                loader: 'style!css'
-            },
-            {
                 test: /\.less$/,
-                //loader: "style!css!less"
-                loader: ExtractTextPlugin.extract( 'style', 'css' )
+                loader: "style!css!less"
+                //loader: ExtractTextPlugin.extract( 'style', 'css', 'less' )
             },
             {
                 test: /\.scss$/,
@@ -39,7 +33,7 @@ module.exports = {
             }
         ]
     },
-    devtool: 'source-map',
+    //devtool: 'source-map',
     plugins: [
         //加版权信息
         new webpack.BannerPlugin("Copyright 2016 <Barrior@qq.com>"),
@@ -49,21 +43,19 @@ module.exports = {
     resolve: {
         //root: 'D:/Github-Projects/barrior.github.com/webpack',
         root: __dirname,
-        extensions: ['', '.js', '.json', '.scss'],
+        extensions: [ '', '.js', '.jsx', '.json', '.scss', '.less' ],
         alias: {
             //后续直接 require('jq') 即可
             jq : 'src/js/jquery.js'
         }
     },
     devServer: {
-        //本地服务器所加载的页面所在的目录
-        contentBase: "./assets",
-        //终端中输出结果为彩色
-        colors: true,
-        //不跳转
-        historyApiFallback: true,
+        //热加载
+        hot: true,
         //实时刷新
-        inline: true
+        inline: true,
+        //终端中输出结果为彩色
+        colors: true
     }
 };
 /*
@@ -89,7 +81,9 @@ module.exports = {
     extensions: 自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
     alias: 模块别名定义，方便后续直接引用别名，无须多写长长的地址
 
- devserver配置选项:
+ devserver配置选项(http://webpack.github.io/docs/webpack-dev-server.html#webpack-dev-server-cli):
+ 注：即便配置文件inline，hot配置参数，但是在命令行终端，devserver仍然要加上inline，hot等参数，因为它是不可省的，不然没有即时更新的功能
+     inline, hot: 热加载，修改入口文件会重新刷新，修改依赖文件则不刷新自动更新
      port: 设置默认监听端口，如果省略，默认为'8080'
      inline: 设置为true，当源文件改变时会自动刷新页面
      colors: 设置为true，使终端输出的文件为彩色的
@@ -99,8 +93,7 @@ module.exports = {
      historyApiFallback:
         在开发单页应用时非常有用，它依赖于HTML5 history API，
         如果设置为true，所有的跳转将指向index.html
- */
-/*
- npm一次性安装多个依赖模块,安装Babel
- npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react
+
+  参考文章：
+        http://hawx1993.github.io/2016/03/21/webpack-development/
  */

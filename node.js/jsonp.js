@@ -16,7 +16,7 @@ server.on( 'request', function( req, res ){
         case '/jsonp':
             res.writeHead( 200, {
                 //以js解析，这就是所谓的jsonp，生成js数据，传到前端，浏览器当做js代码执行
-                //这样就可以实现跨域请求了
+                //这样就可以实现跨域请求了,因为js文件是可以跨域的嘛
                 'content-type': 'application/x-javascript; charset=utf-8'
             });
             res.end( 'var d = [1, 2, 3, 4, 5]; alert(d)' );
@@ -24,4 +24,4 @@ server.on( 'request', function( req, res ){
     }
 });
 
-server.listen( 8080, 'localhost' );
+server.listen( 9999, 'localhost' );

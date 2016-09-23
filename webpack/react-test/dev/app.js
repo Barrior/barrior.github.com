@@ -3,8 +3,10 @@
 // 在webpack里配置的alias模块不可用，会出现路径错误的情况，这是怎么回事
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ShowImg from './component';
-import '../style/app.less';
+import ShowImg from './components/showImg';
+import './style/app.less';
+
+const imgUrl = require('./img/photo.jpg');
 
 console.log( window );
 console.log( window.React );    //undefined

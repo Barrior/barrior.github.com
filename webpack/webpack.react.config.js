@@ -1,16 +1,17 @@
-let webpack = require('webpack');
-let dirname = __dirname.replace( /\\/g, '/' );
-
-console.log( __dirname );
-console.log( dirname );
+const webpack = require('webpack');
+const dirname = __dirname.replace( /\\/g, '/' );
 
 module.exports = {
     entry: {
-        app: './react-test/dev/app.js'
+        lib: ['react', 'react-dom'],
+        app: './react-test/dev/app.js',
+        //user: './react-test/dev/user.js',
     },
     output: {
         path: './react-test/production',
-        filename: '[name].js'
+        filename: '[name]-[hash:8].js',
+        chunkFilename: 'chunk-[hash:8].js',
+        publicPath: './react-test/dev'
     },
     module: {
         loaders: [
@@ -22,10 +23,31 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                loader: 'style!css!less'
+                loader: 'style!css!postcss!less'
+            },
+            {
+                test: /\.jpe?g$|\.gif$|\.png$|\.ico$|\.svg$|\.woff$|\.ttf$|\.eot$/,
+                // 将文件从上下文目录复制到输出目录保留了完整的目录结构
+                loader: 'file?name=[path][name]-[hash:8].[ext]'
+            },
+            {
+                test: /\.json$/,
+                loader: 'json'
             }
         ]
     },
+    postcss: [
+        // 调用autoprefixer插件, npm install --save-dev postcss-loader autoprefixer
+        require('autoprefixer')
+    ],
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            // 建立提取关系，对应entry的lib
+            name: 'lib',
+            // 输出的文件名
+            filename: 'vendor-[hash:8].js'
+        })
+    ],
     resolve: {
         root: dirname,
         extensions: [ '', '.js', '.jsx', '.json', '.scss', '.less' ],
@@ -35,8 +57,9 @@ module.exports = {
         }
     },
     devServer: {
-        // 配置react-test目录为服务器根目录，这样好像就不用刷新页面了
-        //contentBase: `${ dirname }/react-test`,
+        // 配置react-test/production目录为服务器根目录，这样好像就不用刷新页面了，需要绝对路径
+        // production：产品输出目录，真实线上环境目录
+        contentBase: `${ dirname }/react-test/production`,
         // 热加载
         hot: true,
         // 实时刷新

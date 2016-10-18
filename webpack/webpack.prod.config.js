@@ -6,21 +6,18 @@ const dirname = __dirname.replace( /\\/g, '/' );
 
 module.exports = {
     entry: {
-        lib: ['react', 'react-dom', 'jquery'],
+        lib: ['react', 'react-dom'],
         app: './react-test/dev/app.js',
-        // 定义多个入口
-        //user: './react-test/dev/user.js'
+        //user: './react-test/dev/user.js',
     },
     output: {
         path: './react-test/production',
         filename: '[name]-[hash:8].js',
-        // require.ensure 按需加载的时候输出名称
-        chunkFilename: 'chunk-[hash:8].js'
+        //chunkFilename: 'chunk-[hash:8].js',
+        // webpack-dev-server访问的路径
+        //publicPath: './react-test/dev'
     },
     module: {
-
-        // 忽略对已知文件解析，提高编译速度
-        noParse:['react', 'react-dom', 'jquery'],
         loaders: [
             {
                 test: /\.jsx?$/,
@@ -30,9 +27,7 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                //loader: 'style!css!autoprefixer-loader?{browsers: [ "IE >= 9", "Firefox > 10", "chrome > 10" ]}!less',
-                // https://github.com/webpack/extract-text-webpack-plugin
-                loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1!postcss!less')
+                loader: 'style!css!postcss!less'
             },
             {
                 test: /\.jpe?g$|\.gif$|\.png$|\.ico$|\.svg$|\.woff$|\.ttf$|\.eot$/,
@@ -45,43 +40,31 @@ module.exports = {
             }
         ]
     },
-    // https://github.com/postcss/postcss-loader
-    postcss: function () {
-        return [
-            require('autoprefixer')
-        ];
-    },
+    postcss: [
+        // 调用autoprefixer插件, npm install --save-dev postcss-loader autoprefixer
+        require('autoprefixer')
+    ],
     plugins: [
-
-        // https://github.com/ampedandwired/html-webpack-plugin#configuration
-        new HtmlWebpackPlugin({
-            inject: true,
-            template: './react-test/dev/index.html',
-            minify: {
-                minifyCSS: true,
-                minifyJS: true,
-                removeComments: true
-            }
-        }),
-
-        // 提取公共js文件
+        // 压缩js css
+        new webpack.optimize.UglifyJsPlugin(),
+        new HtmlWebpackPlugin(),
         new webpack.optimize.CommonsChunkPlugin({
             // 建立提取关系，对应entry的lib
             name: 'lib',
             // 输出的文件名
             filename: '[name]-[hash:8].js'
-        }),
-
-        // 将所有样式文件提取成独立css文件
-        new ExtractTextPlugin('./css/[name]-[hash:8].css')
+        })
     ],
     resolve: {
         root: dirname,
         extensions: [ '', '.js', '.jsx', '.json', '.scss', '.less' ],
-        alias: {}
+        alias: {
+            //react: dirname + '/react-test/production/react.min',
+            //reactDOM: '../production/react-dom.min'
+        }
     },
     devServer: {
-        // 配置 react-test/production 目录为服务器根目录，这样好像就不用刷新页面了，需要绝对路径
+        // 配置react-test/production目录为服务器根目录，这样好像就不用刷新页面了，需要绝对路径
         // production：产品输出目录，真实线上环境目录
         contentBase: `${ dirname }/react-test/production`,
         // 热加载

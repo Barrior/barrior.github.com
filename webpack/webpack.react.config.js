@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -30,9 +31,8 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                //loader: 'style!css!autoprefixer-loader?{browsers: [ "IE >= 9", "Firefox > 10", "chrome > 10" ]}!less',
                 // https://github.com/webpack/extract-text-webpack-plugin
-                loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1!postcss!less')
+                loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss!less')
             },
             {
                 test: /\.jpe?g$|\.gif$|\.png$|\.ico$|\.svg$|\.woff$|\.ttf$|\.eot$/,
@@ -45,12 +45,13 @@ module.exports = {
             }
         ]
     },
+
     // https://github.com/postcss/postcss-loader
-    postcss: function () {
-        return [
-            require('autoprefixer')
-        ];
-    },
+    postcss: [
+        autoprefixer({
+            browsers: [ "IE >= 9", "Firefox > 10", "chrome > 10" ]
+        })
+    ],
     plugins: [
 
         // https://github.com/ampedandwired/html-webpack-plugin#configuration

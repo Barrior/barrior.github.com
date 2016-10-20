@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './style/app.less';
+import './css/app.less';
 
 
 let container = document.createElement( 'div' );

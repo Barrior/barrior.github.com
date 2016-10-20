@@ -5,16 +5,20 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const dirname = __dirname.replace( /\\/g, '/' );
 
+//rm -rf ./react-test/production
+
 module.exports = {
     entry: {
         lib: ['react', 'react-dom', 'jquery'],
         app: './react-test/dev/app.js',
-        // 定义多个入口
-        //user: './react-test/dev/user.js'
+
+        // 定义多个入口，在 HtmlWebpackPlugin 下使用
+        user: './react-test/dev/user.js'
     },
     output: {
         path: './react-test/production',
         filename: '[name]-[hash:8].js',
+
         // require.ensure 按需加载的时候输出名称
         chunkFilename: 'chunk-[hash:8].js'
     },
@@ -26,16 +30,19 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
+
                 // 注意：数组声明时，这里是loaders
                 loaders: [ 'react-hot', 'babel' ]
             },
             {
                 test: /\.less$/,
+
                 // https://github.com/webpack/extract-text-webpack-plugin
                 loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss!less')
             },
             {
                 test: /\.jpe?g$|\.gif$|\.png$|\.ico$|\.svg$|\.woff$|\.ttf$|\.eot$/,
+
                 // 将文件从上下文目录复制到输出目录并保留完整的目录结构
                 loader: 'file?name=[path][name]-[hash:8].[ext]'
             },
@@ -56,13 +63,33 @@ module.exports = {
 
         // https://github.com/ampedandwired/html-webpack-plugin#configuration
         new HtmlWebpackPlugin({
-            inject: true,
-            template: './react-test/dev/index.html',
+            title: 'INDEX PAGE',
+
+            // 生成的文件名，可包含路径
+            filename: 'index.html',
+            template: './react-test/dev/index-tpl.html',
             minify: {
                 minifyCSS: true,
                 minifyJS: true,
                 removeComments: true
-            }
+            },
+
+            // 生成的文件指定入口文件(或多个)，对应 entry 里的key
+            // 这里加入lib，不然，当多个模板时，css公用的时候，生成的模板不会加入lib.js
+            chunks: ['lib', 'app']
+        }),
+
+        // new 两次，就执行两次该插件
+        new HtmlWebpackPlugin({
+            title: 'USER PAGE',
+            filename: 'user.html',
+            template: './react-test/dev/user-tpl.html',
+            minify: {
+                minifyCSS: true,
+                minifyJS: true,
+                removeComments: true
+            },
+            chunks: ['lib', 'user']
         }),
 
         // 提取公共js文件

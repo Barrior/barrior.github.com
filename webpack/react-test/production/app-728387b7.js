@@ -195,13 +195,6 @@ webpackJsonp([0],{
 
 	module.exports = __webpack_require__.p + "react-test/dev/img/photo-fa2dc5e4.jpg";
 
-/***/ },
-
-/***/ 179:
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
 /***/ }
 
 });

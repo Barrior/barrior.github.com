@@ -1,79 +1,25 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Link, hashHistory, browserHistory } from 'react-router';
-import $ from 'jquery';
-import Particleground from 'Particleground.js';
+import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router';
 import './route.less';
-
-class Index extends Component {
-    render() {
-        return (
-            <div>
-                <h3>Index page</h3>
-                <div>nav:</div>
-                <ul>
-                    <li>
-                        /* 给当前路由加上 active 状态 */
-                        <Link to="/" activeStyle={{color: 'red'}}>Index</Link>
-                    </li>
-                    <li>
-                        /* 给当前路由加上 active 状态, 通过classname */
-                        <Link to="/user" activeClassName="active">User</Link>
-                    </li>
-                    <li>
-                        <Link to="/about" activeStyle={{color: 'red'}}>About</Link>
-                    </li>
-                </ul>
-            </div>
-        )
-    }
-}
-
-class User extends Component {
-    render() {
-        return (
-            <div className="user-page">
-                <h3>User</h3>
-                <h4>The user id: {this.props.params.id}</h4>
-                <div>
-                    <h4>this.props is:</h4>
-                    {JSON.stringify(this.props)}
-                </div>
-            </div>
-        )
-    }
-}
-
-class About extends Component {
-    render() {
-        return (
-            <h3>About</h3>
-        )
-    }
-}
+import App from './app';
+import Index from './index';
+import User from './user';
+import About from './about';
 
 ReactDOM.render(
-    <div>
-        <div className="nav">
-            <ul>
-                <li>
-                    <a href="#/">Index</a>
-                </li>
-                <li>
-                    <a href="#/user/45">User</a>
-                </li>
-                <li>
-                    <a href="#/about">About</a>
-                </li>
-            </ul>
-        </div>
-        <Router history={ hashHistory }>
-            <Route path="/" component={ Index } onEnter={
-                console.info('Route tips: Index event is triggered when Enter index page.')
-            }/>
-            <Route path="/user(/:id)" component={ User }/>
-            <Route path="/about" component={ About }/>
-        </Router>
-    </div>,
+    <Router history={ hashHistory }>
+        {/*
+         嵌套路由：
+            下面代码中，用户访问 /about 路由时(user等路由同理)，
+            会先加载 App 组件，然后在它的内部再加载 About 组件。
+            不过要在 App 组件里调用 this.props.children(代表子组件)，子组件才生效
+        */}
+        <Route path="/" component={App}>
+            <IndexRoute component={Index}/>
+            <Route path="user(/:id)" component={User} />
+            <Route path="about" component={About} />
+        </Route>
+    </Router>,
     document.getElementById('react-container')
 );

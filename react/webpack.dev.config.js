@@ -12,7 +12,7 @@ let createHtmlForPlugin = [];
 for(let name in entries){
     createHtmlForPlugin.push(
         new HtmlWebpackPlugin({
-            filename: `./${name}/${name}.html`,
+            filename: `./${name}/index.html`,
             template: `./${name}/${name}.html`,
             minify: {
                 minifyCSS: true,

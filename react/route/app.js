@@ -4,19 +4,19 @@
 import React, {Component} from 'react';
 import { Router, Route, Link, hashHistory, browserHistory } from 'react-router';
 
-class App extends Component {
+export default class App extends Component {
     render() {
         return (
             <div>
                 <h3>App page for render the nav: </h3>
                 <ul>
                     <li>
-                        <div>/* 给当前路由加上 active 状态，通过样式设置 activeStyle */</div>
+                        <div>给当前路由加上 active 状态，通过样式设置 activeStyle</div>
                         <Link to="/" activeStyle={{color: 'red'}}
                               onlyActiveOnIndex>Index</Link>
                     </li>
                     <li>
-                        <div>/* 给当前路由加上 active 状态，通过 classname */</div>
+                        <div>给当前路由加上 active 状态，通过 classname</div>
                         <Link to="/user/1101" activeClassName="active">User</Link>
                     </li>
                     <li>
@@ -33,5 +33,3 @@ class App extends Component {
         )
     }
 }
-
-export default App;

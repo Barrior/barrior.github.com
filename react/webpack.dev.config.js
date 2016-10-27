@@ -34,7 +34,7 @@ module.exports = {
         filename: '[name]-[hash:8].js',
 
         // require.ensure 按需加载的时候输出名称
-        chunkFilename: 'chunk-[hash:8].js'
+        chunkFilename: 'chunk-[name]-[hash:8].js'
     },
     module: {
 

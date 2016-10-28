@@ -9,5 +9,9 @@
     ],
 
     // 用于增强
-    "plugins": []
+    "plugins": [
+
+        // https://www.npmjs.com/package/babel-plugin-add-module-exports
+        "add-module-exports"
+    ]
 }

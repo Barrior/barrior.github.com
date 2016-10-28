@@ -38,6 +38,7 @@ const rootRoutes = {
             // 语法：require.ensure(dependencies, callback, chunkName)
             // 如果你是使用 es6 的写法，也就是你的组件都是通过 export default 导出的，
             // 那么在 getComponent 方法里面需要加入 .default
+            // 如果添加一个babel插件babel-plugin-add-module-exports，这样就不用处处加.default了
             require.ensure([], () => {
                 cb(null, require('../route/index').default);
             }, 'index');
@@ -51,9 +52,26 @@ const rootRoutes = {
     // 同步加载子路由
     // 这样的写法 路由配置 还得在组件里面写，不够直观
     // childRoutes 和 getChildRoutes 不能同时存在，只会被应用其中一个
-    /*childRoutes: [
+    /*
+    childRoutes: [
         require('./user').default
-    ],*/
+    ],
+    childRoutes: [
+         {
+             path: '/',
+             component: require('./App.jsx'),
+
+             getChildRoutes(location, cb) {
+                 require.ensure([], (require) => {
+                     cb(null, [
+                        require('./routes/Foo.jsx'),
+                        require('./routes/Bar.jsx')
+                     ]);
+                 });
+             }
+         }
+    ]
+    */
 
     // 异步加载子路由，并且 路由配置 统一放在当前这个配置文件，比较直观
     getChildRoutes(ns, cb){
@@ -67,7 +85,7 @@ const rootRoutes = {
                     path: 'user/(:id)',
 
                     // 用于同步加载组件
-                    component: require('../route/user').default,
+                    component: require('../route/user'),
                     onEnter(nextState, replace, callback) {
                         // or do something...
                         callback();
@@ -83,7 +101,7 @@ const rootRoutes = {
                         require.ensure([], () => {
 
                             // by getComponent
-                            cb(null, require('../route/about').default);
+                            cb(null, require('../route/about'));
 
                             /*
                             // by getIndexRoute
@@ -99,7 +117,7 @@ const rootRoutes = {
                     path: 'book(/:name)',
                     getComponent(ns, cb) {
                         require.ensure([], () => {
-                            cb(null, require('./book/booklist').default);
+                            cb(null, require('./book/booklist'));
                         }, 'booklist');
                     },
                     getChildRoutes(ns, cb) {
@@ -107,9 +125,12 @@ const rootRoutes = {
                             cb(null, [
                                 {
                                     path: 'javascript',
+                                    onEnter(ns, cb) {
+                                        cb();
+                                    },
                                     getComponent(ns, cb) {
                                         require.ensure([], () => {
-                                            cb(null, require('./book/javascript').default);
+                                            cb(null, require('./book/javascript'));
                                         }, 'book-javascript');
                                     }
                                 },
@@ -117,7 +138,7 @@ const rootRoutes = {
                                     path: 'go',
                                     getComponent(ns, cb) {
                                         require.ensure([], () => {
-                                            cb(null, require('./book/go').default);
+                                            cb(null, require('./book/go'));
                                         }, 'book-go');
                                     }
                                 }

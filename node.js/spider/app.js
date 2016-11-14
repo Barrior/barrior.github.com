@@ -1,30 +1,34 @@
+const request = require('request');
+const cheerio = require('cheerio');
+const fs = require('fs');
+const path = require('path');
 
-var http = require('http');
-var request = require('request');
-var cheerio = require('cheerio');
-var fs = require('fs');
+// http://jandan.net/ooxx/page-2210
+// http://www.2cto.com/meinv/meitui/
+request('http://jandan.net/ooxx/page-1319', (err, response, body) => {
+    if (!err && response.statusCode === 200) {
+        const $ = cheerio.load(body);
+        const srcArr = [];
 
-
-http.createServer(function ( req, res, err ) {
-    if(err){
-        res.end('error')
-    }else{
-        request('http://www.2cto.com/meinv/meitui/', function ( err, response, body ) {
-            if( !err && response.statusCode === 200 ){
-                var $ = cheerio.load(body);
-                var arr = [];
-                $('img').each(function () {
-                    /*request($(this).attr('data-original'))
-                        .pipe(fs.writeFileSync($(this).attr('data-original')))*/
-                    arr.push(
-                        '<img src="'+$(this).attr('data-original')+'" style="display: block">'
-                    )
-                });
-                res.writeHead({
-                    'content-type': 'text/html;charset=utf-8'
-                });
-                res.end( '<h1>show：</h1>'+arr.join('') );
+        // 存储图片 url
+        $('.commentlist img').each(function () {
+            let src = $(this).attr('src');
+            if (src) {
+                srcArr.push(src);
             }
         });
+
+        // 下载图片
+        srcArr.forEach((src, i) => {
+            // path.basename(src) 获取图片基本名：http://ww4.sinaimg.cn/mw600/name.jpg => name.jpg
+            let filename = i + 1 + path.basename(src).replace(/.+(jpg|jpeg|png|gif)$/, '.$1');
+
+            request
+                .get(src)
+                .pipe(fs.createWriteStream(`images/${filename}`))
+                .on('close', () => {
+                    console.log(`${ src }下载完成`);
+                });
+        });
     }
-}).listen( process.env.PORT || 3000 );
+});

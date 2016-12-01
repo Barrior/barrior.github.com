@@ -56,8 +56,8 @@ module.exports = {
                 test: /\.less$/,
 
                 // https://github.com/webpack/extract-text-webpack-plugin
-                //loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss!less')
-                loader: 'style!css!postcss!less'
+                loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss!less')
+                //loader: 'style!css!postcss!less'
             },
             {
                 test: /\.jpe?g$|\.gif$|\.png$|\.ico$|\.svg$|\.woff$|\.ttf$|\.eot$/,
@@ -86,7 +86,10 @@ module.exports = {
             name: 'lib',
             // 输出的文件名
             filename: '[name]-[hash:8].js'
-        })
+        }),
+
+        // 将所有样式文件提取成独立css文件
+        new ExtractTextPlugin('./css/[name]-[hash:8].css')
 
     ].concat( createHtmlForPlugin ),
     resolve: {

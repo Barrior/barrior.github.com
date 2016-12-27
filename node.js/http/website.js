@@ -31,8 +31,16 @@ server.on( 'request', function( req, res ){
                     con.push( chunk );
                 });
                 req.on( 'end',function(){
+                    // username=name&password=123&...
+                    console.log( con.join() );
+
+                    // { username: 'name', password: '123', ... }
                     console.log( qs.parse( con.join() ) );
+
+                    //res.end('登录成功');
                 });
+                console.log('in');
+                res.end('登录成功');
             }
             break;
         default:

@@ -32,7 +32,8 @@ program
     // 那么程序会使用默认值，然后一定执行到 if (program.test) {
     .option('-t, --test [arg]', 'Descriptions of test', function (inputVal) {
 
-        console.log(inputVal);
+        console.log(`The test argument is ${chalk.red(inputVal)}`);
+        console.log(`The type of the value is a ${chalk.red(typeof inputVal)}`);
 
     }, 'default_value_of_test')
 
@@ -64,7 +65,7 @@ if (program.env) {
     console.log('I\'m env arg is ' + program.env)
 }
 
-console.log(program.test); // undefined
+//console.log(program.test); // undefined
 if (program.test) {
     console.log('I\'m test, arg is ' + chalk.red(program.test))
 }

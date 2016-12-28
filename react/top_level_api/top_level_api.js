@@ -18,13 +18,23 @@ class Proj extends Component {
 }
 
 class Message extends Component {
-
     render() {
         return (
-            <div>
+            <div style={{margin: 60}}>
+                <Team></Team>
+                {
+                    React.createElement(Team, null)
+                }
+                {
+                    React.createElement('h3', {style: {color: 'red'}}, 'Test createElement')
+                }
                 {
                     // 用变量当做 Components 名字加载对应的 组件
-                    React.createElement(this.props.component, 0)
+                    React.createElement(this.props.component, null)
+                }
+                {
+                    // 用变量当做 Components 名字加载对应的 组件，使用 eval 解析
+                    React.createElement(eval(this.props.component), null)
                 }
             </div>
         )
@@ -40,7 +50,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <h3>Context Learning</h3>
+                <h3>Top Level API Learning</h3>
                 <Message component="Team"></Message>
                 <Message component="Proj"></Message>
             </div>
@@ -48,7 +58,9 @@ class App extends Component {
     }
 }
 
-ReactDOM.render(
+const instanceOfAppComponent = ReactDOM.render(
     <App />,
     document.getElementById('app')
 );
+
+console.log(instanceOfAppComponent);

@@ -5,7 +5,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <h3 name="app">APP</h3>
+                <h3>APP</h3>
                 {
                     this.props.children
                 }
@@ -17,9 +17,8 @@ class App extends Component {
 App.Title = React.createClass({
     render() {
         return (
-            // 自定义 HTML 原生属性需要用 data- 前缀
-            // 否则 React 不会显示它们，现在这个版本好像显示了
-            <h4 data-custom-id="55609">
+            // 自定义非 HTML 原生属性需要加 data- 前缀，否则 React 不会显示它们
+            <h4 data-custom-id="55609" custom-name="save data" title="title">
                 Title
             </h4>
         )
@@ -35,7 +34,6 @@ App.Description = React.createClass({
         )
     }
 });
-
 
 ReactDOM.render(
     <App>

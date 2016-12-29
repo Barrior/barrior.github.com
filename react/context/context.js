@@ -24,9 +24,7 @@ class Button extends Component {
                     padding: '6px 8px',
                     borderRadius: 4,
                     color: '#fff',
-
-                    // 这个属性好奇葩，竟然要加引号才能使用
-                    'cursor': 'pointer',
+                    cursor: 'pointer',
 
                     // 使用 context 里的内容，而不是使用一层一层的 数据传递 方式
                     backgroundColor: this.context.color

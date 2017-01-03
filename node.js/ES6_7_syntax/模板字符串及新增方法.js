@@ -1,7 +1,3 @@
-/**
- * Created by weid on 2016/7/25.
- */
-
 let str = '吥';
 console.log( str.codePointAt(0) );
 console.log( String.fromCodePoint(21541) );

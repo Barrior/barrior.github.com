@@ -1,8 +1,4 @@
 /**
- * Created by weid on 2016/7/27.
- */
-
-/**
  * 将多维数组转化成单维数组
  * @param  {Array}	aData
  * @return {Array}
@@ -41,7 +37,5 @@ let unique = aData => {
     }
     return arr;
 };
-
-//export let unique = unique;
 
 export { unique, toSingle };

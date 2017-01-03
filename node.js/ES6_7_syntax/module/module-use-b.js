@@ -16,6 +16,3 @@ console.log((0, _moduleTools.unique)([22, 3, 5, 3, 22, 4]));
 
 //babel写法
 //$ babel example.es6 -o example.js -m amd
-/**
- * Created by weid on 2016/7/27.
- */

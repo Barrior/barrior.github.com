@@ -1,7 +1,3 @@
-/**
- * Created by weid on 2016/7/25.
- */
-
 //把类数组转成数组，
 //在es6里，字符串还被归为类数组
 let arrayLike = 'Barrior';

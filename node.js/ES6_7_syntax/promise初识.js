@@ -1,6 +1,3 @@
-/**
- * Created by weid on 2016/8/10.
- */
 let p1 = new Promise( ( resolve, reject ) => {
     setTimeout( () => {
 

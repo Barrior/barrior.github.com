@@ -1,8 +1,3 @@
-/**
- * Created by Heart on 2016/3/2.
- */
-'use strict';
-
 //let 不允许重复声明
 //let 具有块级作用域
 //let 在window下声明，并不会像var一样挂载到window对象下

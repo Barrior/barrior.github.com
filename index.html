@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -11,8 +11,10 @@
             box-sizing: border-box;
         }
 
+        html,
         body{
             font: 14px/2 "微软雅黑";
+            margin: 0;
         }
 
         #container{
@@ -120,18 +122,22 @@
             cursor: pointer;
         }
 
-        a{
+        a {
+            color: #000;
+            outline: none;
+            text-decoration: none;
+        }
+
+        section a{
             display: block;
             height: 0;
             padding: 0 10px;
             line-height: 38px;
-            text-decoration: none;
-            color: #000;
             outline: none;
             overflow: hidden;
         }
 
-        a:hover{
+        section a:hover{
             background-color: green;
             color: #fff;
         }
@@ -173,13 +179,29 @@
             }
 
         }
+
+        [id^="cnzz_stat_icon"] {
+            display: none;
+        }
+
+        #enter-github {
+            width: 260px;
+            border: 1px solid #9e1d19;
+            background-color: #ac2925;
+            color: #fff;
+            text-align: center;
+            position: fixed;
+            right: 0;
+            top: 0;
+            transform: rotate(45deg) translate(80px, -20px);
+        }
     </style>
     <base target="_blank"></base>
 </head>
 <body>
-    
-    <a href="https://github.com/Barrior" target="_blank">
-        <img style="position: absolute; top: -7px; right: 0; border: 0" src="https://i.alipayobjects.com/e/201211/1dbSqT9ykm.png" width="149" height="149" alt="Fork me on GitHub">
+
+    <a id="enter-github" href="https://github.com/Barrior" target="_blank">
+        Barrior on GitHub
     </a>
 
     <div id="container">
@@ -218,7 +240,7 @@
         </section>
 
         <section>
-            <h3>Back-end</h3>
+            <h3>Backend</h3>
             <nav>
                 <a href="http://chat.2099.gift/">nodejs + socket.io + mongodb = 即时聊天室</a>
             </nav>
@@ -229,21 +251,10 @@
             <nav>
                 <a href="404/404.htm">404设计</a>
                 <a href="crkerui.com/index.html">柯睿创意设计官网：视觉UI、交互、动效</a>
-                <a href="loading_css3/index.html">Css3 loading动画</a>
+                <a href="loading_css3/index.html">css3 loading动画</a>
                 <!-- <a href="css_clock.html">css3时钟</a> -->
             </nav>
         </section>
-
-        <section>
-            <h3>2099释义</h3>
-            <nav id="love">
-                <div>
-                    2099.Gift：爱你永久，是我能送予你的最好礼物！
-                    <footer> -- Barrior <small>安安静静的做个高冷小王子</small></footer>
-                </div>
-            </nav>
-        </section>
-
     </div>
 
     <script>
@@ -329,8 +340,7 @@
         }
         
     </script>
-    
-    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1257129532'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1257129532%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
-    </script>
+
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261159416'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261159416' type='text/javascript'%3E%3C/script%3E"));</script>
 </body>
 </html>

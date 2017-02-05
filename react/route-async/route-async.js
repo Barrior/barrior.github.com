@@ -1,6 +1,3 @@
-/**
- * Created by weid on 2016/10/27.
- */
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router';
@@ -87,16 +84,16 @@ const rootRoutes = {
                     // 用于同步加载组件
                     component: require('../route/user'),
                     onEnter(nextState, replace, callback) {
-                        // or do something...
+                        // do something else...
                         callback();
                     }
                 },
                 {
                     path: 'about',
 
-                    // getIndexRoute(partialNextState, cb) 和 getComponent(nextState, callback)
-                    // 都可用于异步加载组件，只不过参数不同，cb 传过来的参数也也不同，于是使用方式不一样
-                    // getComponent() 更简洁
+                    // getIndexRoute(partialNextState, cb) 仅在当前(父级)路由匹配时才使用该组件
+                    // getComponent(nextState, callback) 不管是子路由还是当前(父级)路由都使用该组件
+                    // 参数不同，cb 传过来的参数也不同，使用方式不一样
                     getComponent(ns, cb) {
                         require.ensure([], () => {
 

@@ -3,5 +3,21 @@ import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider, connect} from 'react-redux';
 
-//import reduxLearning1 from './redux_learning_1';
-import reduxLearning2 from './redux_learning_2';
+let store = createStore(()=>{});
+
+console.log(store.getState());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

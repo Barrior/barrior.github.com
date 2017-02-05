@@ -15,7 +15,9 @@ program
     // 容错处理
     .allowUnknownOption()
 
-    // 添加命令
+    .usage('[command|options] [arguments]')
+
+    // 添加选项命令
     .option('-p, --proj', 'I\'m proj')
     .option('-a, --all', 'I\'m all')
 
@@ -24,6 +26,9 @@ program
 
     // [env] optional argument, 可选参数
     .option('-e, --env [env]', 'I\'m env')
+
+    // 当命令里没有 -u 或 --no-update 参数时，该参数的默认是为 true
+    .option('-u, --no-update', 'don\'t update for app')
 
     // 第一个参数：长短命令
     // 第二个参数：命令描述
@@ -63,6 +68,10 @@ if (program.pipe) {
 
 if (program.env) {
     console.log('I\'m env arg is ' + program.env)
+}
+
+if (program.update) {
+    console.log(chalk.red('--no-update: ' + program.update));
 }
 
 //console.log(program.test); // undefined

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            margin: 0;
+            font-family: '微软雅黑';
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            list-style: none;
+        }
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            border: 1px solid #ccc;
+        }
+        .title {
+            display: flex;
+            padding-top: 20px;
+        }
+        .title div:nth-child(1) {
+            width: 120px;
+            padding-left: 10px;
+        }
+        .title div:nth-child(2) {
+            width: 130px;
+        }
+        .title div:nth-child(3) {
+            flex: auto;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .name {
+            width: 120px;
+            padding-left: 10px;
+        }
+        .info {
+            display: flex;
+            align-items: center;
+            flex: auto;
+        }
+        .phone {
+            width: 130px;
+        }
+        .projs {
+            flex: auto;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <div>姓名</div>
+            <div>电话</div>
+            <div>报备项目</div>
+        </div>
+
+        <ul class="list">
+            <li class="item">
+                <div class="name">
+                    莫容晓晓
+                </div>
+                <div class="info">
+                    <div class="phone">
+                        13100001111
+                    </div>
+                    <div class="projs">
+                        <div>恒大上林苑</div>
+                        <div>保利狮子湖</div>
+                    </div>
+                </div>
+            </li>
+            <li class="item">
+                <div class="name">
+                    张三
+                </div>
+                <div class="info">
+                    <div class="phone">
+                        13299998888
+                    </div>
+                    <div class="projs">
+                        <div>恒大金碧湾</div>
+                        <div>富力湾别墅</div>
+                        <div>英郡年华花园</div>
+                    </div>
+                </div>
+            </li>
+            <li class="item">
+                <div class="name">
+                    黄珊珊
+                </div>
+                <div class="info">
+                    <div class="phone">
+                        15955556666
+                    </div>
+                    <div class="projs">
+                        <div>益田假日府邸</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

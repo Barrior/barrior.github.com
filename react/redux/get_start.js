@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider, connect} from 'react-redux';
-import inner from './redux_learning_2_inner';
 
 // 处理函数_计数器， 即 reducer
 // 当 state 变化时需要返回全新的对象，而不是修改传入的参数。
@@ -39,6 +38,13 @@ store.dispatch({type: 'increment'});
 store.dispatch({type: 'decrement'});
 
 
+export default class GetStart extends Component {
+    render() {
+        return (
+            <h3>Redux get start. Please see the console panel.</h3>
+        )
+    }
+}
 
 
 

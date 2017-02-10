@@ -106,6 +106,7 @@ module.exports = {
         // 实时刷新
         inline: true,
         // 终端中输出结果为彩色
-        colors: true
+        colors: true,
+        historyApiFallback: true
     }
 };

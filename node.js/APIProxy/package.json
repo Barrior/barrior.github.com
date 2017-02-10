@@ -1,0 +1,26 @@
+{
+  "name": "APIProxy",
+  "version": "1.0.0",
+  "description": "Proxy that emulating backend API",
+  "main": "app.js",
+  "proxy": {
+    "protocol": "http",
+    "hostname": "test-yxx.myscrm.cn",
+    "host": "127.0.0.1",
+    "port": 9993
+  },
+  "scripts": {
+    "start": "node --harmony app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Barrior",
+  "license": "MIT",
+  "devEngines": {
+    "node": "> 7.x"
+  },
+  "dependencies": {
+    "koa": "^2.0.0",
+    "koa-bodyparser": "^3.2.0",
+    "koa-router": "^7.1.0"
+  }
+}

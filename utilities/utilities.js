@@ -20,6 +20,12 @@ const $ = {
         formatPassword: /[^\w\s\\\[\]`~!@#$%^&*()-+={};:'"|,.<>/?]/g
     },
 
+    noop() {},
+
+    trimAll(str) {
+        return str.replace(this.reg.trimAll, '');
+    },
+
     // 检查元素是否在某个元素里，与 jQuery.contains 等同
     contains(container, target) {
         if (target) {

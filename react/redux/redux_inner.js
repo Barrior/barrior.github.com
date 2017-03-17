@@ -14,7 +14,7 @@ export default class Inner extends Component {
             <div>
                 <h3>This's inner page:</h3>
                 <div className="content">
-                    <h4>Access user info transfer with outer page:</h4>
+                    <h4>Access user info transfer via outer page:</h4>
                     <div>{JSON.stringify(storeState)}</div>
                 </div>
             </div>

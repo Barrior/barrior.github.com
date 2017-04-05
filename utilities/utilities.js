@@ -1,3 +1,5 @@
+const scripts = [];
+
 const $ = {
     reg: {
         // 匹配所有空白字符
@@ -60,5 +62,72 @@ const $ = {
                 handler.call(this, e);
             }
         }
+    },
+
+    // Translation: {a: 1, b: 2} => '&a=1&b=2'
+    jsonToQueryString(json) {
+        let str = '';
+        for (let key in json) {
+            str += `&${key}=${encodeURIComponent(json[key])}`;
+        }
+        return str;
+    },
+
+    // 加载 js
+    loadScript(url) {
+        if (scripts.indexOf(url) !== -1) {
+            return Promise.resolve();
+        }
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+
+            script.onload = () => {
+                scripts.push(url);
+                resolve();
+            };
+
+            script.onerror = (err) => {
+                reject(err);
+            };
+
+            script.src = url;
+            document.getElementsByTagName('head')[0].appendChild(script);
+        });
+    },
+
+    removeElem(selector) {
+        const elem = document.querySelector(selector);
+        elem && elem.parentNode.removeChild(elem);
+    },
+
+    clearJsonpRemains(id) {
+        this.removeElem('#' + id);
+        delete window[id];
+    },
+
+    // jsonp 加载
+    jsonp(url) {
+        const id = '__utils_jsonp__' + Date.now();
+        url += (url.indexOf('?') !== -1 ? '&' : '?') + `callback=${id}`;
+        return new Promise((resolve, reject) => {
+
+            window[id] = res => {
+                this.clearJsonpRemains(id);
+                resolve(res);
+            };
+
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.id = id;
+
+            script.onerror = err => {
+                this.clearJsonpRemains(id);
+                reject(err);
+            };
+
+            script.src = url;
+            document.getElementsByTagName('head')[0].appendChild(script);
+        });
     }
 };

@@ -1,7 +1,3 @@
-/**
- * Created by weid on 2016/10/24.
- */
-
 const fs = require('fs');
 
 module.exports = function getEntries(path) {

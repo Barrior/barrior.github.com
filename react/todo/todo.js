@@ -42,7 +42,7 @@ class Todo extends Component {
                     {
                         this.names.map((name, i) => {
 
-                            // key 用于解决 react diff 算法的问题，重复只会显示一个
+                            // key 用于解决 react diff 算法的问题
                             return <li key={i}>
                                     <span>The name's {name}</span>
                                     <button className="btn" onClick={this.del.bind(this, i)}>

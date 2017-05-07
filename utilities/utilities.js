@@ -40,6 +40,24 @@ const $ = {
         return false;
     },
 
+    // 检查元素是否在可视区内
+    checkInView(elem) {
+        const $ = jQuery;
+        const elemTop = $(elem).offset().top;
+        const elemHeight = $(elem).outerHeight() / 2;
+        const winTop = $(window).scrollTop();
+        const winHeight = $(window).height();
+
+        if (
+            elemTop + elemHeight > winTop &&
+            elemTop < winTop + winHeight
+        ) {
+            return true;
+        }
+
+        return false;
+    },
+
     throttle(handler, delay, must){
         if (!delay && !must) {
             return handler;

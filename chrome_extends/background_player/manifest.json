@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "Background Player",
+    "description": "Create a simple and beautiful background in Chrome desktop.",
+    "version": "1.0.0",
+    "browser_action": {
+        "default_icon": "images/icon.png",
+        "default_title": "Background Player",
+        "default_popup": "html/popup.html"
+    },
+    "theme": {
+        "images" : {
+            "theme_ntp_background" : "images/theme_ntp_background_norepeat.jpg"
+        }
+    }
+}

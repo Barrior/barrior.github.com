@@ -35,7 +35,10 @@
 		//这里没有closePath，fill，和stroke继续向上填充或描边第一个图形
 
 		
-		//保存路径和恢复路径，让里面形成一个小型作用域，类似lineWidth的属性将不被路径外的方法引用，而closePath是闭合类似stroke()这样的方法向上作用。作用到beginPath即结束
+		// 保存路径和恢复路径，让里面形成一个小型作用域，
+		// 类似lineWidth的属性将不被路径外的方法引用，
+		// 而closePath是闭合类似stroke()这样的方法向上作用。
+		// 作用到beginPath即结束
 		gc.save();
 			gc.strokeStyle = 'rgba( 255, 0, 0, .5 )';
 			gc.lineWidth = 6;
@@ -59,8 +62,6 @@
 			gc.arcTo( 300, 50, 400, 80, 30 );
 		// gc.closePath();
 		gc.stroke();
-
-
 	</script>
 </body>
 </html>

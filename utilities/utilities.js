@@ -87,10 +87,10 @@ const $ = {
     },
 
     // 检查元素是否在可视区内
-    checkInView(elem) {
+    checkInView(elem, ahead = 1) {
         const $ = jQuery;
         const elemTop = $(elem).offset().top;
-        const elemHeight = $(elem).outerHeight() / 2;
+        const elemHeight = $(elem).outerHeight() / ahead;
         const winTop = $(window).scrollTop();
         const winHeight = $(window).height();
 

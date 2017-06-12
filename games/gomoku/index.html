@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gomoku</title>
+    <style>
+        * {
+            user-select: none;
+        }
+
+        body {
+            background-color: #272727;
+        }
+
+        #container {
+            width: 760px;
+            margin: 50px auto;
+            position: relative;
+        }
+
+        #container .chessboard {
+            width: 640px;
+            height: 640px;
+            background: url("images/bg.jpg") 0 0 no-repeat;
+            position: relative;
+        }
+
+        #container .chessboard canvas {
+            position: absolute;
+        }
+
+        #container .control {
+            position: absolute;
+            right: 0;
+            top: 20px;
+        }
+
+        #container .control .btn {
+            background-image: linear-gradient(#D57F29, #AE6822);
+            margin-bottom: 20px;
+            padding: 0 16px;
+            border-top: 1px solid #fff;
+            border-color: rgba(255, 255, 255, .3);
+            border-radius: 4px;
+            line-height: 2.4;
+            text-shadow: 0 1px 1px #444;
+            text-align: center;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #container .control .btn:hover {
+            background-image: linear-gradient(#f49d46, #AE6822);
+        }
+
+        #container .control .btn:active {
+            background-image: linear-gradient(#ca7118, #AE6822);
+        }
+
+        #container .congrats {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-right: 115px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 20px;
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        #container .congrats.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div class="chessboard"></div>
+        <div class="control">
+            <div class="btn undo">悔棋</div>
+            <div class="btn redo">撤销悔棋</div>
+        </div>
+        <div class="congrats hidden"></div>
+    </div>
+
+    <script>
+        function getCss(elem, attr) {
+            const val = window.getComputedStyle(elem)[attr];
+            return /^\d+(\.\d+)?[a-z]+$/i.test(val) ? parseInt(val, 10) : val;
+        }
+
+        function offset(elem) {
+            let left = elem.offsetLeft || 0;
+            let top = elem.offsetTop || 0;
+            while (elem = elem.offsetParent) {
+                left += elem.offsetLeft;
+                top += elem.offsetTop;
+            }
+            return {
+                left: left,
+                top: top
+            };
+        }
+
+        class Gomoku {
+            constructor(selector) {
+                this.container = document.querySelector(selector);
+                this.chessboard = this.container.querySelector('.chessboard');
+                this.undo = this.container.querySelector('.control .undo');
+                this.redo = this.container.querySelector('.control .redo');
+
+                this.chessboardWidth = getCss(this.chessboard, 'width');
+                this.chessboardHeight = getCss(this.chessboard, 'height');
+
+                ['grid', 'piece', 'hover'].forEach(item => {
+                    this[item] = document.createElement('canvas');
+                    this[item + 'Ctx'] = this[item].getContext('2d');
+                    this[item].width = this.chessboardWidth;
+                    this[item].height = this.chessboardHeight;
+                    this.chessboard.appendChild(this[item]);
+                });
+
+                this.initConfig();
+                this.createGrid();
+                this.hoverPiece();
+                this.moveInChess();
+                this.undoEvent();
+                this.redoEvent();
+            }
+
+            initConfig() {
+                this.blackPiece = new Image();
+                this.blackPiece.src = 'images/black.png';
+                this.whitePiece = new Image();
+                this.whitePiece.src = 'images/white.png';
+
+                // 格子个数
+                this.gridNumber = 15;
+
+                // 每次执棋手落子的类型
+                this.curPieceType = 'black';
+
+                // 所有棋子
+                this.allPieces = [];
+
+                // 悔棋棋子集合
+                this.undoCollection = [];
+            }
+
+            createGrid() {
+                this.gridCtx.strokeStyle = "#333";
+
+                // 绘制 15 个 40 * 40 的小正方形
+                for (let i = 0; i < this.gridNumber; i++) {
+                    for (let j = 0; j < this.gridNumber; j++) {
+                        this.gridCtx.strokeRect(i * 40 + 20, j * 40 + 20, 40, 40);
+                    }
+                }
+            }
+
+            switchCurPieceType() {
+                this.curPieceType = this.curPieceType === 'black' ? 'white' : 'black';
+            }
+
+            calcXY(e) {
+                const chessboardOffset = offset(this.chessboard);
+                let x = e.clientX - chessboardOffset.left;
+                let y = e.clientY - chessboardOffset.top;
+
+                // 计算棋子在 Canvas 中的游戏坐标
+                let row = Math.round(x / 40 - 0.5);
+                let col = Math.round(y / 40 - 0.5);
+
+                // 计算棋子在 Canvas 中的真实坐标
+                x = row * 40;
+                y = col * 40;
+
+                return {row, col, x, y};
+            }
+
+            validPiece(e) {
+                let {row, col, x, y} = this.calcXY(e);
+
+                let exist = this.allPieces.some(piece => {
+                    if (piece.x === x && piece.y === y) {
+                        return true;
+                    }
+                });
+
+                // 如果棋位被占用，返回 null
+                return exist ? null : {row, col, x, y};
+            }
+
+            hoverPiece() {
+                this.handlerHoverMove = e => {
+                    const piece = this.validPiece(e);
+                    this.handlerHoverOut();
+                    if (piece) {
+                        this.hoverCtx.drawImage(
+                            this.curPieceType === 'black' ? this.blackPiece : this.whitePiece,
+                            piece.x,
+                            piece.y
+                        );
+                    }
+                };
+                this.handlerHoverOut = () => {
+                    this.hoverCtx.clearRect(0, 0, this.chessboardWidth, this.chessboardHeight);
+                };
+                this.chessboard.addEventListener('mousemove', this.handlerHoverMove);
+                this.chessboard.addEventListener('mouseout', this.handlerHoverOut);
+            }
+
+            moveInChess() {
+                this.handlerChessMove = e => {
+                    this.handlerHoverOut();
+                    let piece = this.validPiece(e);
+                    if (piece) {
+
+                        // 为棋子加上类型
+                        piece.type = this.curPieceType;
+                        this.allPieces.push(piece);
+
+                        // 切换棋手
+                        this.switchCurPieceType();
+
+                        // 清空 undo
+                        this.undoCollection.length = 0;
+
+                        // 绘制棋子
+                        this.renderPiece();
+
+                        // 判断胜负
+                        this.judge(Object.assign({}, piece));
+                    }
+                };
+                this.chessboard.addEventListener('click', this.handlerChessMove);
+            }
+
+            renderPiece() {
+                this.pieceCtx.clearRect(0, 0, this.chessboardWidth, this.chessboardHeight);
+                this.allPieces.forEach(piece => {
+                    this.pieceCtx.drawImage(
+                        piece.type === 'black' ? this.blackPiece : this.whitePiece,
+                        piece.x,
+                        piece.y
+                    );
+                });
+            }
+
+            undoEvent() {
+                this.handlerUndo = () => {
+                    if (!!this.allPieces.length) {
+                        this.undoCollection.push(this.allPieces.pop());
+                        this.switchCurPieceType();
+                        this.renderPiece();
+                    }
+                };
+
+                this.undo.addEventListener('click', this.handlerUndo);
+            }
+
+            redoEvent() {
+                this.handlerRedo = () => {
+                    if (!!this.undoCollection.length) {
+                        this.allPieces.push(this.undoCollection.pop());
+                        this.switchCurPieceType();
+                        this.renderPiece();
+                    }
+                };
+
+                this.redo.addEventListener('click', this.handlerRedo);
+            }
+
+            judge(piece) {
+                let num = 1;
+                let x;
+                let y;
+
+                // 左边
+                for (x = piece.row - 1; x >= 0; x--) {
+                    let exist = this.allPieces.some(item => {
+                        if (item.row === x && item.col === piece.col && item.type === piece.type) {
+                            return true;
+                        }
+                    });
+                    if (exist) {
+                        num++;
+                    } else {
+                        break;
+                    }
+                }
+
+                // 右边
+                for (x = piece.row + 1; x <= this.gridNumber; x++) {
+                    let exist = this.allPieces.some(item => {
+                        if (item.row === x && item.col === piece.col && item.type === piece.type) {
+                            return true;
+                        }
+                    });
+                    if (exist) {
+                        num++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (num >= 5) {
+                    this.gameOver(piece);
+                    return;
+                } else {
+                    num = 1;
+                }
+
+                // 上边
+                for (y = piece.col - 1; y >= 0; y--) {
+                    let exist = this.allPieces.some(item => {
+                        if (item.col === y && item.row === piece.row && item.type === piece.type) {
+                            return true;
+                        }
+                    });
+                    if (exist) {
+                        num++;
+                    } else {
+                        break;
+                    }
+                }
+
+                // 下边
+                for (y = piece.col + 1; y <= this.gridNumber; y++) {
+                    let exist = this.allPieces.some(item => {
+                        if (item.col === y && item.row === piece.row && item.type === piece.type) {
+                            return true;
+                        }
+                    });
+                    if (exist) {
+                        num++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (num >= 5) {
+                    this.gameOver(piece);
+                    return;
+                } else {
+                    num = 1;
+                }
+
+                // 左上
+                for (x = piece.row - 1, y = piece.col - 1; x >= 0 && y >= 0; x--, y--) {
+                    let exist = this.allPieces.some(item => {
+                        if (item.col === y && item.row === x && item.type === piece.type) {
+                            return true;
+                        }
+                    });
+                    if (exist) {
+                        num++;
+                    } else {
+                        break;
+                    }
+                }
+
+                // 左下
+                for (x = piece.row + 1, y = piece.col + 1; x <= this.gridNumber && y <= this.gridNumber; x++, y++) {
+                    let exist = this.allPieces.some(item => {
+                        if (item.col === y && item.row === x && item.type === piece.type) {
+                            return true;
+                        }
+                    });
+                    if (exist) {
+                        num++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (num >= 5) {
+                    this.gameOver(piece);
+                    return;
+                } else {
+                    num = 1;
+                }
+
+                // 右上
+                for (x = piece.row + 1, y = piece.col - 1; x <= this.gridNumber && y >= 0; x++, y--) {
+                    let exist = this.allPieces.some(item => {
+                        if (item.col === y && item.row === x && item.type === piece.type) {
+                            return true;
+                        }
+                    });
+                    if (exist) {
+                        num++;
+                    } else {
+                        break;
+                    }
+                }
+
+                // 右下
+                for (x = piece.row - 1, y = piece.col + 1; x >= 0 && y <= this.gridNumber; x--, y++) {
+                    let exist = this.allPieces.some(item => {
+                        if (item.col === y && item.row === x && item.type === piece.type) {
+                            return true;
+                        }
+                    });
+                    if (exist) {
+                        num++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (num >= 5) {
+                    this.gameOver(piece);
+                    return;
+                } else {
+                    num = 1;
+                }
+
+                if (this.allPieces.length === Math.pow(this.gridNumber + 1, 2)) {
+                    return this.gameOver();
+                }
+            }
+
+            gameOver(piece) {
+                if (typeof this.gameOverListener === 'function') {
+                    this.gameOverListener(piece ? piece.type : '平局');
+                }
+            }
+
+            onGameOver(callback) {
+                this.gameOverListener = callback;
+            }
+        }
+
+        new Gomoku('#container').onGameOver(type => {
+            const congrats = document.querySelector('.congrats');
+            if (type !== '平局') {
+                congrats.innerHTML = `游戏结束啦，恭喜${type === 'black' ? '黑' : '白'}子获胜！`;
+            } else {
+                congrats.innerHTML = '游戏结束啦，恭喜双方打为平手！';
+            }
+            congrats.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

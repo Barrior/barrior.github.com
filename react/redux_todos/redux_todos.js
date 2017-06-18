@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import {createStrore, combineReducers, applyMiddleware, bindActionCreators, compose} from 'redux';
+import {createStrore, combineReducers, applyMiddleware} from 'redux';
+import {connect, Provider} from 'react-redux';
 import './todos.less';
 
 /*

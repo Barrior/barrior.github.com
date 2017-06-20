@@ -1,23 +1,8 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import {createStrore, combineReducers, applyMiddleware} from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {connect, Provider} from 'react-redux';
 import './todos.less';
-
-/*
- createStrore: 创建一个 Redux store 来以存放应用中所有的 state
- combineReducers:
- applyMiddleware:
- bindActionCreators:
- compose:
-
- const store = createStrore(reducer);
- store
-    .getState()
-    .dispatch(action)
-    .subscribe(listener)
-    .replaceReducer(nextReducer)
- */
 
 class Todo extends Component {
     constructor(props) {
@@ -97,6 +82,8 @@ class Todo extends Component {
 }
 
 ReactDOM.render(
-    <Todo />,
+    <Provider store={createStore(function(){})}>
+        <Todo/>
+    </Provider>,
     document.getElementById('app')
 );

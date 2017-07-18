@@ -6,7 +6,7 @@ const postData = qs.stringify({
 });
 
 console.log('-------------');
-console.log(postData, Buffer.byteLength(postData));
+console.log(postData, '\nPost Data byteLength: ', Buffer.byteLength(postData));
 console.log('-------------');
 
 const options = {

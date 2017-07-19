@@ -1,0 +1,16 @@
+{
+  "name": "ava",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "ava": "^0.21.0",
+    "query-string": "^4.3.4",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "ava --verbose"
+  },
+  "author": "",
+  "license": "ISC"
+}

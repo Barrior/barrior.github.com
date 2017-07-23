@@ -7,14 +7,14 @@ console.time('run time');
 var EventEmitter = require('events').EventEmitter;
 var a = new EventEmitter();
 
-a.on( 'myEvent', function(){
-    console.log( 'custom events...' )
+a.on('myEvent', function (data) {
+    console.log('custom events...', data)
 });
 
 //这 不是 setTimeout(fn, 0) 函数的一个简单别名，因为它的效率高多了。
-process.nextTick(function() {
+process.nextTick(function () {
     //emit:发射，发出
-    a.emit( 'myEvent' );
+    a.emit('myEvent', {name: 'Barrior'});
 });
 
 console.log('=======华丽的分割线======')

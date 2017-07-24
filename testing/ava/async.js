@@ -1,6 +1,6 @@
 import test from 'ava';
 
-test('Promise syntax', t => {
+test('Promise function', t => {
     return Promise.resolve(3).then(res => {
         t.is(res, 3);
     });
@@ -14,7 +14,7 @@ function testStatus() {
     });
 }
 
-test('Async syntax', async t => {
+test('Async function', async t => {
     const testPass = await testStatus();
     t.true(testPass);
 });

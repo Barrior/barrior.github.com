@@ -1,3 +1,4 @@
+import './helpers/setup_dom_env';
 import test from 'ava';
 import React from 'react';
 import {mount} from 'enzyme';

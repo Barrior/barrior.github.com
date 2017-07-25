@@ -8,8 +8,7 @@
   "ava": {
     "require": [
       "babel-register",
-      "babel-polyfill",
-      "./helpers/setup_dom_env"
+      "babel-polyfill"
     ],
     "babel": "inherit",
     "files": [

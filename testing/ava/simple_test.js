@@ -11,8 +11,11 @@ test('trimAll testing', t => {
     // 无空字符时，输出值应为输入值
     t.is(trimAll('Barrior'), 'Barrior');
 
+    // 输入 new String 对象应与输入基本类型字符串结果相同
+    t.is(trimAll(new String(' T o m ')), 'Tom');
+
     // 输入其他非字符串数据类型时，应抛出错误
-    [undefined, null, 0, true, [], {}, () => {}, Symbol(), new String()].forEach(type => {
+    [undefined, null, 0, true, [], {}, () => {}, Symbol()].forEach(type => {
         t.throws(() => {
             trimAll(type);
         });

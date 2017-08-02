@@ -27,3 +27,14 @@ let x = 1;
 let y = 2;
 [x, y] = [y, x];
 console.log( x, y );
+
+
+// 结构赋值内部机制
+// 是先找到同名属性，然后再赋给对应的变量。
+// 真正被赋值的是后者，而不是前者。
+const person = {
+    _name: 'Barrior',
+    age: 24
+};
+const {_name: name} = person;
+console.log(name);

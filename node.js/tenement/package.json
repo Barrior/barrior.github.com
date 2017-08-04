@@ -1,0 +1,19 @@
+{
+  "name": "tenement",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "spider:first": "node ./spider/first_58.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "query-string": "^5.0.0",
+    "request": "^2.81.0"
+  },
+  "dependencies": {
+    "moment": "^2.18.1",
+    "mongoose": "^4.11.5"
+  }
+}

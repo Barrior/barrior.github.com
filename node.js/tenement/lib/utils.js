@@ -6,6 +6,18 @@ const utils = {
     // 合并多个空字符为一个空白字符
     resetBlank(string) {
         return string.replace(/[\s\b]+/g, ' ');
+    },
+    // 休眠一段时间
+    sleep(time) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, time);
+        });
+    },
+    // 限制随机值
+    limitRandom(max, min) {
+        return max === min ? max : (Math.random() * (max - min) + min);
     }
 };
 

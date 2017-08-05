@@ -2,10 +2,12 @@ const request = require('request');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
+const userAgent = require('./user_agent');
 
 let album = ['50574', '51276', '71235', '86048', '95656'];
 let pictureIndex = 1;
 let total = null;
+let ua = null;
 
 //album = album.concat([...Array(100).keys()]);
 
@@ -24,7 +26,7 @@ function createImgOptions(albumId, imgUrl) {
             'Pragma': 'no-cache',
             'Referer': `http://www.mzitu.com/${albumId}/${pictureIndex}`,
             'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
+            'User-Agent': ua,
         }
     };
     return options;
@@ -32,6 +34,7 @@ function createImgOptions(albumId, imgUrl) {
 
 function createOptions(albumId, method = 'get', sendData) {
     const url = createUrl(albumId);
+    ua = userAgent[Math.floor(limitRandom(userAgent.length, 0))];
     const options = {
         url,
         timeout: 30 * 1000,
@@ -39,7 +42,7 @@ function createOptions(albumId, method = 'get', sendData) {
         headers: {
             'Connection': 'keep-alive',
             'Host': 'www.mzitu.com',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
+            'User-Agent': ua,
         }
     };
     if (method === 'post') {
@@ -69,7 +72,8 @@ function sendRequest(albumId) {
                 await sleep(parseInt(limitRandom(1000, 0)));
             }
             request.get(createOptions(albumId), (err, res, body) => {
-                if (!err && res.statusCode === 200) {
+                if (err) return recursion();
+                if (res && res.statusCode === 200) {
                     const $ = cheerio.load(body);
                     const imgUrl = $('.main .main-image img').attr('src');
                     const curPictrueIndex = pictureIndex;
@@ -105,7 +109,7 @@ function sendRequest(albumId) {
                             });
                     }
                     downloadImg();
-                } else if (res.statusCode === 404) {
+                } else if (res && res.statusCode === 404) {
                     reject(404);
                 } else {
                     recursion();

@@ -18,6 +18,10 @@ const utils = {
     // 限制随机值
     limitRandom(max, min) {
         return max === min ? max : (Math.random() * (max - min) + min);
+    },
+    // 随机选择数组里的某个值
+    randomChoice(array) {
+        return array[Math.floor(Math.random() * array.length)];
     }
 };
 

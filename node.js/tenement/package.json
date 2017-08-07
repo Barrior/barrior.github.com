@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "spider:first": "node ./spider/first_58.js",
+    "spider:first": "node ./spider/first_58",
+    "spider:timing": "node ./spider/timing_58",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -13,6 +14,7 @@
     "request": "^2.81.0"
   },
   "dependencies": {
+    "generic-pool": "^3.1.7",
     "moment": "^2.18.1",
     "mongoose": "^4.11.5"
   }

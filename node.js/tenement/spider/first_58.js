@@ -3,9 +3,10 @@ const path = require('path');
 const qs = require('query-string');
 const request = require('request');
 const cheerio = require('cheerio');
-const mongoose = require('mongoose');
 const moment = require('moment');
-const utils = require('../utils');
+const utils = require('../lib/utils');
+const userAgents = require('../lib/user_agent');
+const HouseModle = require('../models/houses');
 
 class Spider {
     constructor() {
@@ -31,7 +32,7 @@ class Spider {
             timeout: 30 * 1000,
             jar: true,
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+                'User-Agent': utils.randomChoice(userAgents)
             }
         };
         if (method === 'post') {
@@ -123,7 +124,7 @@ class Spider {
             detailPageUrl: curTenement.detailPageUrl,
             title: $('.main-wrap > .house-title h1').text(),
             releaseTime: utils.trimAll(releaseTime).replace(/^(.+)\d.*次浏览$/, '$1'),
-            entryTime: moment().format('YYYY/MM/DD HH:mm:ss'),
+            entryTime: new Date(),
             price: $houseDes.find('.house-pay-way .c_ff552e').text(),
             payWay: $houseDes.find('.house-pay-way .c_333').text(),
             leaseWay: $houseDes.find('ul.f14 li').eq(0).find('span').eq(1).text(),
@@ -141,28 +142,13 @@ class Spider {
             descriptions
         };
 
-        /*
-            FIELD_COMMENTS
-
-            entryTime: 入库时间。
-            releaseTime: 相对入库时间的发布时间。
-            leaseWay: 租赁方式。
-            houseType: 户型。
-            area: 房屋面积。
-            orientation：朝向。
-            floor: 楼层。
-            estateName: 小区名。
-            district: 所属行政区。
-            street: 街道。
-            address: 详细地址。
-            appliances: 家电。
-            feature: 房屋亮点。
-            claim: 出租要求。
-            descriptions: 房屋描述。
-        */
-
-        mongoose.connect('mongodb://127.0.0.1/tenement');
-        console.log(info)
+        console.log(info);
+        HouseModle.create(info, (err) => {
+            if (err) {
+                console.log('保存到数据库出错！');
+                console.log(info);
+            }
+        });
     }
 }
 

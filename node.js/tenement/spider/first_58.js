@@ -4,6 +4,7 @@ const qs = require('query-string');
 const request = require('request');
 const cheerio = require('cheerio');
 const moment = require('moment');
+const mongoose = require('mongoose');
 const utils = require('../lib/utils');
 const userAgents = require('../lib/user_agent');
 const HouseModle = require('../models/houses');
@@ -142,11 +143,15 @@ class Spider {
             descriptions
         };
 
-        console.log(info);
-        HouseModle.create(info, (err) => {
+        this.saveInfo(info);
+    }
+
+    async saveInfo(info) {
+        await HouseModle.create(info, (err) => {
             if (err) {
-                console.log('保存到数据库出错！');
-                console.log(info);
+                console.error(`${info.title}______保存失败！`);
+            } else {
+                console.log(`${info.title}______保存成功！`);
             }
         });
     }

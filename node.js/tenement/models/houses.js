@@ -45,11 +45,7 @@ const houseSchema = mongoose.Schema({
     // 出租要求
     claim: [String],
     // 描述
-    descriptions: String
+    descriptions: String,
 });
 
-const HouseModle = new mongoose.model('house', houseSchema);
-
-exports.insert = async (info) => {
-    await HouseModle.create(info);
-};
+module.exports = mongoose.model('House', houseSchema);

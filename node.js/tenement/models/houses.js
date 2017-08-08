@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://127.0.0.1:27017/tenement', {
-    useMongoClient: true,
-});
+function connect() {
+    mongoose.connect('mongodb://127.0.0.1:27017/tenement', {
+        useMongoClient: true,
+    }, (err) => {
+        if (err) {
+            connect();
+        }
+    });
+}
+connect();
 
 const houseSchema = mongoose.Schema({
     // 房间缩略图地址
@@ -46,6 +53,17 @@ const houseSchema = mongoose.Schema({
     claim: [String],
     // 描述
     descriptions: String,
+    // 房屋照片
+    pictures: [String],
+    // 联系信息
+    contact: {
+        // 姓名
+        name: String,
+        // 头像
+        avatar: String,
+        // 电话
+        phone: String,
+    }
 });
 
 module.exports = mongoose.model('House', houseSchema);

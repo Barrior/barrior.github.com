@@ -1,12 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+
 const qs = require('query-string');
 const request = require('request');
 const cheerio = require('cheerio');
-const moment = require('moment');
 const mongoose = require('mongoose');
+
 const utils = require('../lib/utils');
 const userAgents = require('../lib/user_agent');
+const encryption = require('../lib/encryption');
 const HouseModle = require('../models/houses');
 
 class Spider {
@@ -31,7 +33,6 @@ class Spider {
         const options = {
             url,
             timeout: 30 * 1000,
-            jar: true,
             headers: {
                 'User-Agent': utils.randomChoice(userAgents)
             }
@@ -47,16 +48,26 @@ class Spider {
         return options;
     }
 
+    randomSleep(max, min) {
+        return utils.sleep(parseInt(utils.limitRandom(max, min)));
+    }
+
     sendRequest(...arg) {
         return new Promise((resolve, reject) => {
-            request.get(this.createOptions(...arg), (err, res, body) => {
-                if (err) reject('服务器无响应');
-                if (res && res.statusCode === 200) {
-                    resolve(body);
-                } else {
-                    reject('无响应内容或状态码错误');
-                }
-            });
+            const recursion = async () => {
+                // 随机休息 1~5s
+                await this.randomSleep(5000, 1000);
+                request.get(this.createOptions(...arg), (err, res, body) => {
+                    if (err) reject('服务器无响应');
+                    if (res && res.statusCode === 200) {
+                        return resolve(body);
+                    } else {
+                        reject('无响应内容或状态码错误');
+                    }
+                    recursion();
+                });
+            };
+            recursion();
         });
     }
 
@@ -81,8 +92,18 @@ class Spider {
 
     async requestDetailPage() {
         for (const item of this.tenement) {
+            // 随机休息 0~2s
+            await this.randomSleep(2000, 0);
             const body = await this.sendRequest(item.detailPageUrl);
-            await this.parseDetailPage(body, item);
+            this.parseDetailPage(body, item);
+        }
+        // 随机休息 10~20s
+        await this.randomSleep(1000 * 20, 1000 * 10);
+        if (this.pageIndex > 70) {
+            console.log('70 页数据下载完毕！');
+        } else {
+            this.pageIndex++;
+            this.bootstrap();
         }
     }
 
@@ -99,25 +120,37 @@ class Spider {
         const floor = this.splitBlank($houseDes.find('ul.f14 li').eq(2).find('span').eq(1).text());
         const district = this.splitBlank($houseDes.find('ul.f14 li').eq(4).find('span').eq(1).text());
 
+        const pictures = [];
+        $('.house-basic-info .basic-pic-list li').each(function () {
+            pictures.push($(this).attr('data-src'));
+        });
+
         const appliances = [];
-        $houseDetails.find('.house-disposal li').each(function() {
+        $houseDetails.find('.house-disposal li').each(function () {
             appliances.push($(this).text().trim())
         });
 
         const feature = [];
-        $houseDetails.find('.house-word-introduce li').eq(0).find('em').each(function() {
+        $houseDetails.find('.house-word-introduce li').eq(0).find('em').each(function () {
             feature.push($(this).text().trim())
         });
 
         const claim = [];
         let descriptions = '';
         if ($houseDetails.find('.house-word-introduce li').length > 2) {
-            $houseDetails.find('.house-word-introduce li').eq(1).find('em').each(function() {
+            $houseDetails.find('.house-word-introduce li').eq(1).find('em').each(function () {
                 claim.push($(this).text().trim())
             });
             descriptions = $houseDetails.find('.house-word-introduce li').eq(2).find('span').text().trim();
         } else {
             descriptions = $houseDetails.find('.house-word-introduce li').eq(1).find('span').text().trim();
+        }
+
+        let phone = utils.trimAll($('.house-basic-right .house-fraud-tip .house-chat-phone .f30').text());
+        if (phone.test(/^\d{11}$/)) {
+            phone = encryption.cipher(phone);
+        } else {
+            phone = '';
         }
 
         const info = {
@@ -140,20 +173,27 @@ class Spider {
             appliances,
             feature,
             claim,
-            descriptions
+            descriptions,
+            pictures,
+            contact: {
+                name: $houseDes.find('.house-agent-info .agent-head-portrait img').attr('src'),
+                avatar: $houseDes.find('.house-agent-info .agent-name').text().trim(),
+                phone,
+            }
         };
 
         this.saveInfo(info);
     }
 
     async saveInfo(info) {
-        await HouseModle.create(info, (err) => {
-            if (err) {
-                console.error(`${info.title}______保存失败！`);
-            } else {
+        await HouseModle.create(info)
+            .then(() => {
                 console.log(`${info.title}______保存成功！`);
-            }
-        });
+            })
+            .catch(() => {
+                console.error(`${info.title}______保存失败，重新保存中...`);
+                this.saveInfo(info);
+            });
     }
 }
 

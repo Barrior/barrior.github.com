@@ -92,8 +92,6 @@ class Spider {
 
     async requestDetailPage() {
         for (const item of this.tenement) {
-            // 随机休息 0~2s
-            await this.randomSleep(2000, 0);
             const body = await this.sendRequest(item.detailPageUrl);
             this.parseDetailPage(body, item);
         }
@@ -147,7 +145,7 @@ class Spider {
         }
 
         let phone = utils.trimAll($('.house-basic-right .house-fraud-tip .house-chat-phone .f30').text());
-        if (phone.test(/^\d{11}$/)) {
+        if (phone && /^\d{11}$/.test(phone)) {
             phone = encryption.cipher(phone);
         } else {
             phone = '';

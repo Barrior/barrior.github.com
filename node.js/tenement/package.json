@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "node-schedule": "^1.2.3",
     "query-string": "^5.0.0",
     "request": "^2.81.0"
   },

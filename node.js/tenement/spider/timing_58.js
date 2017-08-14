@@ -6,22 +6,21 @@ const request = require('request');
 const cheerio = require('cheerio');
 const mongoose = require('mongoose');
 const schedule = require('node-schedule');
+const colors = require('colors');
+const _ = require('lodash');
 
 const utils = require('../lib/utils');
 const userAgents = require('../lib/user_agent');
 const encryption = require('../lib/encryption');
 const HouseModle = require('../models/houses');
 
-schedule.scheduleJob('*/20 * * * *', async () => {
-    // 随机休息 0~10s
+const randomSleep = _.flowRight(utils.sleep, parseInt, utils.limitRandom);
+
+schedule.scheduleJob('*/5 * * * *', async () => {
+    console.log(`schedule job executed: ${new Date()}`.cyan);
     await randomSleep(1000 * 10, 0);
     new Spider();
-    console.log('schedule job executed:' + new Date());
 });
-
-function randomSleep(max, min) {
-    return utils.sleep(parseInt(utils.limitRandom(max, min)));
-}
 
 class Spider {
     constructor() {
@@ -61,11 +60,11 @@ class Spider {
                 // 随机休息 0~2s
                 await randomSleep(2000, 0);
                 request.get(this.createOptions(...arg), (err, res, body) => {
-                    if (err) reject('服务器无响应');
+                    if (err) reject('服务器无响应'.red);
                     if (res && res.statusCode === 200) {
                         return resolve(body);
                     } else {
-                        reject('无响应内容或状态码错误');
+                        reject('无响应内容或状态码错误'.red);
                         recursion();
                     }
                 });
@@ -112,6 +111,7 @@ class Spider {
             if (!exist) {
                 const body = await this.sendRequest(item.detailPageUrl);
                 this.parseDetailPage(body, item);
+                await randomSleep(1000 * 5, 0);
             }
         }
     }
@@ -197,10 +197,10 @@ class Spider {
     async saveInfo(info) {
         await HouseModle.create(info)
             .then(() => {
-                console.log(`${info.title}______保存成功！`);
+                console.log(info.title, `保存成功！`.green);
             })
             .catch(() => {
-                console.error(`${info.title}______保存失败，重新保存中...`);
+                console.error(info.title, `保存失败，重新保存中...`.red);
                 this.saveInfo(info);
             });
     }

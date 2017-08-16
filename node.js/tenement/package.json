@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "start:pm2": "pm2 start app.js --watch -f",
     "spider:first": "node ./spider/first_58",
     "spider:timing": "node ./spider/timing_58",
     "test": "echo \"Error: no test specified\" && exit 1"

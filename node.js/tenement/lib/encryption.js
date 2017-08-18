@@ -1,19 +1,22 @@
 const crypto = require('crypto');
 
-const secretKey = `You don't know the key`;
+const secretKey = `You don't know the secret key`;
 
-const cipher = (data) => {
-    const ciphter = crypto.createCipher('aes-256-cbc', secretKey);
+exports.cipher = (data, key = secretKey) => {
+    const ciphter = crypto.createCipher('aes-256-cbc', key);
     let secret = ciphter.update(data, 'utf8', 'hex');
     secret += ciphter.final('hex');
     return secret;
 };
 
-const decipher = (data) => {
-    const decipher = crypto.createDecipher('aes-256-cbc', secretKey);
+exports.decipher = (data, key = secretKey) => {
+    const decipher = crypto.createDecipher('aes-256-cbc', key);
     let raw = decipher.update(data, 'hex', 'utf8');
     raw += decipher.final('utf8');
     return raw;
 };
 
-module.exports = {cipher, decipher};
+// 密码不可逆加密
+exports.encryptPassword = (password) => {
+    return crypto.createHash('sha1').update(password).digest('hex');
+};

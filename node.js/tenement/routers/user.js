@@ -1,4 +1,5 @@
 const REGEXP = require('../lib/regexp');
+const encryption = require('../lib/encryption');
 const User = require('../models/user');
 
 const defaultRes = Object.freeze({
@@ -6,19 +7,76 @@ const defaultRes = Object.freeze({
     message: '成功',
 });
 
-exports.getUser = async (ctx) => {
-    const uid = ctx.params.id;
-    const data = `获取 ${uid} 用户信息成功`;
-    ctx.body = Object.assign({data}, defaultRes);
+exports.getCookie = async (ctx) => {
+    const loginState = ctx.cookies.get('loginState', {signed: true});
+    try {
+        console.log(loginState, encryption.decipher(loginState));
+        ctx.body = encryption.decipher(loginState);
+    } catch (e) {
+
+    }
 };
 
-exports.createUser = async (ctx) => {
+exports.login = async (ctx) => {
+    const {username, password} = ctx.request.body;
+    const res = Object.assign({}, defaultRes);
+
+    if (!username || !password) {
+        res.code = 1;
+        res.message = '用户名或密码不能为空';
+    } else {
+        await User
+            .findOne({
+                username,
+                password: encryption.encryptPassword(password),
+            })
+            .then((userInfo) => {
+                if (userInfo) {
+                    res.data = {
+                        username,
+                        id: userInfo._id,
+                    };
+                    res.message = '登录成功';
+
+                    // set login state
+                    ctx.cookies.set(
+                        'loginState',
+                        encryption.cipher(JSON.stringify(res.data)),
+                        {
+                            maxAge: 1000 * 60 * 60 * 24 * 30,
+                            httpOnly: true,
+                            signed: true,
+                            overwrite: false
+                        }
+                    );
+                } else {
+                    res.code = 1;
+                    res.message = '用户名或密码错误';
+                }
+            })
+            .catch(console.error);
+    }
+
+    ctx.body = res;
+};
+
+exports.logout = async (ctx) => {
+    const {username, password} = ctx.request.body;
+    const res = Object.assign({}, defaultRes);
+
+    ctx.body = res;
+};
+
+exports.register = async (ctx) => {
     const {username, password} = ctx.request.body;
     const res = Object.assign({}, defaultRes);
 
     console.log({username, password});
 
-    if (!username || !password) {
+    if (/\s/.test(username)) {
+        res.code = 1;
+        res.message = '用户名不能包含空格';
+    } else if (!username || !password) {
         res.code = 1;
         res.message = '用户名或密码不能为空';
     } else {
@@ -35,9 +93,29 @@ exports.createUser = async (ctx) => {
     }
 
     if (res.code === 0) {
-        User.fineOne({name: username}).then(result => {
-            console.log(result)
-        })
+        await User
+            .findOne({username})
+            .then((result) => {
+                if (result) {
+                    res.code = 4;
+                    res.message = '用户名已经被注册';
+                } else {
+                    return User.create({
+                        username,
+                        password: encryption.encryptPassword(password),
+                    });
+                }
+            })
+            .then((newUserInfo) => {
+                if (newUserInfo) {
+                    res.data = {
+                        username,
+                        id: newUserInfo._id,
+                    };
+                    res.message = '注册成功';
+                }
+            })
+            .catch(console.error);
     }
 
     ctx.body = res;

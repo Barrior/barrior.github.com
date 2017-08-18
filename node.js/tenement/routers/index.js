@@ -4,9 +4,11 @@ const user = require('./user');
 const router = new Router();
 
 // REST API : USER
-router.get('/user/:id', user.getUser);
-router.post('/user', user.createUser);
-router.put('/user/:id', user.updateUser);
-router.del('/user/:id', user.deleteUser);
+router.get('/user/getCookie', user.getCookie);
+router.get('/user/logout', user.logout);
+router.post('/user/login', user.login);
+router.post('/user/register', user.register);
+router.put('/user', user.updateUser);
+router.del('/user', user.deleteUser);
 
 module.exports = router;

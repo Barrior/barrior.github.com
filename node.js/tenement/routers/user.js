@@ -8,13 +8,8 @@ const defaultRes = Object.freeze({
 });
 
 exports.getCookie = async (ctx) => {
-    const loginState = ctx.cookies.get('loginState', {signed: true});
-    try {
-        console.log(loginState, encryption.decipher(loginState));
-        ctx.body = encryption.decipher(loginState);
-    } catch (e) {
-
-    }
+    console.log('logined:', ctx.logined)
+    ctx.body = ctx.logined;
 };
 
 exports.login = async (ctx) => {
@@ -41,7 +36,7 @@ exports.login = async (ctx) => {
                     // set login state
                     ctx.cookies.set(
                         'loginState',
-                        encryption.cipher(JSON.stringify(res.data)),
+                        encryption.cipher(userInfo._id.toString()),
                         {
                             maxAge: 1000 * 60 * 60 * 24 * 30,
                             httpOnly: true,

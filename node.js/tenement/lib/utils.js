@@ -22,6 +22,14 @@ const utils = {
     // 随机选择数组里的某个值
     randomChoice(array) {
         return array[Math.floor(Math.random() * array.length)];
+    },
+    defineReadOnlyProperty(target, prop, value) {
+        Object.defineProperty(target, prop, {
+            value,
+            writable: false,
+            enumerable: true,
+            configurable: false
+        });
     }
 };
 

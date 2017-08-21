@@ -2,6 +2,9 @@ const Koa = require('koa');
 const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const router = require('./routers/index');
+const User = require('./models/user');
+const utils = require('./lib/utils');
+const encryption = require('./lib/encryption');
 
 const app = new Koa();
 const sessionConfig = {
@@ -15,20 +18,22 @@ const sessionConfig = {
 
 app.keys = ['cookie_sign_key_1', 'cookie_sign_key_2'];
 
-/*
+// get login state
 app.use(async (ctx, next) => {
-    console.log(1)
-    next();
-    console.log(3)
-    ctx.body = 0;
-});
+    const loginState = ctx.cookies.get('loginState', {signed: true});
+    try {
+        const uid = encryption.decipher(loginState);
+        await User.findOne({_id: uid}).then((userInfo) => {
+            if (userInfo) {
+                Object.freeze(userInfo);
+                utils.defineReadOnlyProperty(ctx, 'logined', userInfo);
+            }
+        });
+    } catch (e) {
 
-app.use(async (ctx, next) => {
-    console.log(2);
+    }
     await next();
-    console.log(4)
 });
-*/
 
 app.use(session(sessionConfig, app));
 app.use(bodyParser());

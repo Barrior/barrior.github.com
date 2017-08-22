@@ -12,7 +12,7 @@ exports.getCookie = async (ctx) => {
     ctx.body = ctx.logined;
 };
 
-exports.login = async (ctx) => {
+exports.signin = async (ctx) => {
     const {username, password} = ctx.request.body;
     const res = Object.assign({}, defaultRes);
 
@@ -55,14 +55,14 @@ exports.login = async (ctx) => {
     ctx.body = res;
 };
 
-exports.logout = async (ctx) => {
+exports.signout = async (ctx) => {
     const {username, password} = ctx.request.body;
     const res = Object.assign({}, defaultRes);
 
     ctx.body = res;
 };
 
-exports.register = async (ctx) => {
+exports.signup = async (ctx) => {
     const {username, password} = ctx.request.body;
     const res = Object.assign({}, defaultRes);
 

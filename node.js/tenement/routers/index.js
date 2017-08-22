@@ -5,9 +5,9 @@ const router = new Router();
 
 // REST API : USER
 router.get('/user/getCookie', user.getCookie);
-router.get('/user/logout', user.logout);
-router.post('/user/login', user.login);
-router.post('/user/register', user.register);
+router.get('/user/signout', user.signout);
+router.post('/user/signin', user.signin);
+router.post('/user/signup', user.signup);
 router.put('/user', user.updateUser);
 router.del('/user', user.deleteUser);
 

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script>
+			//定时器的第三个参数
+			setInterval(function(str1,str2,num){
+				alert(str1+str2+num)
+			},1000,'参数1','还可以有很多参数,不同的类型...',123);
+			
+			
+			//控制台输出有样式的文本信息或图片
+			//大大的中文详细文档http://wayou.github.io/2014/09/10/chrome-console-tips-and-tricks/
+			console.log('%c这些字是红色的，哈哈','color:red');
+			
+			
+			//字符串链连接的三种方法
+			document.body.innerHTML='<div id="content"><p class="abc"></p><span>span</span>...</div>';	//1
+			
+			document.body.innerHTML=
+			'<div id="content">'+
+				'<p class="abc"></p>'+
+				'<span>span</span>'+
+				'...'+
+			'</div>';	//2
+			
+			document.body.innerHTML=
+			'<div id="content">\
+				<p class="abc"></p>\
+				<span>span</span>\
+				...\
+			</div>';	//3--狂拽炫酷吊炸天吧 o(≧v≦)o~~注意空格
+			
+			
+			//跳出嵌套for循环,给for添加个名字，用break跳出指定的for循环
+			name : for(var i=0; i<5; i++){
+				for(var j=0; j<1; j++){
+					if(i==3){
+						break name;
+					}
+					alert(i);
+				}
+			}
+			
+			//for的简写，没有条件限制,一直执行，相当于条件一直是true
+			var num=0;
+			for(;;){
+				alert(num);
+				if(++num>5){	//内部给限制条件，以跳出无限循环
+					break;
+				}
+			}
+			
+			//for的多表达式--for(初始化语句; 条件语句; 控制语句)
+			for(var i=10,j=10; i>0 && j<15; i--,j++){
+				alert( 'i='+i+'，j='+j )
+			}
+			
+			
+			//typeof和instanceof等加上小括号的写法，还有的好像in,return
+			//原因：由于 typeof也可以像函数的语法被调用，比如 typeof(obj)，但这并不是一个函数调用。 那两个小括号只是用来计算一个表达式的值，这个返回值会作为 typeof操作符的一个操作数。 实际上不存在名为 typeof的函数。js秘密花园文档--http://bonsaiden.github.io/JavaScript-Garden/zh/#types.typeof
+			alert( typeof 6 )	//number
+			alert( typeof(6) )	//number
+			
+			//省略创建对象时的小括号,包括自己创建的构造函数也可以
+			var arr=new Array();
+			var arr=new Array;
+			
+			
+			//匿名函数自执行，知乎文档--匿名函数附近使用括号或一些一元运算符的惯用法，就是来引导解析器，指明运算符附近是一个表达式--按照这个理解，可以举出五类，超过十几种的让匿名函数表达式立即调用的写法：--http://www.zhihu.com/question/20249179
+			( function() {}() );
+			( function() {} )();
+			[ function() {}() ];	//小括号或中括号括起来调用
+			
+			~ function() {}();
+			! function() {}();
+			+ function() {}();
+			- function() {}();		//位运算符[~！+...]在前，小括号调用
+			
+			delete function() {}();
+			typeof function() {}();
+			void function() {}();
+			new function() {}();
+			new function() {};
+			
+			1, function() {}();
+			1 ^ function() {}();
+			1 > function() {}();	//等等
+			
+			
+			//改变this指向等相近方法arguments，callee，caller，call，apply的区别
+			//百度文档--http://wenku.baidu.com/link?url=NPq__nPg_VNrcb89NFPGi_deo-S7EnL1LHgH7qgbUsdpmYLDTtEYzKuh4u8AXZqHNpU3qmp6YgYrSxA12ocB8gJ69scGsosdOS9o5HQzmZS
+			var obj={
+				aaa:function(){
+					alert(this);
+				},
+				bbb:function(fn){
+					fn();
+				}
+			}
+			obj.aaa();	//this指向obj
+			obj.aaa.call();		//this指向document，无参数默认指向window
+								//call()和apply()方法的作用相同，区别在与接收参数的方式不一样
+			obj.bbb(function(){
+				alert(1);
+				arguments.callee();		//arguments.callee等于其上面的这个函数，加个()就是让自身函数再次执行
+			});		//无限弹出1，因为函数每次执行到最后又调用了自身函数--执行
+			//arguments.length是实参长度，arguments.callee.length是形参长度，由此能够判断调用时形参长度是否和实参长度一致
+			function a(){
+				if(a.caller){
+					alert(a.caller)
+				}else{
+					alert('top')
+				}
+			}
+			a();	//弹出top；因为a是最外层函数，此时a.caller为null；
+			
+			function b(){
+				a();
+			}
+			b();	//弹出function b(){a();}，因为此时a.caller指向b这个函数体
+			
+			
+		</script>
+	</body>
+</html>

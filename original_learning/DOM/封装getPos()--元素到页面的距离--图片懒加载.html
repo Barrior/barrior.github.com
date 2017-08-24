@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			body{margin: 0;}
+			div{padding: 50px;}
+			#div1{background: red;}
+			#div2{background: yellow; position: relative;}
+			#div3{background: green; position: relative;}
+			#div4{background: red; position: absolute; top: 1000px; opacity: 0; transition: 2s;}
+			#div5{background: orange; position: absolute; top: 2000px;}
+			img{width: 600px; margin-bottom: 100px; display: block;}
+			@-webkit-keyframes fade{
+				0%{opacity: 0;}
+				100%{opacity: 1;}
+			}
+		</style>
+	</head>
+	<body id="body">
+		<div id="div1">
+			<div id="div2">
+				<div id="div3"></div>
+			</div>
+		</div>
+		<div id="div4"></div>
+		<div id="div5"></div>
+		<img _src="http://img.souutu.com/2014/1203/20141203031729353.jpg"  src="../jQuery效果/延时加载/images/delayed.gif" alt=""/>
+		<img _src="http://img.souutu.com/2014/1203/20141203031729731.jpg"  src="../jQuery效果/延时加载/images/delayed.gif" alt=""/>
+		<img _src="http://img.souutu.com/2014/1203/20141203031730929.jpg"  src="../jQuery效果/延时加载/images/delayed.gif" alt=""/>
+		<img _src="http://img.souutu.com/2014/1203/20141203031730752.jpg"  src="../jQuery效果/延时加载/images/delayed.gif" alt=""/>
+		<img _src="http://img.souutu.com/2014/1203/20141203031731535.jpg"  src="../jQuery效果/延时加载/images/delayed.gif" alt=""/>
+		<img _src="http://img.souutu.com/2014/1203/20141203031731209.jpg"  src="../jQuery效果/延时加载/images/delayed.gif" alt=""/>
+		<img _src="http://img.souutu.com/2014/1203/20141203031733229.jpg"  src="../jQuery效果/延时加载/images/delayed.gif" alt=""/>
+		<script>
+			var oDiv4=document.getElementById('div4');
+			var t=getPos(oDiv4).top-document.documentElement.clientHeight;
+			var b=getPos(oDiv4).top+oDiv4.offsetHeight;
+			var aImg=document.getElementsByTagName('img');
+			var timer=null;
+			
+			for(var i=0; i<aImg.length; i++){
+				aImg[i].t='t'+i;
+				aImg[i].b='b'+i;
+				aImg[i].t=getPos(aImg[i]).top-document.documentElement.clientHeight;
+				aImg[i].b=getPos(aImg[i]).top+aImg[i].offsetHeight;
+			}
+			
+			window.onscroll=function(){
+				var s=document.body.scrollTop || document.documentElement.scrollTop;
+				console.log(s);
+				if(s>t && s<b){
+					console.log('到了')
+					oDiv4.style.opacity=1;
+				}
+				clearTimeout(timer);
+				timer=setTimeout(function(){
+					for(var i=0; i<aImg.length; i++){
+						if(s>aImg[i].t && s<aImg[i].b){
+							var oImg=new Image();
+							oImg.src=aImg[i].getAttribute('_src');
+							oImg.onload=on(i);
+							function on(i){
+								aImg[i].style.webkitAnimation='fade 0.6s';
+								aImg[i].src=aImg[i].getAttribute('_src');
+							}
+						}
+					}
+				},1000);
+			}
+			
+			function getPos(obj){
+				
+				var pos={left:0, top:0};
+				
+				while(obj){
+					pos.left+=obj.offsetLeft;
+					pos.top+=obj.offsetTop;
+					obj=obj.offsetParent;
+				}
+				
+				return pos;
+			}
+		</script>
+	</body>
+</html>

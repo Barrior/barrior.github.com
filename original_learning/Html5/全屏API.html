@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			div{
+				padding: 50px; border: 1px solid #000; margin-bottom: 10px;
+				width:200px; cursor: pointer; transition: .4s;
+			}
+			div:hover{background-color: #000; color: #fff;}
+		</style>
+	</head>
+	<body>
+		<div id="launch">进入全屏</div>
+		<script>
+		/*
+			// Webkit (works in Safari5.1 and Chrome 15)
+			element.webkitRequestFullScreen();
+			document.webkitCancelFullScreen();
+			测试环境chrome39支持document.webkitExitFullscreen()
+			document.webkitIsFullScreen
+			 
+			// Firefox 10+
+			element.mozRequestFullScreen();
+			document.mozCancelFullScreen();
+			document.mozFullScreen
+			
+			//ie11
+			element.msRequestFullscreen();
+			document.msExitFullscreen();
+			 
+			// W3C 提议
+			element.requestFullscreen();
+			document.exitFullscreen();
+			document.fullscreen
+		*/
+		
+		!function(w,d){
+			var fs={
+					supportsFullScreen:false,
+					isFullScreen:false,
+					requestFullScreen:'',
+					exitFullScreen:'',
+					fullscreenchange:'',
+					prefix:''
+				},
+				aP=['webkit','moz','ms'],	//opera 15 支持全屏是webkit内核
+				len=aP.length,
+				i=0;
+			
+			if(d.exitFullscreen){
+				fs.supportsFullScreen=true
+			}else{
+				for(; i<len; i++){
+					if(d[aP[i]+'ExitFullscreen'] || d[aP[i]+'CancelFullScreen']){
+						fs.supportsFullScreen=true;
+						fs.prefix=aP[i];
+						break
+					}
+				}
+			}
+			
+			if(fs.supportsFullScreen){
+				var p=fs.prefix;
+				fs.fullscreenchange=function(fn){
+					d.addEventListener(p=='ms' ? 'MSFullscreenChange' : p+'fullscreenchange',function(){
+						fn && fn()
+					},false)
+				};
+				fs.fullscreenchange(function(){
+					fs.isFullScreen=(function(p){
+						switch (p) {
+							case '':
+								return d.fullscreen;
+							case 'webkit':
+								return d.webkitIsFullScreen;
+							case 'moz':
+								return d.mozFullScreen;
+							case 'ms':
+								return d.msFullscreenElement ? true : false
+						}
+					})(p)
+				});
+				fs.requestFullScreen=function(elem){
+					var elem=elem || d.documentElement;
+					try{
+						p ? elem[p+'RequestFullScreen']() : elem.requestFullScreen()	//chrome，ff，标准
+					}catch(e){
+						elem[p+'RequestFullscreen']()	//elem.msRequestFullscreen
+					}
+				};
+				fs.exitFullScreen=function(){
+					try{
+						p ? d[p+'ExitFullscreen']() : d.exitFullscreen()	//ie，新版chrome或标准
+					}catch(e){
+						d[p+'CancelFullScreen']()	//老版chrome 火狐
+					}
+				}
+			}
+			w.fs=fs
+		}(window,document);
+		
+		var oBtn=document.getElementById('launch');
+		oBtn.onclick=function(){
+			if(fs.supportsFullScreen){
+				fs.isFullScreen ?
+				(fs.exitFullScreen(), this.innerHTML='进入全屏') :
+				(fs.requestFullScreen(), this.innerHTML='退出全屏')
+			}else{
+				alert('Sorry: Your browser does not support fullScreen preview.')
+			}
+		};
+		
+		fs.fullscreenchange(function(){
+			oBtn.innerHTML = fs.isFullScreen ? '退出全屏' : '进入全屏'
+		})
+		</script>
+	</body>
+</html>

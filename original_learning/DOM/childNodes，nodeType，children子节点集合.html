@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<ul id="ul1" style="border: 1px solid #000;">
+			<li>111111 <span>span</span> </li>
+			<li>222222</li>
+			<li>333333</li>
+			<li>444444</li>
+			<p>ppppppp</p>
+		</ul>
+		<script>
+			/*
+			  childNodes:	只读		属性		元素子节点集合，不包括孙节点
+				标准下：包含所有的子节点，包括文本节点，和非法嵌套节点
+				非标准下：包含所有的子元素节点，不包括文本节点，和非法嵌套节点
+				
+			  nodeType:		只读		属性		元素节点类型
+			  	1：元素节点
+			  	2：属性节点
+			  	3：文本节点
+			  	
+			  children:		只读		属性		元素子节点集合，仅仅是元素子节点集合，不包括孙节点
+			  	标准下：包括所有的元素子节点，和非法嵌套节点，不包括文本节点等
+				非标准下：包括所有的元素子节点，不包括非法嵌套节点，和文本节点等
+			*/
+			var oUl=document.getElementById('ul1');
+			
+			//alert(oUl.childNodes.length);
+			//alert(oUl.childNodes[0].nodeType)
+			//alert(oUl.attributes[0].name)	弹出oUl的属性节点的第一个属性名称：id，value可以获取其值：ul1
+			//alert(oUl.attributes[0].nodeType)	弹出oUl的属性节点类型：2
+			
+			for(var i=0; i<oUl.children.length; i++){
+					oUl.children[i].style.background='red';			
+			}
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			html,body{width: 100%; height: 100%; overflow: hidden;}
+			#container{
+				margin: 100px auto;
+				width: 538px;
+				height: 136px;
+				font-family:"微软雅黑";
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<svg width=100% height=100%>
+				<radialGradient id="radialGradient">
+			        <stop offset="0" stop-color="white"/>
+			        <stop offset="1" stop-color="rgba(0,0,0,.3)"/>
+		        </radialGradient>
+		        
+				<g transform="translate(52,52)">
+					<circle cx=0 cy=0 r=52 fill=url(#radialGradient)></circle>
+					<path id=p stroke=none fill=red></path>
+					<circle cx=0 cy=0 r=48 fill=#fff></circle>
+					<text y=10 fill=#333 text-anchor=middle>82%</text>
+					<text y=80 text-anchor=middle>男-821人</text>
+				</g>
+				<g transform="translate(182,52)">
+					<circle cx=0 cy=0 r=52 fill=url(#radialGradient)></circle>
+					<path id=p stroke=none fill=blue></path>
+					<circle cx=0 cy=0 r=48 fill=#fff></circle>
+					<text y=10 fill=#333 text-anchor=middle>73%</text>
+					<text y=80 text-anchor=middle>海淀-738人</text>
+				</g>
+				<g transform="translate(312,52)">
+					<circle cx=0 cy=0 r=52 fill=url(#radialGradient)></circle>
+					<path id=p stroke=none fill=purple></path>
+					<circle cx=0 cy=0 r=48 fill=#fff></circle>
+					<text y=10 fill=#333 text-anchor=middle>64%</text>
+					<text y=80 text-anchor=middle>90后-642人</text>
+				</g>
+				<g transform="translate(442,52)">
+					<circle cx=0 cy=0 r=52 fill=url(#radialGradient)></circle>
+					<path id=p stroke=none fill=green></path>
+					<circle cx=0 cy=0 r=48 fill=#fff></circle>
+					<text y=10 fill=#333 text-anchor=middle>46%</text>
+					<text y=80 text-anchor=middle>单身-466人</text>
+				</g>
+			</svg>
+		</div>
+		
+		<script>
+			var aPath=document.querySelectorAll('g path');
+			
+			
+			animte(aPath[0],0.8);
+			animte(aPath[1],0.73);
+			animte(aPath[2],0.64);
+			animte(aPath[3],0.46);
+			
+			function animte(oElem,iAngle){
+				oElem.i=0;
+				oElem.j=0;
+				
+				oElem.timer=setInterval(function(){
+					oElem.j+=0.01
+					oElem.i+=0.05+oElem.j;
+					
+					x=Math.sin(360*oElem.i*Math.PI/180)*51;
+					y=-Math.cos(360*oElem.i*Math.PI/180)*51;
+					
+					arc= 360*oElem.i<180 ? 0: 1;
+					
+					oElem.setAttribute('d','M0 -51A51 51 0 '+arc+' 1 '+x+' '+y+'L0 0' );
+					
+					if(oElem.i>=iAngle){
+						clearInterval(oElem.timer);
+						oElem.setAttribute('d','M0 -51A51 51 0 '+arc+' 1 '+
+							Math.sin(360*iAngle*Math.PI/180)*51+' '+
+							(-Math.cos(360*iAngle*Math.PI/180)*51) +'L0 0' );
+					}
+				},30);
+				
+			}
+		</script>
+	</body>
+</html>

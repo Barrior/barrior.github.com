@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		svg的n种用法：
+			1、直接在浏览器写入svg代码
+					<br />
+			2、iframe引用：<iframe src="first.svg" width="200px" height="200px"></iframe>
+					<br />
+			3、img引用：<img src="first.svg" width="200px" height="200px" />
+					<br />
+			4、元素背景引用：<div style="width: 200px; height: 200px; background-image: url(first.svg);"></div>
+					<br />
+			5、embed引用：<embed src="first.svg" width="200px" height="200px" />
+		参考文献：https://msdn.microsoft.com/zh-cn/library/gg589526(v=vs.85).aspx
+		
+		<svg width="100%" height="1000px">
+			<defs>
+				<marker id="m-circle" markerWidth="8" markerHeight="8" refx="4" refy="4">
+					<circle cx="4" cy="4" r="4" fill="red"></circle>
+				</marker>
+				<marker id="m-mid" markerWidth="8" markerHeight="8" refx="4" refy="4" orient="auto">
+					<rect x="0" y="0" width="8" height="8" fill="purple"></rect>
+				</marker>
+				<marker id="m-arrow" markerWidth="14" markerHeight="14"
+					refx="0" refy="7" orient="auto">
+						<path d="M0 0 14 7 0 14" fill="red"></path>
+				</marker>
+				
+                <marker id="m-start-u" markerWidth="8" markerHeight="8"
+					markerUnits="userSpaceOnUse" refx="4" refy="4" fill=red>
+					<circle cx="4" cy="4" r="4" fill="red"></circle>
+				</marker>
+                <marker id="m-start-s" markerWidth="8" markerHeight="8"
+					markerUnits="strokeWidth" refx="4" refy="4" fill=red>
+					<circle cx="4" cy="4" r="4" fill="red"></circle>
+				</marker>
+				<marker id="m-arrow-u" markerWidth="14" markerHeight="14"
+					markerUnits="userSpaceOnUse" refx="0" refy="7" orient="auto">
+						<path d="M0 0 14 7 0 14" fill="red"></path>
+				</marker>
+				<!--
+                	markerWidth,markerHeight:标记的实际宽高
+                	refx,refy:标记相对于引用元素要偏移的值，标记的【最左上角的点】对应引用元素【开始或结尾的点】
+                			     整数则相对于元素向右/上偏移，反之向左/下
+                	orient："30",与引用元素结尾点的水平方向顺时针保持30度的角度
+                			"auto",自动与引用元素最后两个点的方向保持一致
+                	markerUnits:"userSpaceOnUse",标记不随stroke-Width的变化而变化
+                				默认"strokeWidth",标记随着轮廓的大小而变化
+                -->
+                
+				<pattern id="pattern-grid" width=0.11 height=0.11 x=0.01 y=0.01>
+					<path d="M0 10.5H10 M10.5 0V10" stroke=green></path>
+				</pattern><!--pattern按照引用它的元素的(width/height)11%的相对大小进行填充-->
+				<pattern id="pattern-grid-viewBox"
+					width=0.11 height=0.11
+					x=0.01 y=0.01
+					viewBox="0 0 11 11">
+					<path d="M0 10.5H10 M10.5 0V10" stroke=green></path>
+				</pattern><!--pattern按照相对大小进行填充，但viewBox改变了填充里的内容/图案-->
+				<pattern id="pattern-grid-userSpaceOnUse"
+					width=11 height=11
+					x=0 y=0
+					patternUnits=userSpaceOnUse>
+					<path d="M0 10.5H10 M10.5 0V10" stroke=green></path>
+				</pattern><!--pattern按照(width/height)11的绝对大小进行填充-->
+				<pattern id="pattern-grid-objectBoundingBox"
+					width=0.25 height=0.25
+					x=0 y=0
+					patternContentUnits=objectBoundingBox>
+					<rect width=0.125 height=0.125></rect>
+					<rect width=0.125 height=0.125 x=0.125 y=0.125></rect>
+					<!--<path d="M0 10.5H10 M10.5 0V10" stroke=green></path>-->
+				</pattern><!--pattern按照相对大小进行填充，但内容根据大小的改变而拉伸-->
+				<!--
+                	pattern:
+                		x/y:相对偏移量，默认从(0,0)开始平铺
+                		width/height:pattern的宽高，决定了平铺时每个填充图案所占背景的宽度和高度，相对于引用它的元素的百分比(当patternUnits为默认时)或绝对大小(当patternUnits为userSpaceOnUse时)
+                		patternTransform:允许整个表达式进行转换
+                		
+                		patternUnits:
+                			userSpaceOnUse(按照pattern里元素形状的绝对大小进行填充)
+                			objectBoundingBox(默认,按比例填充)
+                			
+                		patternContentUnits="userSpaceOnUse(默认) 或 objectBoundingBox"
+                			这里需要说明一下，当图形的尺寸发生变化时，pattern也会自动缩放，适应图形的变化，但是pattern内部的图形不会改变尺寸。所以它们之间有比较大的空白。通过改变patternContentUnits属性，我们可以让所有元素使用同样的单位。
+                			当使用objectBoundingBox时，需要注意pattern里面的元素的width/height，都要用成与引用元素的百分比，所以说很多特殊（path路径）形状很难实现？
+                			
+                		
+                	MDN链接：https://developer.mozilla.org/zh-TW/docs/Web/SVG/Tutorial/%E5%9B%BE%E6%A1%88
+                	PS：麻麻地，感觉用绝对大小的时候应该多，其他的都可以忽略啦，哈哈
+                -->
+			</defs>
+			<!---------------------------------defs end------------------------------------------>
+			
+			<path d="M50 300,100 240,150 250,200 190,250 200,300 140" fill=none stroke=black
+				marker-end="url(#m-arrow)">
+			</path>
+			<path d="M50 300,100 200,150 210,200 150,250 160,300 100,400 100" fill=none stroke=black
+				marker-start="url(#m-circle)"
+				marker-mid="url(#m-mid)"
+				marker-end="url(#m-arrow)">
+			</path>
+			
+			<path d="M100 300 200 260" fill=none stroke=black
+				stroke-width="2"
+				marker-start="url(#m-start-u)"
+				marker-end="url(#m-arrow-u)">
+			</path>
+			<path d="M180 300 280 260" fill=none stroke=black
+				stroke-width="2"
+				marker-start="url(#m-start-s)"
+				marker-end="url(#m-arrow)">
+			</path>
+			<!--
+            	marker-start="url(#m-circle)"	起始节点应用#m-circle标记
+				marker-mid="url(#m-mid)"	中间的全部节点
+				marker-end="url(#m-arrow)"	尾部节点
+            -->
+            
+			<switch>
+			    <g systemLanguage="zh">
+			        <text x="10" y="50">中文内容</text>
+			    </g>
+			    <g systemLanguage="en">
+			        <text x="10" y="50">English text</text>
+			    </g>
+			</switch>
+			<!--
+            	<switch>元素，根据用户的系统（不知道是浏览器还是桌面系统）语言显示要展示的元素或内容，应该基本不会用到吧
+            -->
+            
+            <a xlink:href="http://www.baidu.com/" xlink:show="replace">
+            	<rect x=10 y=80 width="60" height="40"></rect>
+            </a>
+            <!--
+            	xlink:show="new | replace",等同于a属性的target（测试是这样）；顾名思义-new就是新标签页打开，replace就是当前窗口
+            -->
+            
+            <symbol id="sym">
+            	<circle cx=40 cy=40 r=40></circle>
+            </symbol>
+            <use id="styleDemo" xlink:href="#sym" x=20 y=500></use>
+            <use xlink:href="#sym" x=200 y=500 width="40" height="40"></use>
+            <!--
+            	<symbol>:定义一个引用，然后用use引用，跟g差不多,唯一的差别就是可以设置大小，但是引用的形状并不会随之缩小或放大，好像可以通过viewbox来自适应
+            -->
+            
+            <g transform="translate(560,100)">
+            	<path d="M50 0 100 50 50 100 0 50zM50 25 75 50 50 75 25 50z"
+            		stroke=red
+            		stroke-width=2
+            		fill=black>
+            	</path>
+            </g><!--原始图形-->
+            <g transform="translate(690,100)">
+            	<path d="M50 0 100 50 50 100 0 50zM50 25 25 50 50 75 75 50z"
+            		stroke=red
+            		stroke-width=2
+            		fill=black>
+            	</path>
+      		</g><!--相反方向绘制-->
+            <g transform="translate(560,240)">
+            	<path d="M50 0 100 50 50 100 0 50zM50 25 75 50 50 75 25 50z"
+            		stroke=red
+            		stroke-width=2
+            		fill=black
+            		fill-rule=evenodd>
+            	</path>
+            </g><!--相同方向加fill-rule=evenodd属性-->
+            <!--
+            	fill-rule:"nonzero | evenodd | inherit"
+            		理解大概：假设一个元素有交错的n个图形，
+            			如果里面的图形和外面的图形是相反方向的绘制方式，那么fill-rule不管是哪个都只填充交错部分；
+            			如果里面的图形和外面的图形是相同方向的绘制方式，那么fill-rule="evenodd"才只填充交错部分；
+            -->
+            
+            <circle cx=450 cy=410 r=100 fill=url(#pattern-grid)></circle>
+            <rect x=650 y=410 width=100 height=100 fill=url(#pattern-grid)></rect>
+            <circle cx=450 cy=640 r=100 fill=url(#pattern-grid-viewBox)></circle>
+            <circle cx=680 cy=640 r=100 fill=url(#pattern-grid-userSpaceOnUse)></circle>
+            <circle cx=450 cy=880 r=100 fill=url(#pattern-grid-objectBoundingBox)></circle>
+            <!-----------------------------Fill Pattern------------------------------------->
+		</svg>
+	</body>
+</html>

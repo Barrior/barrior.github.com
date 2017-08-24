@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>html5表单</title>
+<style>
+span{color:red;}
+[autofocus]{}  /*定义自动获焦的背景颜色*/
+[type=data]{background:red;}
+</style>
+</head>
+
+<body style="width:500px; margin:50px auto 0;">
+<h5 align="center" style="font-weight:normal;">建议在chrome下预览</h5>
+
+<form action="#" method="post" name="userName" oninput="pass2.setCustomValidity(pass2.value!=pass1.value?'输入密码不一致。':'')">
+<!--custom:定制的，validity:正确。 判断两次密码是否输入一致，oninput:当元素获得用户输入时运行脚本，pass2：与name对应。-->
+<fieldset><legend>HTML5表单</legend>  <!--fieldset:标签没有必需的或唯一的属性，legend标签为 fieldset 元素定义标题。-->
+    <table style="width:500px; margin:0; padding:0;">
+        <tbody>
+        <tr>
+            <td width="100px" align="right"><label for="userName">用户名<span>*</span></label>：</td>
+            <!--for:用于规定 label 绑定到哪个表单元素。指向元素的 id。-->
+            <td><input type="text" id="userName" name="userName" maxlength="8" placeholder="请输入用户名" autofocus required autocomplete="on"/>
+                <small><span>*</span>您最多只能输入8个字符。</small>
+            </td>
+            <!--maxlength:用户只能输入的最多字符。 placeholder:占位符， autofocus:自动获得焦点。 required:提示用户在此处要有一定的输入内容。
+             autocomplete:保护用户输入后的数据，on: 为保护，即不保存用户输入的数据，off:则反之，不指定则使用浏览器默认值。-->
+        </tr>
+        <tr>
+            <td align="right">性别<span>*</span>：</td>
+            <td><label><input type="radio" name="sex" />男</label> <label><input type="radio" name="sex" />女</label></td>
+        </tr>
+        <tr>
+            <td align="right">年龄<span>*</span>：</td>
+            <td><input type="range" name="age" min="1" max="146" step="1"/>
+                <output onforminput="value=age.value">20</output>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">密码<span>*</span>：</td>
+            <td><input type="password" name="pass1" /></td>
+        </tr>
+        <tr>
+            <td align="right">确认密码<span>*</span>：</td>
+            <td><input type="password" name="pass2" /></td>
+        </tr>
+        <tr>
+            <td align="right">邮箱<span>*</span>：</td>
+            <td><input type="email" autocomplete="on" name="mail" /></td>
+        </tr>
+        <tr>
+            <td align="right">电话（手机）：</td>
+            <td><input type="tel" pattern="[0-9]{11}" maxlength="11" complete="on" name="tel" /><span>*</span>请输入11位手机号码。</td>
+        </tr>
+        <tr>
+            <td align="right">个人主页：</td>
+            <td><input type="url" autocomplete="on" name="url" /></td>
+        </tr>
+        <tr>
+            <td align="right">头像：</td>
+            <td><input type="file" name="userImg" /></td>
+        </tr>
+        <tr>
+            <td align="right">生日：</td>
+            <td><input type="date" name="userDate" /></td>
+        </tr>
+        <tr>
+            <td align="right">搜索：</td>
+            <td><input type="search" results="n" value="搜索" name="search" /></td>
+        </tr>
+        <tr>
+            <td align="right">文本域：</td>
+            <td><textarea rows="5" cols="23" style="resize:none; overflow:auto;"></textarea></td>
+            <!-- 取消用户拖拽文本域resize:none,兼容各个浏览器下滚动条不同样式overflow:auto; -->
+        </tr>
+        <tr>
+          <td align="right">爱好：</td>
+            <td><label><input type="checkbox"/>文学</label> <label><input type="checkbox"/>运动</label> <label><input type="checkbox" />音乐</label>
+            </td>
+            <td>
+                <input type="checkbox" id="a"/><label for="a">宅</label> 
+                <input type="checkbox" id="b"/><label for="b">腐</label>
+                <!-- 兼容ie6的写法 -->
+            </td>
+        </tr>
+        <tr>
+          <td align="right">学历：</td>
+            <td><select name="xueLi" style="width:156px;">  <!--select认<option></option>中间的值。-->
+                  <option value=""></option>
+                  <option value="小学">小学</option>
+                  <option value="初中">初中</option>
+                  <option value="高中">高中</option>
+                  <option value="中专">中专</option> 
+                  <option value="大专" selected="selected">大专</option><!--默认选项-->
+                  <option value="本科">本科</option>
+                  <option value="研究生">研究生</option>
+                  <option value="博士生">博士生</option>
+                </select>
+            </td>
+        </tr>
+        <td align="right">学历2：</td>
+            <td><input type="text" list="xueli">
+                  <datalist id="xueli" style="display:none;">  <!--display:none;处理兼容没有datalist属性的浏览器。 datalist认value的值-->
+                      <option value=""></option>
+                      <option value="小学">小学</option>
+                      <option value="初中">初中</option>
+                      <option value="高中">高中</option>
+                      <option value="中专">中专</option> 
+                      <option value="大专">大专</option>
+                      <option value="本科">本科</option>
+                      <option value="研究生">研究生</option>
+                      <option value="博士生">博士生</option>
+                  </datalist>
+            </td>
+        </tr><br>
+        <tr>
+            <td colspan="2"><label><input type="checkbox"/>同意</label><a href="#">注册协议</a></td>
+        </tr><br>
+        <tr>
+            <td></td>
+            <td><input type="submit" name="submit" value="提交" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" name="reset" value="重置" /></td>
+        </tr>
+      </tbody>
+    </table>
+</fieldset>
+</form>
+</body>
+</html>
+<script>
+	var oForm=document.getElementsByName('userName')[0];
+	oForm.onreset=function(){
+		/*if(confirm('是否要清空表单？')){
+			return true;
+		}
+		else{
+			return false;
+		}*/
+		return confirm('是否要清空表单？');
+	};
+</script>

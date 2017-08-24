@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>BASE</title>
+	<style>
+		pre{
+			padding: 20px;
+			background-color: #e0e0e0;
+			border: 1px solid #D2D2D2;
+		}
+		.wrap{
+			width: 200px;
+			height: 300px;
+			border: 1px solid #ccc;
+			padding: 10px;
+			overflow: auto;
+			position: relative;
+		}
+		
+		#goto-50,
+		#toTop{
+			position: fixed;
+			right: 20px;
+			bottom: 20px;
+			width: 50px;
+			height: 50px;
+			border: 1px solid #ccc;
+			text-align: center;
+			line-height: 50px;
+			cursor: pointer;
+		}
+		#goto-50{
+			position: absolute;
+			background-color: rgba(255, 255, 255, 0.63);
+			border: none;
+			top: 500px;
+		}
+		
+		#drag-sort{
+			width: 300px;
+			margin: 50px auto;
+			border: 1px solid #ccc;
+		}
+		#drag-sort ul{
+			padding: 10px 0 0 0;
+			margin: 0;
+		}
+		#drag-sort li{
+			list-style: none;
+			padding: 10px;
+			border-top: 1px solid #ccc;
+			border-bottom: 1px solid #ccc;
+			margin: 0 0 10px;
+			cursor: move;
+		}
+		#drag-sort li:hover{
+			background-color: #F4F4F4;
+		}
+		
+		#drag{
+			width: 100px;
+			height: 100px;
+			background-color: red;
+			position: absolute;
+			z-index: 10;
+			top: 200px;
+			left: 40px;
+			cursor: move;
+		}
+		*{
+			/*box-sizing: border-box;*/
+		}
+	</style>
+	<script src="jquery.1x.js"></script>
+	<script src="base.js"></script>
+</head>
+<body style="height: 2000px;">
+	<pre>
+		var a = 0;
+		console.log( a++ )
+	</pre>
+	
+	<div id="drag-sort">
+		<ul>
+			<li>111111</li>
+			<li>222222</li>
+			<li>
+				333333<br />
+				wwwwww
+			</li>
+			<li>444444</li>
+			<li>555555</li>
+			<li>666666</li>
+		</ul>
+	</div>
+	
+	<div class="wrap">
+		<div style="height: 600px; background-color: #00FF00;"></div>
+		hhhhhhhh<br />
+		hhhhhhhh<br />
+		
+		<div id="goto-50">to-50</div>
+	</div>
+	
+	<div class="wrap">
+		<div style="height: 600px; background-color: #00FF00;"></div>
+		hhhhhhhh<br />
+		hhhhhhhh<br />
+		
+	</div>
+	
+	<div id="toTop">toTop</div>
+	
+	<div id="drag"> drag move </div>
+	<script>
+		//---------------
+		$('#toTop').click(function(){
+			$( window ).toTop( -1 )
+		});
+		
+		$('#goto-50').click(function(){
+			$( '.wrap' ).goto( 50 ).css('border','4px solid #ccc')
+		})
+	
+		//---------------
+		$( 'pre' ).clickToggle(function( e ){
+			
+			$( this ).css( 'background-color', 'red' );
+			
+		}, function( e ){
+			
+			$( this ).removeAttr( 'style' )
+			
+		}, 0, 400 );
+		
+		//---------------
+		$('#drag').drag({
+			limit: true,
+			move: function(){
+				$(this).css( 'background-color', 'palegreen' )
+			},
+			up: function(){
+				$(this).css( 'background-color', 'red' )
+			}
+			
+		}).dblclick(function(){
+			alert()
+		});
+		
+		//---------------
+		$('#drag-sort').dragSort({
+			target: 'li',
+			floatStyle: {
+				'background-color': '#fff'
+			}
+			
+		}).dblclick(function(){
+			alert()
+		});
+		
+			
+		/*Base.store.set( 'name', 'wei' );
+		Base.store.set( 'userInfo', {
+			name: 'wei',
+			age: 22,
+			fn: 'function a(){ alert(this.name) }'
+		});
+		
+		console.log( Base.store.get( 'userInfo' ) );
+		
+		document.onclick = function(){
+			
+			Base.store.remove( 'name' );
+			
+		}
+		
+		Base.store.forEach(function( key, val ){
+			
+			console.log( key + ': ' , val )
+			
+		});
+		
+		Base.session.set( 'name', 'barrior' );
+		console.log( Base.session.get( 'name' ) );
+		
+		
+		console.log( Base.session == Base.store );
+		console.log( Base.session.get === Base.store.get );*/
+		
+	</script>
+</body>
+</html>

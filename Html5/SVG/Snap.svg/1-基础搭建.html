@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="snap.svg-min.js" ></script>
+		<style>
+			html,body{width: 100%; height: 100%; margin: 0;}
+		</style>
+	</head>
+	<body>
+		<svg id="svg1" width="100%" height="100%"></svg>
+		<script>
+			var oSvg=Snap('#svg1');
+			var oCircle=oSvg.paper.circle(100,100,50).attr({
+				fill:'#fff',
+				stroke:'red',
+				'stroke-width':2
+			})
+			
+			oSvg.click(function(){
+				oCircle.stop().animate({fill:'red'},600,function(){
+					//alert( '圆的颜色动画的改变啦，圆的半径是：'+oCircle.asPX('cx')+'px' )	//attr('cx')也行
+					
+					if( oSvg.select('text')==null ){
+						oSvg.paper.text(100,100,this.data('author')).attr('text-anchor','middle');
+					}
+				}).data('author','wei-点击我').click(function(ev){
+					this.animate({fill:'#'+(Math.random()+'').slice(-6)},600);
+					ev.stopPropagation();
+				});
+			});
+			
+			var oCCircle=oCircle.clone().attr({
+				cx:10,
+				cy:10
+			});
+				oText=oSvg.paper.text(-20,14,'拖拽我吧');
+				oGDrag=oSvg.paper.g().attr({
+				transform:'translate(300,200)'
+			}).add(oCCircle,oText).drag();
+			
+			var oLine=oSvg.paper.line(100,200,300,300).attr('stroke','pink');
+			
+			var set=oSvg.selectAll('circle,line');
+			//set.clear();	//清楚所有选中的元素
+			//set.push( oCCircle )	//在最后添加一个元素
+			set.attr({
+				fill:'yellow',
+				stroke:'red'
+			})
+		</script>
+	</body>
+</html>

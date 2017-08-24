@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			/*#div1{width: 100px; height: 100px; padding: 10px; margin: 10px; border: 1px solid #000;}*/
+		</style>
+	</head>
+	<body>
+		<div id="div1" style="width: 100px; height: 100px; padding: 10px; margin: 10px; border: 1px solid #000;"></div>
+		<script>
+			/*
+			 style.width	样式宽	width
+			 非行间样式用currentStyle(),getComputedStyle();
+			 
+			 clientWidth	可视宽	width + padding
+			 offsetWidth	占位宽	width + padding + border
+			 
+			 width和height一样的获取，都没有兼容性
+			 */
+			
+			
+			var oDiv=document.getElementById('div1');
+			
+			//alert(oDiv.style.width);	// 100px
+			//alert(oDiv.clientWidth);	// 120
+			//alert(oDiv.offsetWidth);	// 122
+			alert(oDiv.offsetWidth+parseInt(oDiv.style.marginLeft)+parseInt(oDiv.style.marginRight) );
+			//获取outerWidth(ture);		width + padding + border + margin
+		</script>
+	</body>
+</html>

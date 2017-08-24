@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+		body{padding: 200px 0 0 500px;}
+			a{float: left; width: 20px; height: 20px; background: url(icon.png) no-repeat -39px 0;}
+			#div1{margin-left: 10px; float: left;}
+		</style>
+		<script>
+			window.onload=function(){
+				var oDiv=document.getElementById('div1'),
+					aA=document.getElementsByTagName('a'),
+					iLen=aA.length,
+					
+					arr=['很差','较差','还行','推荐','力荐'],
+					onOff=false,
+					num=0,
+					imgUrl='url(icon.png) no-repeat 1px 0';
+					
+					for(var i=0; i<iLen; i++){
+						aA[i].index=i;
+						aA[i].onmouseover=function(){
+							if(onOff){
+								hover(this);
+							}else{
+								fo(this,imgUrl,arr[this.index]);
+							}
+							
+						}
+						aA[i].onmouseout=function(){
+							if(onOff){
+								hover(aA[num]);
+							}else{
+								fo(this,'','评价一下吧');
+							}
+						}
+						
+						aA[i].onclick=function(){
+							fo(this,imgUrl,arr[this.index]);
+							onOff=true;
+							num=this.index;
+						}
+						
+						function hover(obj){
+							for(var i=0; i<iLen; i++){
+								aA[i].style.background='';
+							}
+							fo(obj,imgUrl,arr[obj.index]);
+						}
+						
+						function fo(obj,color,str){
+							if(obj.index<2){
+								color='url(icon.png) no-repeat -19px 0';
+							}
+							for(var i=0; i<=obj.index; i++){
+								aA[i].style.background=color;
+							}
+							oDiv.innerHTML=str;
+						}
+						
+					}
+				
+				
+				
+			}
+		</script>
+	</head>
+	<body>
+		<a href="javascript:;"></a>
+		<a href="javascript:;"></a>
+		<a href="javascript:;"></a>
+		<a href="javascript:;"></a>
+		<a href="javascript:;"></a>
+		<div id="div1">评分一下吧</div>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+.wei-tip{position: absolute; z-index: 999; padding: 10px 20px 10px 10px; width: 290px; border: 1px solid #ccc; box-shadow: 0 0 2px #ccc; font-size: 12px !important; background-color: #fff; cursor: move;}
+.wei-tip .title{margin: 0; padding-bottom: 10px; font-weight: normal;}
+.wei-tip .title:after{content:""; display: block; clear: both;}
+.wei-tip .title strong{float: left; color: #0055B6; font-weight: normal;}
+.wei-tip .title span{float: right; color: #666;}
+.wei-tip .content{line-height: 1.4em;}
+.wei-tip .close{width: 10px; height: 10px; position: absolute; top: 4px; right: 6px; cursor: pointer;
+	transition: 0.2s ease-out;
+	-o-transition: 0.2s ease-out;
+	-moz-transition: 0.2s ease-out;
+	-webkit-transition: 0.2s ease-out;
+}
+.wei-tip .close:hover{
+	transform: rotate(360deg);
+	-o-transform: rotate(360deg);
+	-moz-transform: rotate(360deg);
+	-webkit-transform: rotate(360deg);
+}
+.wei-tip .close:hover path{stroke:#666}

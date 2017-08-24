@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>绘制图表折线</title>
+		<style>
+			body{background-color: gray; font-family: Arial "微软雅黑";}
+			#box{width: 780px; height: 400px; background-color: #FFFFFF; margin: 40px auto;}
+		</style>
+		<script type="text/javascript" src="jquery-1.8.3.min.js" ></script>
+		<script>
+			$(function(){
+				function creatTag(sTag,oAttr){
+					var oTag=document.createElementNS(ns,sTag);
+					for(var i in oAttr){
+						oTag.setAttribute(i,oAttr[i]);
+					}
+					return $(oTag);
+				}
+				
+				var ns='http://www.w3.org/2000/svg',
+					oSvg=$('#svg');
+				
+				/*var oData={
+						title:{
+							x:'x轴标题',
+							y:'y轴标题'
+						},
+						
+						series:[{
+							name:'数据一',
+							data:[10,20,42,16,34,50,26]
+						},{
+							name:'数据二',
+							data:[22,40,11,17,41,38,45]
+						}]
+					}*/
+				
+				for(var i=2; i<7; i++){
+					oLineX=creatTag('line',{
+						x1:52,
+						y1:50*i,
+						x2:'90%',
+						y2:50*i,
+						stroke:'#000',
+						'stroke-width':1,
+						opacity:.2
+					});
+					oSvg.append(oLineX);
+				}
+				for(var i=2; i<14; i++){
+					oLineY=creatTag('line',{
+						x1:52*i,
+						y1:50,
+						x2:52*i,
+						y2:'90%',
+						stroke:'#000',
+						'stroke-width':1,
+						opacity:.2
+					});
+					oSvg.append(oLineY);
+				}
+				
+				/*var arrSort=oData.series[0].data.sort();
+				var minNum=arrSort.slice()*/
+				var arrNum=[380,300,320,260,280,180,190,60];
+				var x=10;
+				var str;
+				
+				for(var i=0; i<arrNum.length; i++){
+					if(str){
+						str+='L'+(x+100*i)+' '+arrNum[i];
+					}else{
+						str='M'+x+' '+arrNum[i];
+					}
+				}
+				
+				arrPolygon=str.replace(/m|l/ig,' ').split(' ').slice(1);
+				/*console.log(str);
+				console.log('('+str.replace(/m|l/ig,' ')+')');
+				console.log(arrPolygon);*/
+				
+				var oP=creatTag('path',{
+						//d:'M10 380 L110 300 L210 320 L360 260 L410 280 L510 180 L610 190 L710 60',
+						d:str,
+						fill:'none',
+						stroke:'red',
+						'stroke-width':1
+					}),
+					oArea=creatTag('polygon',{
+						points:str.replace(/m|l/ig,' ')+' '+arrPolygon[arrPolygon.length-2]+' '+arrPolygon[1],
+						style:'fill:url(#gradient)'
+					}),
+					oLine=creatTag('line',{
+						id:'line1',
+						x1:0,
+						y1:0,
+						x2:0,
+						y2:'100%',
+						stroke:'red',
+						opacity:.75,
+						visibility:'hidden'
+					});
+					oTitle=creatTag('text',{
+						x:400,
+						y:30,
+						'stroke-width': 0,
+						fill: 'black',
+						'font-size': 14,
+						'font-family': '微软雅黑',
+						'text-anchor':'middle'
+					});
+					oTitle.html('600559股票分时图--2014-12-30');
+					oGStar=creatTag('g',{
+						
+					});
+					oStar=creatTag('path',{
+						
+					});
+				
+				oSvg.append(oTitle, oArea, oP, oLine, oStar);
+				
+				
+				for(var i=0,j=1; i<arrPolygon.length; i+=2,j+=2){
+					oRect=creatTag('rect',{
+						width:100,
+						height:'100%',
+						x:arrPolygon[i]-50,
+						y:0,
+						fill:'transparent'
+					});
+					oC=creatTag('circle',{
+						cx:arrPolygon[i],
+						cy:arrPolygon[j],
+						style:'stroke:red; stroke-width:2; fill:#fff;'
+					});
+					oSvg.append(oC, oRect);
+				}
+				
+				
+				var	oRect=$('rect'),
+					oCircle=$('circle'),
+					oLineMove=$('#line1');
+				
+				oRect.hover(function(){
+					oLineMove.attr({
+						x1: parseInt($(this).attr('x'))+50.5,
+						x2:parseInt($(this).attr('x'))+50.5,
+						visibility:'visiable'
+					});
+					oCircle.eq($(this).index('rect')).attr('r','4');
+				},function(){
+					oCircle.eq($(this).index('rect')).attr('r','');
+					oLineMove.attr({
+						x1:0,
+						x2:0,
+						visibility:'hidden'
+					})
+				});
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			<svg id="svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+						<stop offset="0%" style="stop-color:#3F8CD8; stop-opacity:1"/>
+						<stop offset="100%" style="stop-color:#3F8CD8; stop-opacity:0"/>
+					</linearGradient>
+				</defs>
+				<!--<path d="M10 380 L110 300 L210 320 L360 260 L410 280 L510 180 L610 190 L710 60" fill="none" stroke="red" stroke-width="2"></path>-->
+			</svg>
+		</div>
+	</body>
+</html>

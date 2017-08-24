@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			html,body{width: 100%; height: 100%; margin: 0;}
+			a:hover{text-decoration: underline;}
+		</style>
+	</head>
+	<body>
+		<svg width=100% height=100% >
+			<defs>
+				<path id="textPath" d="M500 500A100 100 0 0 0 700 500"></path>
+			</defs>
+			
+			<text fill="red" font-size="1.4em">
+				<textpath xlink:href="#textPath">I Love SVG && SVG Love Me !!</textpath>
+				
+				<tspan x=710 y=500 fill=purple>这是一个非常有意思的东西</tspan>
+				
+				<a xlink:href="http://www.baidu.com/" target="_blank">
+					<tspan x=710 y=530 font-family="\5FAE\8F6F\96C5\9ED1">它可以造出很多稀奇古怪的好玩意儿</tspan>
+				</a>
+			</text>
+			
+			<line x1=100 y1=100 x2=400 y2=100 stroke=red stroke-width=6></line>
+			<line x1=100 y1=130 x2=400 y2=130 stroke=red stroke-width=6 stroke-linecap=round></line>
+			<path d="M100 160L400 160" stroke=red stroke-width=6 stroke-dasharray="6,6"></path>
+			<path d="M100 190L400 190" stroke=red stroke-width=6 stroke-dasharray="10,6,6,10"></path>
+		</svg>
+	</body>
+</html>

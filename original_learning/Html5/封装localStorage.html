@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script>
+			var lStorage=function(key,vArg){
+				switch(typeof vArg){
+					case 'undefined':
+						var t=Object.prototype.toString.call(key);
+						if(t=='[object String]'){
+							return localStorage[key]
+						}else if(t=='[object Null]'){
+							localStorage.clear()
+						}else{
+							for(var i in key){
+								localStorage[i]=key[i]
+							}
+						}
+						break;
+					case 'number':
+						var i,oDate;
+						oDate=new Date();
+						oDate.setDate(oDate.getDate()+vArg);
+						for(i in key){
+							key[i]=key[i]+';'+oDate.getTime();
+							localStorage[i]=key[i]
+						}
+						break;
+					case 'object':
+						if(typeof key=='string'){
+							localStorage.removeItem(key.trim())
+						}else{
+							key.forEach(function(value){
+								localStorage.removeItem(value.trim())
+							})
+						}
+						break;
+				}
+			};
+			lStorage({user:'wei',psw:'123456'})
+			lStorage({color:'#fff'},34)
+			//alert( lStorage('color') )
+			//lStorage('   user ',null)
+			//lStorage(['color2','psw'],null)
+			//lStorage(null)
+			/*
+			lStorage({user:'wei'})//设置
+			lStorage({user:'wei',psw:'123'},21)//设置,21天过期
+			lStorage('user')//获取
+			lStorage('user',null)//删除
+			lStorage(['user','psw'],null)//删除多个
+			lStorage(null)//删除所有
+			
+			store.set( user, 'wei' )
+			store.set( {user: 'wei', psw: '123'} )
+			store.get( 'user' )
+			store.get( 'user', 'psw' ) => {'user': 'xxx', 'psw': 'xxx'}
+			store.remove( 'user', 'psw' )
+			store.remove( 'user' )
+			store.remove()
+			*/
+		</script>
+	</body>
+</html>

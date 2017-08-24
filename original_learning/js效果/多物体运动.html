@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>多物体运动框架</title>
+<style>
+div{width:200px; height:200px; background:red; font-size:20px; float:left; margin-left:20px; border:1px solid #000;}
+.div5{filter:alpha(opacity:30); opacity:0.3;}
+</style>
+<script>
+window.onload=function(){
+	var oDiv=document.getElementsByTagName('div');
+	oDiv[0].onmouseover=function(){
+		startMove(this,'height',500);
+	};
+	oDiv[0].onmouseout=function(){
+		startMove(this,'height',200);
+	};
+	oDiv[1].onmouseover=function(){
+		startMove(this,'width',500);
+	};
+	oDiv[1].onmouseout=function(){
+		startMove(this,'width',200);
+	};
+	oDiv[2].onmouseover=function(){
+		startMove(this,'fontSize',50);
+	};
+	oDiv[2].onmouseout=function(){
+		startMove(this,'fontSize',20);
+	};
+	oDiv[3].onmouseover=function(){
+		startMove(this,'borderWidth',30);
+	};
+	oDiv[3].onmouseout=function(){
+		startMove(this,'borderWidth',1);
+	};
+	oDiv[4].onmouseover=function(){
+		startMove(this,'opacity',100);
+	};
+	oDiv[4].onmouseout=function(){
+		startMove(this,'opacity',30);
+	};
+};
+
+
+//move.js:
+function getStyle(obj,name){
+	if(obj.currentStyle){
+		return obj.currenStyle[name];
+	}
+	else{
+		return getComputedStyle(obj,false)[name];
+	}
+}
+
+function startMove(obj,attr,iTarget){
+	clearInterval(obj.timer);
+	obj.timer=setInterval(function(){
+		var cur=0;
+		if(attr=='opacity'){
+			cur=Math.round(parseFloat(getStyle(obj,attr)*100));
+		}
+		else{
+			cur=parseInt(getStyle(obj,attr));
+		}
+		var speed=(iTarget-cur)/6;
+		speed=speed>0?Math.ceil(speed):Math.floor(speed);
+		if(cur==iTarget){
+			clearInterval(obj.timer);
+		}
+		else{
+			if(attr=='opacity'){
+				obj.style.filter='alpha(opacity:'+(cur+speed)+')';
+				obj.style.opacity=(cur+speed)/100;
+			}
+			else{
+				obj.style[attr]=cur+speed+'px';
+			}
+		}
+	},30);
+}
+</script>
+</head>
+
+<body>
+<div class="div1">变高</div>
+<div class="div2">变宽</div>
+<div class="div3">变字体大小</div>
+<div class="div4">变border大小</div>
+<div class="div5">变透明度</div>
+</body>
+</html>

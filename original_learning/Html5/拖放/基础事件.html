@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			#s{
+				width: 500px; height: 500px; border: 1px solid #000;
+				text-align: center; line-height: 500px; font-size: 20px;
+				position: absolute; left: 200px; top: 100px;
+			}
+			#a{width: 100px; height: 100px; background-color: red; display: inline-block;}
+		</style>
+	</head>
+	<body>
+		<section id="s"></section>
+		<aside id="a" draggable="true"></aside>
+		<script>
+			var oS=document.getElementById('s'),
+				oA=document.getElementById('a');
+			
+				oImg=document.createElement('img');
+				oImg.setAttribute('src','1.png');
+
+			oA.ondragstart=function(ev){	//拖拽元素开始拖拽事件
+				this.style.background='yellow';
+				ev.dataTransfer.setData('name','解决火狐拖拽的方法');
+				//火狐下实现拖拽解决方法https://developer.mozilla.org/zh-CN/docs/DragDrop/Drag_Operations
+				//ev.dataTransfer(转让).effectAllowed='unintialize'; //设置拖拽时鼠标的样式
+				ev.dataTransfer.setDragImage(oImg,-10,-10);
+			}
+			oA.ondrag=function(ev){	//拖拽元素开始拖拽到结束拖拽之间的事件
+				this.style.background='green';
+				oS.innerHTML='将文件拖拽至此区域';
+			}
+			oA.ondragend=function(){	//拖拽元素结束拖拽事件
+				this.style.background='red';
+			}
+			
+			oS.ondragenter=function(){	//进入目标元素事件
+				this.style.borderColor='purple';
+			}
+			oS.ondragover=function(ev){	//进入目标元素与离开目标元素之间的事件
+				this.style.borderColor='red';
+				this.innerHTML='释放鼠标';
+				ev.preventDefault();
+			}
+			oS.ondragleave=function(){	//离开目标元素事件
+				this.style.borderColor='black';
+			}
+			oS.ondrop=function(ev){	//在目标元素上释放鼠标触发的事件
+				this.style.borderColor='orange';
+				this.innerHTML=ev.dataTransfer.getData('name')||'';
+				this.appendChild(oA);
+			}
+			
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			html,body{
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<svg width="100%" height="100%">
+			<defs>
+				<linearGradient id="pole-linearGradient" x1="1" y1="0" x2="0" y2="0">
+					<stop offset="0" stop-color="#5c0030"></stop>
+					<stop offset="1" stop-color="#d50d7a"></stop>
+				</linearGradient>
+			</defs>
+			
+			<!--
+				<animate>:随时间动态改变属性
+					attributeName="目标属性名称"
+					from="起始值"
+					to="结束值"
+					begin="哪时开始运动"
+					dur="持续时间"
+					end="停止时间"
+					repeatCount="动画时间动画将进行几次", indefinite-无限次
+					fill="动画结束后的展现形式"， freeze（以结束时的属性展示） 或  remove（按元素自身的属性展示）
+					
+				注：解释begin="one.begin 或one.end 或one.end+3s"；和end="one.end"
+				        假设元素有两个运动标签，给第一个ID取名叫one，
+				        第二个标签就还可以这样设置：begin="one.end",意为one运动结束后才开始运动，以此类推
+			-->
+			<circle cx=50 cy=50 r=30>
+				<animate
+					attributeName="cy"
+					from="50"
+					to="300"
+					dur="2s"
+					repeatCount="indefinite">
+				</animate>
+				<animate
+					attributeName="r"
+					from="30"
+					to="0"
+					dur="2s"
+					repeatCount="indefinite">
+				</animate>
+			</circle>
+			
+			<!--
+				<animateColor>:定义随着时间的推移颜色转换
+					by="相对偏移值"
+					from="起始值"
+					to="结束值
+				
+				注：此元素已被SVG1.1第二版否决，并可能在SVG的未来版本中被删除，用animate替代
+			-->
+			
+			<!--
+				<animateTransform>:动画上一个目标元素变换属性，从而使动画控制平移，缩放，旋转或倾斜
+					by="相对偏移值"
+					from="起始值"
+					to="结束值"
+					type="类型的转换其值是随时间变化。可以是 'translate', 'scale', 'rotate', 'skewX', 'skewY'"
+				
+				注：如果一个元素加了两个及以上animateTransform，后一个动画就会替换前一个动画；
+				        解决方法：给animateTransform加上additive="sum"属性，这样两个动画都会执行了
+			-->
+			<rect width="6" height="200" x=297 y=146 fill=url(#pole-linearGradient)></rect>
+			<image xlink:href="windmill.png" width="200" height="203" x=200 y=40>
+				<animateTransform
+					attributeName="transform"
+					type="rotate"
+					from="0 300 146"
+					to="-360 300 146"
+					dur="2"
+					repeatCount="indefinite">
+				</animateTransform>
+				<!--注：rotate下from和to里的"0/-360"是旋转角度，"300 146"是旋转基点-->
+			</image>
+			
+			<circle cx=600 cy=100 r=2 fill=red></circle>
+			<rect width="20" height="20" x=600 y=100>
+				<animateTransform
+					attributeName="transform"
+					type="rotate"
+					from="0 610 110"
+					to="360 610 110"
+					dur="4"
+					repeatCount="indefinite">
+				</animateTransform>
+				<animateTransform
+					attributeName="transform"
+					type="scale"
+					from="1 1"
+					to="1.1 2"
+					dur="4"
+					additive="sum"
+					repeatCount="indefinite">
+				</animateTransform>
+				<!--注：scale下from"1 1"对应to里的"1.1 2",对应变化是width从1变到1.1，height从1变到2；x，y也会对应改变-->
+			</rect>
+			<!--
+				<animateMotion>:使元素沿着动作路径移动
+					calcMode="动画的插补模式。可以是'discrete', 'linear', 'paced', 'spline'"
+					path="运动路径"
+					keyPoints="沿运动路径的对象目前时间应移动多远"
+					rotate="应用旋转变换"
+					xlink:href="一个URI引用<path>元素，它定义运动路径"
+			-->
+			<g transform="translate(700,200)">
+				<image xlink:href="earth.png" width="454" height="454"></image>
+				
+				<image xlink:href="car.png" width="46" height="36">
+			        <animateMotion
+			        	id="one"
+				        path="M227,0A225 225 0 1 0 227.5 0"
+				        dur="8s"
+						repeatCount="indefinite">
+					</animateMotion>
+			    </image>
+			    
+				<image xlink:href="car.png" width="46" height="36" transform="rotate(180)" y="-32">
+			        <animateMotion
+				        path="M227,0A225 225 0 1 0 227.5 0"
+				        begin="one.begin+1s"
+						dur="8s"
+						rotate="auto"
+						repeatCount="indefinite">
+					</animateMotion>
+			    </image>
+			</g>
+			
+			<!--
+            	<set>:设置一个属性值指定时间,设置跟动画雷同
+            -->
+			<rect width="100" height="100" x=85 y=450 rx=100>
+				<set
+					attributeName="width"
+					to="200"
+					begin="3s">
+				</set>
+				<set
+					attributeName="fill"
+					to="purple"
+					begin="3s">
+				</set>
+			</rect>
+		</svg>
+	</body>
+</html>

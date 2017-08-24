@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			body{background: url(http://p8.qhimg.com/t01f9ee1b0873023e36.jpg);}
+			div,a{position: absolute; right: 20px; border: 1px solid #fff; padding: 4px 8px; color: #fff;}
+			a:active{text-decoration: none;}
+			#to-top{top: 1900px;}
+			div{position: fixed; width: 100px; cursor: pointer; text-align: center;}
+			#to-where1{left: 20px;}
+			#to-where2{left: 200px;}
+		</style>
+		<script type="text/javascript" src="jquery.js" ></script>
+		<script type="text/javascript" src="towhere.js" ></script>
+		<script>
+			$(function(){
+				$('#to-bottom').click(function(){
+					$.toBottom();
+				});
+				$('#to-top').click(function(){
+					$.toTop();
+				});
+				$('#to-where1').click(function(){
+					$.toWhere(500);
+				});
+				$('#to-where2').click(function(){
+					$.toWhere(1000);
+				});
+				
+				/*
+				 
+				 $.toBottom();		去向底部，$.toBottom(0.1)--[0.1-可选参数-运动速度]，默认0.3
+				 $.toTop();			返回顶部，调整同上
+				 $.toWhere();		到任何处，$.toWhere(500,0.1)--[500-必填到达何处，0.1--可选速度]
+				 
+				 */
+			});
+		</script>
+	</head>
+	<body>
+		<a href="javascript:;" id="to-bottom">去到底部</a>
+		<a href="javascript:;" id="to-top">返回顶部</a>
+		<div id="to-where1">去到500处</div>
+		<div id="to-where2">去到1000处</div>
+	</body>
+</html>

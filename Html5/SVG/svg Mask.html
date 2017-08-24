@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			html,body{width: 100%; height: 100%; margin: 0; overflow: hidden;}
+			path,text{display: none;}
+		</style>
+	</head>
+	<body>
+		<svg width=100% height=100% >
+			<!--
+            	maskUnits="'userSpaceOnUse' or 'objectBoundingBox'.设定裁剪面是否是相对完整的视窗或对象（默认：'objectBoundingBox'）"
+				maskContentUnits="第二个掩码相对对象的图形位置使用百分比'userSpaceOnUse'或'objectBoundingBox'（默认：'userSpaceOnUse'）"
+				x="裁剪面掩码（默认值：-10％）" 
+				y="裁剪面掩码（默认值：-10％）" 
+				width="裁剪面掩码（默认是：120％）"
+				height="裁剪面掩码（默认是：120％）"
+				
+				mask与clipPath的区别是mask可以指定透明度，clipPath只有可见与不可见之分
+            -->
+            <defs>
+            	<mask id="mask-1">
+            		<circle cx=200 cy=150 r=100 fill=#333></circle>
+            		<rect x=165 y=150 rx=4 width=56 height=82 fill=#fff></rect>
+            	</mask>
+            	<mask id="mask-blur">
+            		<circle cx=200 cy=400 r=80 fill=url(#rg)></circle>
+            	</mask>
+            	
+            	<radialGradient id=rg>
+            		<stop offset=0 stop-color=#fff></stop>
+            		<stop offset=1 stop-color=#000></stop>
+            	</radialGradient>
+            </defs>
+            
+           	<image
+           		x=100
+           		y=50
+           		width=200
+           		height=200
+				xlink:href="earth.png"
+			></image>
+			
+			<path d="M200 178L305 120h40" fill=none stroke=#00B9DA></path>
+			<text x=345 y=120 fill=black>非洲大陆</text>
+            
+            
+           	<image
+           		x=100
+           		y=300
+           		width=200
+           		height=200
+				xlink:href="earth.png"
+				mask=url(#mask-blur)
+			></image>
+		</svg>
+		<script>
+			var oImg=document.querySelector('image'),
+				oPath=document.querySelector('path'),
+				oText=document.querySelector('text');
+			
+			oImg.onmouseover=function(){
+				this.style.mask='url(#mask-1)';
+				oPath.style.display='block';
+				oText.style.display='block';
+			}
+			oImg.onmouseout=function(){
+				this.style.mask='';
+				oPath.style.display='none';
+				oText.style.display='none';
+			}
+		</script>
+	</body>
+</html>

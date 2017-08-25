@@ -7,9 +7,17 @@ const defaultRes = Object.freeze({
     message: '成功',
 });
 
-exports.getCookie = async (ctx) => {
-    console.log('logined:', ctx.logined)
-    ctx.body = ctx.logined;
+exports.getUserInfo = async (ctx) => {
+    const res = Object.assign({}, defaultRes);
+
+    if (ctx.session.signin) {
+        res.data = ctx.session.userInfo;
+    } else {
+        res.code = -1;
+        res.message = '未登录';
+    }
+
+    ctx.body = res;
 };
 
 exports.signin = async (ctx) => {
@@ -33,17 +41,8 @@ exports.signin = async (ctx) => {
                     };
                     res.message = '登录成功';
 
-                    // set login state
-                    ctx.cookies.set(
-                        'loginState',
-                        encryption.cipher(userInfo._id.toString()),
-                        {
-                            maxAge: 1000 * 60 * 60 * 24 * 30,
-                            httpOnly: true,
-                            signed: true,
-                            overwrite: false
-                        }
-                    );
+                    ctx.session.signin = true;
+                    ctx.session.userInfo = userInfo;
                 } else {
                     res.code = 1;
                     res.message = '用户名或密码错误';

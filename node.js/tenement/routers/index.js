@@ -4,7 +4,7 @@ const user = require('./user');
 const router = new Router();
 
 // REST API : USER
-router.get('/user/getCookie', user.getCookie);
+router.get('/user/info', user.getUserInfo);
 router.get('/user/signout', user.signout);
 router.post('/user/signin', user.signin);
 router.post('/user/signup', user.signup);

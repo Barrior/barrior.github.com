@@ -9,7 +9,8 @@ const encryption = require('./lib/encryption');
 const app = new Koa();
 const sessionConfig = {
     key: 'koa:sess',
-    maxAge: 1000 * 60 * 60 * 24 * 30,
+//    maxAge: 1000 * 60 * 60 * 24 * 30,
+    maxAge: 1000,
     overwrite: true,
     httpOnly: true,
     signed: true,
@@ -19,7 +20,7 @@ const sessionConfig = {
 app.keys = ['cookie_sign_key_1', 'cookie_sign_key_2'];
 
 // get login state
-app.use(async (ctx, next) => {
+/*app.use(async (ctx, next) => {
     const loginState = ctx.cookies.get('loginState', {signed: true});
     try {
         const uid = encryption.decipher(loginState);
@@ -33,7 +34,7 @@ app.use(async (ctx, next) => {
 
     }
     await next();
-});
+});*/
 
 app.use(session(sessionConfig, app));
 app.use(bodyParser());

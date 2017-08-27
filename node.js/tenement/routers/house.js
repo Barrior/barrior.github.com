@@ -29,11 +29,17 @@ exports.list = async (ctx) => {
         pageIndex = Math.min(pageIndex, pageTotal);
 
         const skipIndex = (pageIndex - 1) * pageSize;
-        const list = await HouseModel.find()
-            .skip(skipIndex).limit(pageSize)
-            .sort({
-                [query.sort]: query.sortType === 'asc' ? 1 : -1
-            })
+
+        let list = [];
+        if (query.sort) {
+            list = await HouseModel.find()
+                .skip(skipIndex).limit(pageSize)
+                .sort({
+                    [query.sort]: query.sortType === 'asc' ? 1 : -1
+                });
+        } else {
+            list = await HouseModel.find().skip(skipIndex).limit(pageSize);
+        }
 
         res.data = {list, pageTotal};
     } catch (err) {

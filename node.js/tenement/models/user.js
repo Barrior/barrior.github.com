@@ -1,23 +1,30 @@
 const mongoose = require('mongoose');
-const utils = require('../lib/utils');
-
-mongoose.Promise = global.Promise;
-
-function connect() {
-    mongoose.connect('mongodb://127.0.0.1:27017/tenement', {
-        useMongoClient: true,
-    }, async (err) => {
-        if (err) {
-            await utils.sleep(1000);
-            connect();
-        }
-    });
-}
-connect();
+const RexExp = require('../lib/regexp');
 
 const userSchema = mongoose.Schema({
-    username: String,
-    password: String,
+    username: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        min: 1,
+        max: 20,
+    },
+    password: {
+        type: String,
+        min: 6,
+        max: 20,
+    },
+    email: {
+        type: String,
+        trim: true,
+        match: RexExp.email,
+    },
+    tel: {
+        type: Number,
+        trim: true,
+        match: RexExp.tel,
+    },
+    avatar: String,
 });
 
 module.exports = mongoose.model('User', userSchema);

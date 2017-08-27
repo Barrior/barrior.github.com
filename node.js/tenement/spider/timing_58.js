@@ -12,10 +12,12 @@ const _ = require('lodash');
 const utils = require('../lib/utils');
 const userAgents = require('../lib/user_agent');
 const encryption = require('../lib/encryption');
-const HouseModle = require('../models/houses');
+const connectDB = require('../models/connect_db');
+const HouseModle = require('../models/house');
 
 const randomSleep = _.flowRight(utils.sleep, parseInt, utils.limitRandom);
 
+connectDB();
 schedule.scheduleJob('*/5 * * * *', async () => {
     console.log(`schedule job executed: ${new Date()}`.cyan);
     await randomSleep(1000 * 10, 0);

@@ -1,34 +1,77 @@
-const REGEXP = require('../lib/regexp');
+const RexExp = require('../lib/regexp');
 const encryption = require('../lib/encryption');
-const User = require('../models/user');
+const UserModel = require('../models/user');
 
 const defaultRes = Object.freeze({
     code: 0,
     message: '成功',
 });
 
-exports.getUserInfo = async (ctx) => {
+exports.signup = async (ctx) => {
+    let {username, password} = ctx.request.body;
     const res = Object.assign({}, defaultRes);
 
-    if (ctx.session.signin) {
-        res.data = ctx.session.userInfo;
+    if (/\s/.test(username)) {
+        res.code = 1;
+        res.message = '用户名不能包含空格';
+    } else if (!username || !password) {
+        res.code = 1;
+        res.message = '用户名或密码不能为空';
     } else {
-        res.code = -1;
-        res.message = '未登录';
+        username = username.toLowerCase();
+        if (username.length >= 20) {
+            res.code = 1;
+            res.message = '用户名长度不能超过20个字符';
+        } else if (password.length < 6 || password.length >= 20) {
+            res.code = 1;
+            res.message = '密码长度不能小于6个字符或超过20个字符';
+        } else if (!RexExp.password.test(password)) {
+            res.code = 1;
+            res.message = '密码只能包含英文字符或数字';
+        }
+    }
+
+    if (res.code === 0) {
+        await UserModel
+            .findOne({username})
+            .then((result) => {
+                if (result) {
+                    res.code = 4;
+                    res.message = '用户名已经被注册';
+                } else {
+                    return UserModel.create({
+                        username,
+                        password: encryption.encryptPassword(password),
+                    });
+                }
+            })
+            .then((newUserInfo) => {
+                if (newUserInfo) {
+                    ctx.session.signin = true;
+                    ctx.session.userInfo = newUserInfo;
+                    res.data = {
+                        username,
+                        id: newUserInfo._id,
+                    };
+                    res.message = '注册成功';
+                }
+            })
+            .catch(console.error);
     }
 
     ctx.body = res;
 };
 
 exports.signin = async (ctx) => {
-    const {username, password} = ctx.request.body;
+    let {username, password} = ctx.request.body;
     const res = Object.assign({}, defaultRes);
 
     if (!username || !password) {
         res.code = 1;
         res.message = '用户名或密码不能为空';
     } else {
-        await User
+        username = username.toLowerCase();
+        await UserModel
             .findOne({
                 username,
                 password: encryption.encryptPassword(password),
@@ -36,7 +79,7 @@ exports.signin = async (ctx) => {
             .then((userInfo) => {
                 if (userInfo) {
                     res.data = {
-                        username,
+                        username: userInfo.username,
                         id: userInfo._id,
                     };
                     res.message = '登录成功';
@@ -55,61 +98,22 @@ exports.signin = async (ctx) => {
 };
 
 exports.signout = async (ctx) => {
-    const {username, password} = ctx.request.body;
     const res = Object.assign({}, defaultRes);
 
+    ctx.session = null;
+    res.message = '退出成功';
     ctx.body = res;
 };
 
-exports.signup = async (ctx) => {
-    const {username, password} = ctx.request.body;
+exports.getUserInfo = async (ctx) => {
     const res = Object.assign({}, defaultRes);
 
-    console.log({username, password});
-
-    if (/\s/.test(username)) {
-        res.code = 1;
-        res.message = '用户名不能包含空格';
-    } else if (!username || !password) {
-        res.code = 1;
-        res.message = '用户名或密码不能为空';
+    if (ctx.session.signin) {
+        res.data = Object.assign({}, ctx.session.userInfo);
+        delete res.data.password;
     } else {
-        if (username.length >= 20) {
-            res.code = 1;
-            res.message = '用户名长度不能超过20个字符';
-        } else if (password.length < 6 || password.length >= 20) {
-            res.code = 1;
-            res.message = '密码长度不能小于6个字符或超过20个字符';
-        } else if (!REGEXP.password.test(password)) {
-            res.code = 1;
-            res.message = '密码只能包含英文字符或数字';
-        }
-    }
-
-    if (res.code === 0) {
-        await User
-            .findOne({username})
-            .then((result) => {
-                if (result) {
-                    res.code = 4;
-                    res.message = '用户名已经被注册';
-                } else {
-                    return User.create({
-                        username,
-                        password: encryption.encryptPassword(password),
-                    });
-                }
-            })
-            .then((newUserInfo) => {
-                if (newUserInfo) {
-                    res.data = {
-                        username,
-                        id: newUserInfo._id,
-                    };
-                    res.message = '注册成功';
-                }
-            })
-            .catch(console.error);
+        res.code = -1;
+        res.message = '未登录';
     }
 
     ctx.body = res;

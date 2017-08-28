@@ -24,6 +24,12 @@ const userSchema = mongoose.Schema({
         trim: true,
         match: RexExp.tel,
     },
+    sex: String,
+    age: {
+        type: String,
+        min: 0,
+        max: 200,
+    },
     avatar: String,
 });
 

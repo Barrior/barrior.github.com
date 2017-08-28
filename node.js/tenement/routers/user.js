@@ -120,11 +120,46 @@ exports.getUserInfo = async (ctx) => {
 };
 
 exports.updateUser = async (ctx) => {
-    const uid = ctx.params.id;
-    ctx.body = `更新 ${uid} 用户信息成功`;
+    const res = Object.assign({}, defaultRes);
+    const body = ctx.request.body;
+
+    try {
+        delete body.password;
+        await UserModel.update({_id: body.id}, body);
+        const userInfo = await UserModel.findById(body.id);
+        if (userInfo) {
+            res.data = userInfo;
+            res.message = '更新用户信息成功';
+        } else {
+            res.code = 1;
+            res.message = '用户不存在';
+        }
+    } catch (err) {
+        res.code = -1;
+        res.message = '服务器错误';
+    }
+
+    ctx.body = res;
 };
 
 exports.deleteUser = async (ctx) => {
-    const uid = ctx.params.id;
-    ctx.body = `删除 ${uid} 用户信息成功`;
+    const res = Object.assign({}, defaultRes);
+    const query = ctx.request.query;
+
+    try {
+        const userInfo = await UserModel.findByIdAndRemove(query.id);
+        if (userInfo) {
+            res.message = '删除用户成功';
+            res.data = userInfo._doc;
+            delete res.data.password;
+        } else {
+            res.code = 1;
+            res.message = '用户不存在';
+        }
+    } catch (err) {
+        res.code = -1;
+        res.message = '服务器错误';
+    }
+
+    ctx.body = res;
 };

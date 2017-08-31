@@ -14,7 +14,6 @@ const userAgents = require('../lib/user_agent');
 const encryption = require('../lib/encryption');
 const connectDB = require('../models/connect_db');
 const HouseModle = require('../models/house');
-
 const randomSleep = _.flowRight(utils.sleep, parseInt, utils.limitRandom);
 
 connectDB();
@@ -96,7 +95,7 @@ class Spider {
         this.requestDetailPage();
     }
 
-    queryHouseExist(item) {
+    queryHouseExists(item) {
         return new Promise((resolve, reject) => {
             HouseModle.findOne({thumbnailUrl: item.thumbnailUrl}, (err, result) => {
                 if (err) {
@@ -109,7 +108,7 @@ class Spider {
 
     async requestDetailPage() {
         for (const item of this.tenement) {
-            const exist = await this.queryHouseExist(item).catch(console.log);
+            const exist = await this.queryHouseExists(item).catch(console.log);
             if (!exist) {
                 const body = await this.sendRequest(item.detailPageUrl);
                 this.parseDetailPage(body, item);

@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const RexExp = require('../lib/regexp');
 
 const userSchema = mongoose.Schema({
+    createAt: {
+        type: Date,
+        default: Date.now
+    },
     username: {
         type: String,
         trim: true,

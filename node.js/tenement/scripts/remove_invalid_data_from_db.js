@@ -14,13 +14,13 @@ async function removeInvalidData() {
 async function removeDuplicateData() {
     const duplicateId = {};
     const count = await HouseModel.count();
-    const limit = 200;
+    const limit = 100;
     const times = Math.ceil(count / limit);
 
     for (let i = 0; i < times; i++) {
         console.log(`匹配第 ${i} 页数据，共 ${times} 页`);
-        const skipIndex = i * limit;
-        const list = await HouseModel.find().limit(limit).skip(skipIndex);
+        const skipCount = i * limit;
+        const list = await HouseModel.find().limit(limit).skip(skipCount);
         for (const data of list) {
 
             // 不在已经重复的 id 列表，才查找重复项

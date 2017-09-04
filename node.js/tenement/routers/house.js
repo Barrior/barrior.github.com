@@ -28,17 +28,17 @@ exports.list = async (ctx) => {
         // 不能跳过最大总页码
         pageIndex = Math.min(pageIndex, pageTotal);
 
-        const skipIndex = (pageIndex - 1) * pageSize;
+        const skipCount = (pageIndex - 1) * pageSize;
 
         let list = [];
         if (query.sort) {
             list = await HouseModel.find()
-                .skip(skipIndex).limit(pageSize)
+                .skip(skipCount).limit(pageSize)
                 .sort({
                     [query.sort]: query.sortType === 'asc' ? 1 : -1
                 });
         } else {
-            list = await HouseModel.find().skip(skipIndex).limit(pageSize);
+            list = await HouseModel.find().skip(skipCount).limit(pageSize);
         }
 
         res.data = {list, pageTotal};

@@ -2,6 +2,7 @@ const Koa = require('koa');
 const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const compress = require('koa-compress');
+const logger = require('koa-logger');
 
 const connectDB = require('./models/connect_db');
 const router = require('./routers/index');
@@ -11,6 +12,7 @@ const app = new Koa();
 app.keys = ['koa_session_secret_key'];
 
 app.use(compress());
+app.use(logger());
 app.use(session(sessionConfig, app));
 app.use(bodyParser());
 app.use(router.routes());

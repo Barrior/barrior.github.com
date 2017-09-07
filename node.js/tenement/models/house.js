@@ -11,6 +11,8 @@ const houseSchema = mongoose.Schema({
     releaseTime: String,
     // 创建时间
     createAt: {type: Date, default: Date.now},
+    // 更新时间
+    updateAt: {type: Date, default: Date.now},
     // 入库时间
     entryTime: {type: Date, default: Date.now},
     // 价格

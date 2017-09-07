@@ -9,11 +9,11 @@ const schedule = require('node-schedule');
 const colors = require('colors');
 const _ = require('lodash');
 
-const utils = require('../lib/utils');
-const userAgents = require('../lib/user_agent');
-const encryption = require('../lib/encryption');
-const connectDB = require('../models/connect_db');
-const HouseModle = require('../models/house');
+const utils = require('../../lib/utils');
+const userAgents = require('../../lib/user_agent');
+const encryption = require('../../lib/encryption');
+const connectDB = require('../../models/connect_db');
+const HouseModle = require('../../models/house');
 const randomSleep = _.flowRight(utils.sleep, parseInt, utils.limitRandom);
 
 connectDB();
@@ -22,6 +22,8 @@ schedule.scheduleJob('*/5 * * * *', async () => {
     await randomSleep(1000 * 10, 0);
     new Spider();
 });
+
+console.log(`spider runing...`.green);
 
 class Spider {
     constructor() {

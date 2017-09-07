@@ -1,23 +1,38 @@
 const Koa = require('koa');
 const session = require('koa-session');
+const redisStore = require('koa-redis');
 const bodyParser = require('koa-bodyparser');
 const compress = require('koa-compress');
 const logger = require('koa-logger');
 
-const connectDB = require('./models/connect_db');
 const router = require('./routers/index');
-const sessionConfig = require('./config/session');
+const appConfig = require('./config/app');
+const redisConfig = require('./config/redis');
+
+require('./models/connect_db');
 
 const app = new Koa();
-app.keys = ['koa_session_secret_key'];
+app.keys = appConfig.keys;
 
 app.use(compress());
 app.use(logger());
-app.use(session(sessionConfig, app));
+app.use(session({
+    maxAge: 1000 * 60 * 60 * 24 * 30,
+    overwrite: true,
+    httpOnly: true,
+    signed: true,
+    rolling: false,
+    store: redisStore(/*{
+        host: redisConfig.host,
+        port: redisConfig.port,
+        db: redisConfig.db,
+        password: redisConfig.password,
+    }*/)
+}, app));
 app.use(bodyParser());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-connectDB(() => {
-    app.listen(3000);
+app.listen(appConfig.port, appConfig.host, () => {
+    console.log(`Listening on ${appConfig.host}:${appConfig.port}...`);
 });

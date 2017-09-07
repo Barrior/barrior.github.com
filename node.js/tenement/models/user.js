@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const RexExp = require('../lib/regexp');
 
 const userSchema = mongoose.Schema({
-    createAt: {
-        type: Date,
-        default: Date.now
-    },
     username: {
         type: String,
         trim: true,
@@ -35,6 +31,10 @@ const userSchema = mongoose.Schema({
         max: 200,
     },
     avatar: String,
+    is_block: {type: Boolean, default: false},
+
+    create_at: {type: Date, default: Date.now},
+    update_at: {type: Date, default: Date.now},
 });
 
 module.exports = mongoose.model('User', userSchema);

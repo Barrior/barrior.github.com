@@ -1,18 +1,14 @@
 const mongoose = require('mongoose');
-const utils = require('../lib/utils');
+const mongoConfig = require('../config/mongodb');
 
 mongoose.Promise = global.Promise;
 
-function connect(callback) {
-    mongoose.connect('mongodb://127.0.0.1:27017/tenement', {
-        useMongoClient: true,
-    }, async (err) => {
-        if (err) {
-            await utils.sleep(1000);
-            connect(callback);
-        }
-    });
-    callback && callback();
-}
-
-module.exports = connect;
+mongoose.connect(mongoConfig.url, {
+    useMongoClient: true,
+    poolSize: 10,
+}, (err) => {
+    if (err) {
+        console.error('connect to %s error: ', mongoConfig.url, err.message);
+        process.exit(1);
+    }
+});

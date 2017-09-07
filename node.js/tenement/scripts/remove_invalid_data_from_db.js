@@ -1,4 +1,4 @@
-const connectDB = require('../models/connect_db');
+require('../models/connect_db');
 const HouseModel = require('../models/house');
 
 // 删除无效数据
@@ -49,12 +49,11 @@ async function removeDuplicateData() {
     }
 
     console.log('remove duplicate data completed.');
-    process.exit();
+    process.exit(0);
 }
 
 async function start() {
     try {
-        await connectDB();
         await removeInvalidData();
         removeDuplicateData();
     } catch (e) {

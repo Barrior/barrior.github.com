@@ -4,19 +4,18 @@ const path = require('path');
 const qs = require('query-string');
 const request = require('request');
 const cheerio = require('cheerio');
-const mongoose = require('mongoose');
 const schedule = require('node-schedule');
-const colors = require('colors');
 const _ = require('lodash');
 
 const utils = require('../../lib/utils');
 const userAgents = require('../../lib/user_agent');
 const encryption = require('../../lib/encryption');
-const connectDB = require('../../models/connect_db');
 const HouseModle = require('../../models/house');
 const randomSleep = _.flowRight(utils.sleep, parseInt, utils.limitRandom);
 
-connectDB();
+require('colors');
+require('../../models/connect_db');
+
 schedule.scheduleJob('*/5 * * * *', async () => {
     console.log(`schedule job executed: ${new Date()}`.cyan);
     await randomSleep(1000 * 10, 0);

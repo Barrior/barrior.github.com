@@ -55,10 +55,11 @@ async function removeDuplicateData() {
 async function start() {
     try {
         await removeInvalidData();
-        removeDuplicateData();
+        await removeDuplicateData();
     } catch (e) {
         console.error(e);
     }
 }
 
+// '0 0 24 * * *'
 start();

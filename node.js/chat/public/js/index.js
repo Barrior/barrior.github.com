@@ -1,9 +1,13 @@
 /**
  * Created by Heart on 2016/2/16.
  */
+function getOrigin() {
+    return location.protocol + '//'+ location.hostname;
+}
+
 $(function(){
     //创建socket
-    var socket = io.connect(location.protocol + '//'+ location.hostname +':8888');
+    var socket = io.connect(getOrigin());
     var userInfo;
 
     var member = $( '.member' );
@@ -33,8 +37,8 @@ $(function(){
         }).click();
 
         //注册与信息同步
-        var username = $('#init-username')
-            hint = $('#no-init-username-hint');
+        var username = $('#init-username');
+        var hint = $('#no-init-username-hint');
 
         socket.on( 'onCreateSelf', function( data ){
             if( data.status ){

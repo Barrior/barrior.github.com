@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "pm2 start processes.prod.json",
+    "dev": "pm2 start processes.dev.json"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

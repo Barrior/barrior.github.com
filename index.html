@@ -24,8 +24,9 @@
             height: 100%;
             margin: 0;
             font: 14px/1.5 \5FAE\8F6F\96C5\9ED1;
-            color: #444;
+            color: #fff;
             overflow: hidden;
+            background-color: #2d2d2d;
         }
         a {
             color: #444;
@@ -74,7 +75,7 @@
             transition: color .6s;
         }
         .section a:hover {
-            color: #000;
+            color: #fff;
         }
     </style>
 </head>
@@ -86,13 +87,13 @@
         <h3 class="motto">Excellent to create everything</h3>
 
         <section class="section">
-            <span>Articles / 文章 : </span>
+            <span>Articles : </span>
             <a href="https://www.cnblogs.com/barrior/">博客园</a>
             <a href="https://segmentfault.com/u/barrior">SegmentFault</a>
         </section>
 
         <section class="section">
-            <span>Photography / 摄影 : </span>
+            <span>Photography : </span>
             <a href="https://tuchong.com/1629928/">图虫</a>
         </section>
 
@@ -103,12 +104,20 @@
 
     <script src="https://unpkg.com/jparticles@2.0.1/production/jparticles.all.js"></script>
     <script>
-        new JParticles.particle('.bg', {
-            parallax: true,
-            proximity: .05,
-            range: 20000,
-            eventElem: document
-        });
+        +function () {
+            var config = {
+                parallax: true,
+                proximity: .05,
+                range: .2,
+                eventElem: document
+            };
+            if (/Android|webOS|iPhone|iPod|iPad|BlackBerry|Windows Phone/.test(navigator.userAgent)) {
+                config.num = .11;
+                config.proximity = .16;
+                config.range = .5;
+            }
+            new JParticles.particle('.bg', config);
+        }();
     </script>
     <script>
         var _hmt = _hmt || [];

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{ message }}</p>
+        <!-- v-on:click 的简写为 @click -->
+        <button v-on:click="reverseMessage">逆转消息</button>
+        <ul>
+            <todo-item
+                v-for="item in list"
+                v-bind:data="item"
+                v-bind:key="item.id"
+            >
+            </todo-item>
+        </ul>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+        Vue.component('todo-item', {
+            props: ['data'],
+            template: '<li v-bind:id="data.id">{{data.text}}</li>',
+        })
+
+        const app = new Vue({
+            el: '#app',
+            data: {
+                message: 'hello world',
+                list: [
+                    { id: 0, text: '蔬菜' },
+                    { id: 1, text: '奶酪' },
+                    { id: 2, text: '随便吃点东西' }
+                ]
+            },
+            methods: {
+                reverseMessage() {
+                    this.message = this.message.split('').reverse().join('')
+                }
+            },
+            beforeMount() {
+                console.log('*** beforeMount ***')
+                console.log(document.querySelector('li'))
+            },
+            mounted() {
+                console.log('*** mounted ***')
+                console.log(document.querySelector('li'))
+            },
+            updated() {
+                console.log('*** updated ***')
+            }
+        })
+    </script>
+</body>
+</html>

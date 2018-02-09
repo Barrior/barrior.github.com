@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 按键修饰符，也可以写成 @keyup.enter -->
+        <input type="text" @keyup.13="onEnter">
+        <ul>
+            <todo-item
+                v-for="item in list"
+                v-bind:data="item"
+                v-bind:key="item.id"
+                v-on:click-and-ctrl="onClickAndCtrl"
+            >
+            </todo-item>
+        </ul>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+        Vue.component('todo-item', {
+            props: ['data'],
+            template: '<li v-bind:id="data.id" @click.ctrl="clickAndCtrl">{{data.text}}</li>',
+            methods: {
+                clickAndCtrl(e) {
+                    console.log(e.target.innerHTML)
+                    this.$emit('click-and-ctrl')
+                }
+            }
+        })
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                list: [
+                    { id: 0, text: '蔬菜' },
+                    { id: 1, text: '奶酪' },
+                    { id: 2, text: '随便吃点东西' }
+                ]
+            },
+            methods: {
+                onClickAndCtrl() {
+                    console.log('子组件传递到父组件的 onClickAndCtrl 事件...')
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>

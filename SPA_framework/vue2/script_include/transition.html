@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .slide-fade-leave-active {
+            background-color: blue;
+            transform: translateX(-2em);
+        }
+        .slide-fade-leave-to {
+            /* transition 放在 to 里，active 的样式会动画执行 */
+            /* transition 放在 active 里， active 的样式不会动画执行*/
+            transition: all .8s ease-out;
+            transform: translateX(2em);
+            background-color: green;
+            opacity: 0;
+        }
+
+        .slide-fade-enter-active {
+            transition: all .8s ease-out;
+            background-color: red;
+            opacity: 0;
+            transform: translateX(2em);
+        }
+        .slide-fade-enter-to {
+            background-color: yellow;
+            transform: translateX(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <button @click="onFade">fade</button>
+        <transition name="slide-fade">
+            <h3 class="only-single-element-on-top" v-if="show">Show Something</h3>
+        </transition>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                show: true
+            },
+            methods: {
+                onFade() {
+                    this.show = !this.show
+                }
+            }
+        })
+    </script>
+</body>
+</html>

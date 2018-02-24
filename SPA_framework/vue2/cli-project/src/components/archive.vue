@@ -2,13 +2,14 @@
   <div class="hello">
     <Nav></Nav>
     <h3>
-      Profile Page
+      Archive Page
     </h3>
   </div>
 </template>
 
 <script>
 import Nav from './nav.vue'
+
 export default {
   components: {
     Nav

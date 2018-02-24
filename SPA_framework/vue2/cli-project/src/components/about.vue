@@ -27,5 +27,8 @@ export default {
 </script>
 
 <style scoped>
-
+h3 {
+  font-size: 60px;
+  color: yellowgreen;
+}
 </style>

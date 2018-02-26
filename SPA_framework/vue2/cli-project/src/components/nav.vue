@@ -14,6 +14,9 @@
         <a @click="redirect('/User/About')">About</a>
       </li>
     </ul>
+    <div style="font-size: 60px;" v-if="$slots.default">
+      <slot></slot>
+    </div>
   </div>
 </template>
 

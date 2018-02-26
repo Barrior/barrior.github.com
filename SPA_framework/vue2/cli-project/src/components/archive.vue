@@ -1,6 +1,8 @@
 <template>
   <div class="hello">
-    <Nav></Nav>
+    <Nav>
+      SOLT...
+    </Nav>
     <h3>
       Archive Page
     </h3>

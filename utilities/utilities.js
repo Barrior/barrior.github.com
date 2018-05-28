@@ -252,3 +252,22 @@ export function extend() {
 
     return target;
 }
+
+export function scrollTo (to, speed = 0.3) {
+  const element = document.documentElement || document.body
+  
+  clearInterval(element.TIMER_OF_SCROLL_TO)
+  element.TIMER_OF_SCROLL_TO = setInterval(function () {
+    let scrollTop = element.scrollTop
+    let position = (to - scrollTop) * speed
+    
+    scrollTop += (scrollTop > to ? Math.floor(position) : Math.ceil(position))
+    
+    element.scrollTop = scrollTop
+    
+    if (scrollTop < to + 1 && scrollTop > to - 1) {
+      clearInterval(element.TIMER_OF_SCROLL_TO)
+      element.scrollTop = to
+    }
+  }, 30)
+}

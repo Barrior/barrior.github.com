@@ -92,22 +92,15 @@ export function removeElement(selector) {
     elem && elem.parentNode.removeChild(elem);
 }
 
-// 检查元素是否在可视区内，依赖jQuery
-export function checkInView(elem, ahead = 1) {
-    const $ = jQuery;
-    const elemTop = $(elem).offset().top;
-    const elemHeight = $(elem).outerHeight() / ahead;
-    const winTop = $(window).scrollTop();
-    const winHeight = $(window).height();
-
-    if (
-        elemTop + elemHeight > winTop &&
-        elemTop < winTop + winHeight
-    ) {
-        return true;
-    }
-
-    return false;
+// 检查元素是否在可视区内
+export function isElementInViewport(elem, ahead = 1) {
+  const documentElement = document.documentElement || document.body
+  const st = documentElement.scrollTop
+  const ch = documentElement.clientHeight
+  const elemTop = offset(elem).top
+  const elemHeight = elem.offsetHeight / ahead
+  
+  return (elemTop + elemHeight > st && elemTop < st + ch)
 }
 
 /**

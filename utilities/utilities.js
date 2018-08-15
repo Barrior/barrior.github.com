@@ -93,10 +93,13 @@ export function removeElement(selector) {
 }
 
 // 检查元素是否在可视区内
-export function isElementInViewport(elem, ahead = 1) {
-  const documentElement = document.documentElement || document.body
-  const st = documentElement.scrollTop
-  const ch = documentElement.clientHeight
+export function isElementInViewport(elem, container, ahead = 1) {
+  if (!container) {
+    container = document.documentElement || document.body
+  }
+  
+  const st = container.scrollTop + offset(container).top
+  const ch = container.clientHeight
   const elemTop = offset(elem).top
   const elemHeight = elem.offsetHeight / ahead
   

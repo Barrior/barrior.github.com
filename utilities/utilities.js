@@ -92,18 +92,75 @@ export function removeElement(selector) {
     elem && elem.parentNode.removeChild(elem);
 }
 
-// 检查元素是否在可视区内
-export function isElementInViewport(elem, container, ahead = 1) {
-  if (!container) {
-    container = document.documentElement || document.body
+export function isWindow (elem) {
+  return elem != null && elem === elem.window
+}
+
+export function offset (elem) {
+  const offset = { left: 0, top: 0 }
+  if (!isWindow(elem) && elem.nodeType !== 9) {
+    while (elem) {
+      offset.left += elem.offsetLeft
+      offset.top += elem.offsetTop
+      elem = elem.offsetParent
+    }
+  }
+  return offset
+}
+
+export function getClientHeight (elem) {
+  if (isWindow(elem) || elem.nodeType === 9) {
+    elem = document.documentElement
+  }
+  return elem.clientHeight
+}
+
+export function scrollTop (elem, value) {
+  let win
+  if (isWindow(elem)) {
+    win = elem
+  } else if (elem.nodeType === 9) {
+    win = elem.defaultView
   }
   
-  const st = container.scrollTop + offset(container).top
-  const ch = container.clientHeight
+  if (value === undefined) {
+    return win ? win.pageYOffset : elem.scrollTop
+  }
+  
+  if (win) {
+    win.scrollTo(0, value)
+  } else {
+    elem.scrollTop = value
+  }
+}
+
+// 检查元素是否在可视区内
+export function isElementInViewport(elem, container = winodw, ahead = 1) {
+  const st = scrollTop(container) + offset(container).top
+  const ch = getClientHeight(container)
   const elemTop = offset(elem).top
   const elemHeight = elem.offsetHeight / ahead
   
   return (elemTop + elemHeight > st && elemTop < st + ch)
+}
+
+export function scrollTo (to, speed = 0.3) {
+  const element = window
+  
+  clearInterval(element.TIMER_OF_SRCOLL_TO)
+  element.TIMER_OF_SRCOLL_TO = setInterval(function () {
+    let st = scrollTop(element)
+    let position = (to - st) * speed
+    
+    st += (st > to ? Math.floor(position) : Math.ceil(position))
+    
+    scrollTop(element, st)
+    
+    if (st < to + 1 && st > to - 1) {
+      clearInterval(element.TIMER_OF_SRCOLL_TO)
+      scrollTop(element, to)
+    }
+  }, 30)
 }
 
 /**
@@ -247,23 +304,4 @@ export function extend() {
     }
 
     return target;
-}
-
-export function scrollTo (to, speed = 0.3) {
-  const element = document.documentElement || document.body
-  
-  clearInterval(element.TIMER_OF_SCROLL_TO)
-  element.TIMER_OF_SCROLL_TO = setInterval(function () {
-    let scrollTop = element.scrollTop
-    let position = (to - scrollTop) * speed
-    
-    scrollTop += (scrollTop > to ? Math.floor(position) : Math.ceil(position))
-    
-    element.scrollTop = scrollTop
-    
-    if (scrollTop < to + 1 && scrollTop > to - 1) {
-      clearInterval(element.TIMER_OF_SCROLL_TO)
-      element.scrollTop = to
-    }
-  }, 30)
 }

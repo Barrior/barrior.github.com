@@ -115,6 +115,13 @@ export function getClientHeight (elem) {
   return elem.clientHeight
 }
 
+export function getScrollHeight (elem) {
+  if (isWindow(elem) || elem.nodeType === 9) {
+    elem = document.documentElement
+  }
+  return elem.scrollHeight
+}
+
 export function scrollTop (elem, value) {
   let win
   if (isWindow(elem)) {
@@ -144,8 +151,9 @@ export function isElementInViewport(elem, container = winodw, ahead = 1) {
   return (elemTop + elemHeight > st && elemTop < st + ch)
 }
 
-export function scrollTo (to, speed = 0.3) {
-  const element = window
+export function scrollTo (to, element = window, speed = 0.3) {
+  // to 不能小于 0，不能大于最大滚动距离
+  to = Math.max(0, Math.min(getScrollHeight(element) - getClientHeight(element), to))
   
   clearInterval(element.TIMER_OF_SRCOLL_TO)
   element.TIMER_OF_SRCOLL_TO = setInterval(function () {

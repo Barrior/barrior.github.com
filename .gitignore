@@ -3,3 +3,6 @@ node_modules/
 chrome_extends/**/*.pak
 
 .DS_Store
+
+/go/*
+!/go/*.go

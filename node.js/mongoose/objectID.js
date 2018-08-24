@@ -10,3 +10,9 @@ console.log('value: %s \ntype: %s', id, typeof id)
 // 转换 ObjectID 为字符串
 const sId = String(id) || id.toString()
 console.log('value: %s \ntype: %s', sId, typeof sId)
+
+// 12 byte binary string 换成为 24 字符的 js string
+// time      machine   pid     Encode index
+// 5b7fab94   b80bc1   5dfd    5e7ab6
+
+// time: 时间差隔大于等于 100 ms 则不同，小于则相同

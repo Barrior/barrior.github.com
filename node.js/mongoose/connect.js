@@ -13,9 +13,14 @@ const Cat = mongoose.model('Cat', {
 })
 
 // 创建多个数据库连接
-const test2 = mongoose.createConnection('mongodb://localhost:27017/test2', { useNewUrlParser: true })
+const test2 = mongoose.createConnection('mongodb://localhost:27017/test2', {
+  useNewUrlParser: true
+})
 
-const Cat2 = test2.model('Cat', { name: String, age: Number })
+const Cat2 = test2.model('Cat', {
+  name: String,
+  age: Number
+})
 
 ;(async function start () {
   try {

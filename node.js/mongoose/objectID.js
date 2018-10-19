@@ -3,6 +3,10 @@ const { ObjectID } = require('mongodb')
 // 创建一个新 ObjectID
 console.log('create a new ObjectID: ', ObjectID())
 
+// 检查一个字符串是否是有效的 ObjectID
+console.log('is valid ObjectId: ', ObjectID.isValid('5bc94a92b01aa48f1cbe782d')) // true
+console.log('is valid ObjectId: ', ObjectID.isValid('11')) // false
+
 // 转换字符串为 ObjectID
 const id = ObjectID('5b7e7afa7b36e85788770b3a')
 console.log('value: %s \ntype: %s', id, typeof id)

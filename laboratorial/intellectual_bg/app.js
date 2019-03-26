@@ -2,6 +2,7 @@ const http = require('http')
 const url = require('url')
 const server = http.createServer()
 const { createCircle } = require('./circle')
+const { createRect } = require('./rect')
 const { times } = require('lodash')
 
 server.on('request', function (req, res) {
@@ -10,9 +11,10 @@ server.on('request', function (req, res) {
     'Access-Control-Allow-Origin': '*'
   })
 
+  const result = []
+
   switch (url.parse(req.url).pathname) {
     case '/circle':
-      const result = []
       times(20, () => {
         result.push({
           url: createCircle().base64
@@ -20,8 +22,13 @@ server.on('request', function (req, res) {
       })
       res.end(JSON.stringify(result))
       break
-    case '/user':
-      res.end('用户中心')
+    case '/rect':
+      times(20, () => {
+        result.push({
+          url: createRect().base64
+        })
+      })
+      res.end(JSON.stringify(result))
       break
     default:
       res.writeHead(404, {

@@ -2,10 +2,7 @@ const randomColor = require('randomcolor')
 const chroma = require('chroma-js')
 const { createCanvas } = require('canvas')
 const { times } = require('lodash')
-
-function limitRandom (max, min) {
-  return max === min ? max : (Math.random() * (max - min) + min)
-}
+const { limitRandom } = require('./utils')
 
 const globalCompositeOperations = [
   'lighter', 'xor', 'copy'

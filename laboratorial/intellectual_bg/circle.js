@@ -1,9 +1,6 @@
 const randomColor = require('randomcolor')
 const { createCanvas } = require('canvas')
-
-function limitRandom (max, min) {
-  return max === min ? max : (Math.random() * (max - min) + min)
-}
+const { limitRandom } = require('./utils')
 
 function start () {
   const cw = 600

@@ -5,8 +5,6 @@ const { createCircle } = require('./circle')
 const { times } = require('lodash')
 
 server.on('request', function (req, res) {
-  // console.log(url.parse(req.url), req.url)
-
   res.writeHead(200, {
     'content-type': 'application/json;charset=utf-8',
     'Access-Control-Allow-Origin': '*'

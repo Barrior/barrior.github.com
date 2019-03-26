@@ -39,7 +39,7 @@ function start () {
   ctx.rotate(angle * Math.PI / 180)
 
   // dots space
-  const space = limitRandom(r * 0.5, 0)
+  const space = limitRandom(r * 0.5, r * -0.5)
 
   const moreDots = 6
 

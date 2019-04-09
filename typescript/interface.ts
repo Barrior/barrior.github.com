@@ -10,3 +10,10 @@ const man: Person = {
 };
 
 console.log(man, man.name);
+
+// 定义一个除了给定属性以外，还可以带有任意数量的其它属性
+interface SquareConfig {
+  color?: string;
+  width?: number;
+  [propName: string]: any;
+}

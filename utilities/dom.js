@@ -32,6 +32,26 @@ export function offset (elem) {
   return offset
 }
 
+export function getStyle (elem, prop) {
+  const style = getComputedStyle(elem)
+  return parseFloat(style[prop])
+}
+
+export function getWidth (elem) {
+  const clientWidth = getClientWidth(elem)
+  const style = getComputedStyle(elem)
+  return (
+    clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)
+  )
+}
+
+export function getClientWidth (elem) {
+  if (isWindow(elem) || elem.nodeType === 9) {
+    elem = document.documentElement
+  }
+  return elem.clientWidth
+}
+
 export function getClientHeight (elem) {
   if (isWindow(elem) || elem.nodeType === 9) {
     elem = document.documentElement

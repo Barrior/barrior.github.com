@@ -1,5 +1,6 @@
-import { getSign, uniqueRandom } from './utilities'
+import { getSign } from './url'
 import { removeElement } from './dom'
+import randomUnique from './randomUnique'
 
 export function loadScript (url) {
   // jump url has been requested
@@ -39,7 +40,7 @@ loadScript.scripts = []
  */
 export function jsonp (url) {
   return new Promise((resolve, reject) => {
-    const id = '_JSONP_' + uniqueRandom()
+    const id = '_JSONP_' + randomUnique()
     url += `${getSign(url)}callback=${id}`
 
     window[id] = (res) => {

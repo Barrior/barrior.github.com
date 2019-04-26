@@ -1,16 +1,3 @@
-// check if the element be contained in the container
-// result that equal jQuery.contains
-export function contains (container, target) {
-  if (target) {
-    while ((target = target.parentNode)) {
-      if (container === target) {
-        return true
-      }
-    }
-  }
-  return false
-}
-
 export function removeElement (selector) {
   const elem = document.querySelector(selector)
   elem && elem.parentNode.removeChild(elem)
@@ -21,15 +8,11 @@ export function isWindow (elem) {
 }
 
 export function offset (elem) {
-  const offset = { left: 0, top: 0 }
-  if (!isWindow(elem) && elem.nodeType !== 9) {
-    while (elem) {
-      offset.left += elem.offsetLeft
-      offset.top += elem.offsetTop
-      elem = elem.offsetParent
-    }
+  const bounding = elem.getBoundingClientRect()
+  return {
+    left: window.pageXOffset + bounding.left,
+    top: window.pageYOffset + bounding.top
   }
-  return offset
 }
 
 export function getStyle (elem, prop) {
@@ -95,13 +78,16 @@ export function isElementInViewport (elem, container = window, ahead = 1) {
   return (elemTop + elemHeight > st && elemTop < st + ch)
 }
 
-export function scrollTo (target, element = window, speed = 0.3) {
+export function scrollTo (element = window, target, speed = 0.3) {
   // target value must less than the max value of scroll top and
   // more than the min value of 0
-  target = Math.max(0, Math.min(getScrollHeight(element) - getClientHeight(element), target))
+  target = Math.max(
+    0,
+    Math.min(getScrollHeight(element) - getClientHeight(element), target)
+  )
 
-  clearInterval(element.TIMER_OF_SRCOLL_TO)
-  element.TIMER_OF_SRCOLL_TO = setInterval(function () {
+  clearInterval(element.TIMER_OF_SRCOLLTO)
+  element.TIMER_OF_SRCOLLTO = setInterval(function () {
     let st = scrollTop(element)
     let position = (target - st) * speed
 
@@ -110,7 +96,7 @@ export function scrollTo (target, element = window, speed = 0.3) {
     scrollTop(element, st)
 
     if (st < target + 1 && st > target - 1) {
-      clearInterval(element.TIMER_OF_SRCOLL_TO)
+      clearInterval(element.TIMER_OF_SRCOLLTO)
       scrollTop(element, target)
     }
   }, 30)

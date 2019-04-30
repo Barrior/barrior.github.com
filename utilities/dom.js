@@ -78,26 +78,26 @@ export function isElementInViewport (elem, container = window, ahead = 1) {
   return (elemTop + elemHeight > st && elemTop < st + ch)
 }
 
-export function scrollTo (element = window, target, speed = 0.3) {
+export function scrollTo (elem = window, target, speed = 0.3) {
   // target value must less than the max value of scroll top and
   // more than the min value of 0
   target = Math.max(
     0,
-    Math.min(getScrollHeight(element) - getClientHeight(element), target)
+    Math.min(getScrollHeight(elem) - getClientHeight(elem), target)
   )
 
-  clearInterval(element.TIMER_OF_SRCOLLTO)
-  element.TIMER_OF_SRCOLLTO = setInterval(function () {
-    let st = scrollTop(element)
+  clearInterval(elem.TIMER_OF_SRCOLLTO)
+  elem.TIMER_OF_SRCOLLTO = setInterval(function () {
+    let st = scrollTop(elem)
     let position = (target - st) * speed
 
     st += (st > target ? Math.floor(position) : Math.ceil(position))
 
-    scrollTop(element, st)
+    scrollTop(elem, st)
 
     if (st < target + 1 && st > target - 1) {
-      clearInterval(element.TIMER_OF_SRCOLLTO)
-      scrollTop(element, target)
+      clearInterval(elem.TIMER_OF_SRCOLLTO)
+      scrollTop(elem, target)
     }
   }, 30)
 }

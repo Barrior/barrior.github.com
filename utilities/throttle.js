@@ -1,27 +1,43 @@
 /**
  * 函数节流
- * @param  {Function} handler
- * @param  {Number}   delay 可选，值 >= 0
- * @param  {Number}   must  可选，值 >= 0
- * @return {Function}       run when trigger it's event
+ * @param  {Function}   handler            执行函数
+ * @param  {Number}     delay              延迟时间，可选，值 >= 0
+ * @param  {Number}     forceInterval      强制执行时间间隔，可选，值 >= 0
+ * @return {Function}   wrapper function
  */
-export function throttle (handler, delay, must) {
-  if (!delay && !must) {
+export default function throttle (handler, delay, forceInterval) {
+  if (!delay) {
     return handler
   }
 
-  let startTime = new Date()
+  let startTime
   let timer
 
-  return function (e) {
-    if (delay) {
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        handler.call(this, e)
-      }, delay)
-    } else if (new Date() - startTime > must) {
-      startTime = new Date()
-      handler.call(this, e)
+  const throttled = function (...arg) {
+    clearTimeout(timer)
+
+    if (forceInterval && forceInterval > delay) {
+      const curTime = new Date()
+      if (!startTime) {
+        startTime = curTime
+      }
+
+      if (curTime - startTime >= forceInterval) {
+        handler.call(this, ...arg)
+        startTime = new Date()
+        return
+      }
     }
+
+    timer = setTimeout(() => {
+      handler.call(this, ...arg)
+    }, delay)
   }
+
+  throttled.cancel = function () {
+    clearTimeout(timer)
+    startTime = timer = null
+  }
+
+  return throttled
 }

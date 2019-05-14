@@ -1,12 +1,12 @@
 package main
 
-import ( 
+import (
 	"fmt"
 	"strconv"
 )
 
 // 字符串转数字
-func stringToNumber () {
+func stringToNumber() {
 	val, err := strconv.Atoi("1")
 	println("val is:", val)
 	println("err is:", err)
@@ -37,7 +37,7 @@ func main() {
 		fmt.Printf("slice1[%d]: %d \n", i, slice1[i])
 	}
 
-	slice2 := []int{ 1, 2 }
+	slice2 := []int{1, 2}
 	println("slice2 length is:", len(slice2))
 	println("cap(slice2) is:", cap(slice2))
 }

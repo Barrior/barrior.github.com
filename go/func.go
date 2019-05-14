@@ -3,19 +3,19 @@ package main
 var map1 = map[string]int{"a": 5, "b": 6}
 
 // 常规声明一个函数，入参和出参
-func Sum (a int, b int) int {
+func Sum(a int, b int) int {
 	return a + b
 }
 
 // 命名的返回值函数（named return variables）
-func Sum2 (a int, b int) (result int) {
+func Sum2(a int, b int) (result int) {
 	result = a + b
 	return
 }
 
 // 声明一个返回函数的函数
 // 类型为 func(b int) int
-func Adder (a int) func(b int) int {
+func Adder(a int) func(b int) int {
 	return func(b int) int {
 		return a + b
 	}
@@ -35,5 +35,3 @@ func main() {
 
 	println("Adder(2)(3):", Adder(2)(3))
 }
-
-

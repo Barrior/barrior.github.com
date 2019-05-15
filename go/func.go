@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 var map1 = map[string]int{"a": 5, "b": 6}
 
 // 常规声明一个函数，入参和出参
@@ -21,6 +23,16 @@ func Adder(a int) func(b int) int {
 	}
 }
 
+// 变参函数，不定参数调用函数
+// arg 数组类型
+func Max(arg ...int) {
+	if len(arg) == 0 {
+		fmt.Println("no arguments to call Max")
+		return
+	}
+	fmt.Println("arg:", arg)
+}
+
 func main() {
 	println("Sum(1, 2):", Sum(1, 2))
 	println("Sum2(1, 2):", Sum2(1, 2))
@@ -34,4 +46,8 @@ func main() {
 	println("c:", c)
 
 	println("Adder(2)(3):", Adder(2)(3))
+
+	Max()
+	Max(1, 2)
+	Max(1, 2, 3)
 }

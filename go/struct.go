@@ -31,6 +31,7 @@ func main() {
 
 	// 混合字面量语法（composite literal syntax）&struct1{a, b, c} 是一种简写，底层仍然会调用 new ()
 	// 值的顺序必须按照字段顺序来写，& 不是必须的
+	// & 还有个作用是表示取结构内存地址，所以在传递到函数内进行改动操作会影响原值
 	who2 := &user{"Tom", 25}
 	println("who2:", who2)
 	println("name:", who2.name)

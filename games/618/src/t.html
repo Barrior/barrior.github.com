@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .animate {
+            width: 186px;
+            height: 220px;
+            background-image: url("./sprite.loading.png");
+            /*animation: loading_animate 6s steps(6, start) infinite reverse;*/
+            /*animation: loading_animate1 6s steps(1, start) infinite reverse;*/
+            animation: loading_animate1 6s infinite;
+        }
+        @keyframes loading_animate1 {
+            0% {
+                background-position: 0 0;
+            }
+            16.666% {
+                background-position: 186px 0;
+            }
+            33.333% {
+                background-position: 372px 0;
+            }
+            49.999% {
+                background-position: 558px 0;
+            }
+            66.666% {
+                background-position: 744px 0;
+            }
+            83.333% {
+                background-position: 930px 0;
+            }
+            100% {
+                background-position: 0 0;
+            }
+        }
+        @keyframes loading_animate {
+            100% {
+                background-position: 1116px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animate"></div>
+</body>
+</html>

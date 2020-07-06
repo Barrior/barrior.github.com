@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			div{padding: 50px;}
+			#div1{background: red;}
+			#div2{background: yellow; position: relative;}
+			#div3{background: green; position: relative;}
+		</style>
+	</head>
+	<body id="body">
+		<div id="div1">
+			<div id="div2">
+				<div id="div3"></div>
+			</div>
+		</div>
+		<script>
+			/*
+			  offsetLeft[Top]:	只读，属性，	当前元素离其最近的有定位的父级节点的距离（偏移量）
+			  
+			  当都没有定位时，offsetParent指向body；offsetLeft[Top]是元素到body的距离；
+			  
+			  当没有定位父级，元素有定位时：
+			  	标准：到body的距离；
+			  	ie7及以下：到html的距离；
+			  
+			  当有定位父级，元素没有定位的情况下：
+			  	标准：到定位父级的距离；
+			  	ie7及以下：到body的距离；
+			  	
+			   当有定位父级，元素有定位的情况下：
+			  	都是到定位父级的距离；
+			   	
+			*/
+			var oDiv3=document.getElementById('div3');
+			
+			alert( oDiv3.offsetLeft +'+'+oDiv3.offsetParent.id )
+			
+		</script>
+	</body>
+</html>

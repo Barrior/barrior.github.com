@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			a,img{position: absolute;}
+			img{max-width: 300px;}
+		</style>
+	</head>
+	<body>
+		<a href="http://www.netbian.com/d/file/20150528/a6abe8cfda8f4d2aaad673d2156a39c4.jpg">图片1</a>
+		<a href="http://www.netbian.com/d/file/20150529/9b33d2d656bb300a79191ff5580c899a.jpg">图片2</a>
+		<a href="http://www.netbian.com/d/file/20150529/97e676389550b369291da439662f7670.jpg">图片3</a>
+		<a href="http://www.netbian.com/d/file/20150528/92272d96800d5d01e0a688b51281bc34.jpg">图片4</a>
+		<a href="http://www.netbian.com/d/file/20150528/5000b04b652e3ada5819e83b4fc9b184.jpg">图片5</a>
+		<a href="http://www.netbian.com/d/file/20150528/44d0e8267c351280724ef3f8f6ee31e0.jpg">图片6</a>
+		<a href="http://www.netbian.com/d/file/20150529/5b08cfdef886e6783a91e58343dcdf10.jpg">图片7</a>
+		
+		<script>
+			var aA=document.querySelectorAll('a'),
+				len=aA.length,
+				i=0,
+				
+				w=document.documentElement.clientWidth,
+				h=document.documentElement.clientHeight;
+			
+			for(; i<len; i++){
+				var l= (Math.random()*w*.7).toFixed(),
+					t= (Math.random()*h*.7).toFixed();
+				
+				l= l - parseInt(getComputedStyle(aA[i],false).width)*2;
+				t= t - parseInt(getComputedStyle(aA[i],false).height)*2;
+				
+				l<0 && (l=10);
+				t<0 && (t=10);
+				
+				
+				css(aA[i],{
+					left: l + 'px',
+					top: t + 'px'
+				})
+			}
+			
+			function css(o,attr){
+				for(var i in attr){
+					o.style[i] = attr[i]
+				}
+			}
+			
+			
+			//单体模式开始
+			var singleton=function(fn){
+				var img;
+				
+				//console.log('执行了全局')
+				return function(e){
+					
+					//console.log('创建img部分函数')
+					img=img || ( img=document.body.appendChild(document.createElement('img')) );
+					fn.call(this,img,e)
+				}
+			};
+			
+			var loadingSrc;
+			
+			document.body.onmouseover=singleton(function(img,e){
+				var oImg=new Image(),
+					src=e.target.getAttribute('href');
+					
+				img.src='http://www.netbian.com/skin/js/loading.gif';
+				css(img,{
+					left: e.clientX+10+'px',
+					top: e.clientY+10+'px',
+					display: 'initial'
+				});
+				
+				oImg.src=loadingSrc=src;
+				oImg.onload=function(){
+					this.src==loadingSrc && (img.src=src)
+				};
+				
+				img.onmouseover=function(e){
+					e.stopPropagation();
+					css(this,{
+						display: 'none'
+					})
+				}
+			});
+			
+			
+		</script>
+	</body>
+</html>

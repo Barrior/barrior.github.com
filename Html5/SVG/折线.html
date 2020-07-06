@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>绘制图表折线</title>
+		<style>
+			body{background-color: gray; font-family: Arial "微软雅黑";}
+			#box{width: 780px; height: 400px; background-color: #FFFFFF; margin: 40px auto;}
+		</style>
+		<script type="text/javascript" src="jquery-1.8.3.min.js" ></script>
+		<script>
+			$(function(){
+				function creatTag(sTag,oAttr){
+					var oTag=document.createElementNS(ns,sTag);
+					for(var i in oAttr){
+						oTag.setAttribute(i,oAttr[i]);
+					}
+					return $(oTag);
+				}
+				
+				var ns='http://www.w3.org/2000/svg',
+					oSvg=$('#svg'),
+					aPoint='',
+					oPl=null;
+				
+				oSvg.mousedown(function(ev){
+					var x=ev.pageX-oSvg.offset().left,
+						y=ev.pageY-oSvg.offset().top;
+						
+					if(!oPl){
+						oPl=creatTag('polyline',{fill:'none',stroke:'red',strokeWidth:2});
+						oSvg.append(oPl);
+					}
+					
+					if(aPoint){
+						aPoint+=','+x+','+y;
+					}else{
+						aPoint=x+','+y;
+					}
+					oPl.attr('points',aPoint);
+					
+					oSvg.append(creatTag('circle',{cx:x, cy:y, r:3, fill:'white', stroke:'red', strokeWidth:2}));
+					
+					$(this).mousemove(function(ev){
+						var x=ev.pageX-oSvg.offset().left,
+							y=ev.pageY-oSvg.offset().top;
+						
+						if(aPoint){
+							oPl.attr('points',aPoint+','+x+','+y);
+						}
+						
+					});
+					
+				});
+				
+				oSvg.on('contextmenu dblclick',function(ev){
+					oSvg.off('mousemove');
+					ev.preventDefault();
+				});
+				
+				/*
+				$('circle').mouseover(function(){
+					var oL=creatTag('line',{
+							x1:$(this).attr('cx'),
+							y1:0,
+							x2:$(this).attr('cx'),
+							y2:'100%',
+							stroke:'black',
+							strokeWidth:'2'
+						}
+					);
+					oSvg.append(oL);
+				});
+				
+				$('circle').mouseout(function(){
+					$('line').remove();
+				});
+				*/
+			});
+		</script>
+	</head>
+	<body>
+		<h3>点击画线</h3>
+		<div id="box">
+			<svg id="svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+				<!--<polyline points="100,380 200,300 300,280 400,350 500,240 600,260 700,160" fill="none" stroke="red" stroke-width="2"></polyline>-->
+			</svg>
+		</div>
+	</body>
+</html>

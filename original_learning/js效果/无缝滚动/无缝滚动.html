@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+*{margin:0; padding:0;}
+#div1{
+	margin:0 auto;
+	width: 712px;
+	height: 108px;
+	position: relative;
+	overflow: hidden;
+}
+#div1 ul{
+	position: absolute;
+	left:o;
+	top:0;
+}
+#div1 ul li{float:left;list-style:none;}
+
+</style>
+
+<script>
+window.onload=function(){
+	var odiv=document.getElementById('div1');
+	var oul=odiv.getElementsByTagName('ul')[0];
+	var oli=oul.getElementsByTagName('li');
+	var a=document.getElementsByTagName('a');
+	var speed=-2;
+	oul.innerHTML=oul.innerHTML+oul.innerHTML;
+	oul.style.width=oli[0].offsetWidth*oli.length+'px';
+	function roll(){
+		if(oul.offsetLeft<-oul.offsetWidth/2){
+			oul.style.left='0';
+		}
+		if(oul.offsetLeft>0){
+			oul.style.left=-oul.offsetWidth/2+'px';
+		}
+		oul.style.left=oul.offsetLeft+speed+'px';
+	}
+	var timer=setInterval(roll,30);
+	oul.onmouseover=function(){
+		clearInterval(timer);
+	};
+	oul.onmouseout=function(){
+		timer=setInterval(roll,30);
+	};
+	a[0].onclick=function(){
+		speed=-2;
+	};
+	a[1].onclick=function(){
+		speed=2;
+	};
+};
+
+</script>
+</head>
+
+<body>
+<a href="javascript:">向左</a>
+<a href="javascript:">向右</a>
+<div id="div1">
+    <ul>
+        <li><a href="#"><img src="1.jpg" /></a></li>
+        <li><a href="#"><img src="2.jpg" /></a></li>
+        <li><a href="#"><img src="3.jpg" /></a></li>
+        <li><a href="#"><img src="4.jpg" /></a></li>
+    </ul>
+</div>    
+
+</body>
+</html>

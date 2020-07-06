@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script>
+			/*
+			 * 父级.insertBefore(新元素，已知节点)
+			 * ie8下，如果父级没有第一个元素，那么insertBefore就会报错啦，通过判断解决
+			 * ie9及标准浏览器则默认使用appendChild操作
+			 * 
+			 * 父级.removeChild(子元素)
+			 * 
+			 * 父级.replaceChild(新节点，被替换的节点)
+			 * 
+			 * 需要被复制的节点.cloneNode(true/false)
+			 * 	true:复制节点及其所有子节点
+			 * 	false:仅复制节点，连文本都没有，因为文本是文本节点
+			 * 
+			*/
+			window.onload=function(){
+				var oUl=document.getElementById('ul1'),
+					oText=document.getElementsByTagName('input')[0],
+					oBtn=document.getElementsByTagName('input')[1];
+				
+				oBtn.onclick=function(){
+					var oLi=document.createElement('li');
+					oLi.innerHTML=oText.value;
+					var oA=document.createElement('a');
+					oA.innerHTML="删除";
+					oA.href='javascript:;';
+					oLi.appendChild(oA);
+					
+					oA.onclick=function(){
+						this.parentNode.parentNode.removeChild(this.parentNode);
+					}
+					
+					if(oUl.children[0]){
+						oUl.insertBefore( oLi, oUl.children[0] );
+					}else{
+						oUl.appendChild(oLi);
+					}
+				}
+				
+				var oBtn=document.getElementsByTagName('input')[2],
+					oDiv=document.getElementById('div'),
+					oP=document.getElementById('p');
+					onOff=true;
+				
+				oBtn.onclick=function(){
+					if(onOff){
+						var oD=oDiv.cloneNode(true);
+						document.body.replaceChild(oD,oP);
+						onOff=!onOff;
+					}
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<input type="text" />
+		<input type="button" value="留言" />
+		<ul id="ul1"></ul>
+		
+		<input type="button" value="点击克隆一个div元素替换掉p元素" />
+		<div id="div">div</div>
+		<hr />
+		<p id="p">p</p>
+	</body>
+</html>

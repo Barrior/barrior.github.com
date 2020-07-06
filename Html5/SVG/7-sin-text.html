@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<svg width="800" height="400">
+			<text x="200" y="200" font-family=arial>ABCDEFGHIJKLNMOPQRSTUVWSYZ</text>
+			<path d="M200.5 200.5H400 0" stroke=red fill=none></path>
+			<path d="M200.5 200.5V600 0" stroke=red fill=none></path>
+		</svg>
+		<script type="text/javascript">
+			/*arr=[1,2,3,4,5];
+			
+			newArr=arr.map(function(currentValue, index, array){
+				console.log('数组中第'+index+'值：'+currentValue+',调用map方法的数组（就是原数组）：'+array)
+				
+				var result=currentValue+1;
+				return result;
+			},window);
+			
+			console.log( 'newArr:'+newArr );
+			console.log( 'arr:'+arr );*/
+			
+			//y = s * sin( α*x + 2πk );
+			
+			var oText=document.querySelector('text');
+				n=oText.textContent.length;	//26个英文字母的长度
+				dx=[];
+				dy=[];
+				
+				i=n;
+				s=100;
+				w=0.02;
+				t=0;
+			
+			while(n--){
+				dx.push(10);
+			}
+			
+			function range(t){
+					ly=0;
+					cy=undefined;
+				
+				for(i=0; i<n; ++i){
+					cy=-s*Math.sin( w*i*20 + t );
+					y.push(cy-ly);
+					ly=cy;
+				}
+			}
+			
+			function render(){
+				oText.setAttribute('dx',dx.join(','));
+				oText.setAttribute('dy',dy.join(','));
+			}
+			range();
+			render()
+			
+			/*setInterval(function(){
+				t+=0.01;
+				range(t);
+				render();
+				requestAnimationFrame(this.callee);
+			},10000);*/
+			
+			
+		</script>
+	</body>
+</html>

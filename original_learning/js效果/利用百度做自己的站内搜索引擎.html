@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+
+<body>
+<script type="text/javascript">
+　　var domainroot="www.w3school.com.cn"//个人站点域名，替换成你的网站的网址即可
+　　function Gsitesearch(curobj){
+　　curobj.q.value="site:"+domainroot+' '+curobj.qfront.value
+　　}
+</script>
+　　<form action="http://www.Google.com/search" method="get" onSubmit="Gsitesearch(this)">
+　　<p>站内搜索:<br/>
+　　<input name="q" type="hidden" />
+　　<input name="qfront" type="text" style="width: 180px" /> <input type="submit" value="开始搜索">
+　　</p>
+　　</form> 
+
+Baidu站内搜索开始
+<script language="javascript">
+function baidusearch () {
+var wd=document.getElementsByName("wd")[0].value;
+var link="http://www.baidu.com/s?si=www.w3school.com.cn&cl=3&ct=2097152&tn=baidulocal&word="+wd;
+window.open(link); }
+</script>
+<input type="text" name="wd"/><input type="submit" onclick="javascript:baidusearch()" value="搜索" />
+<!--Baidu站内搜索结束-->
+
+
+<!--Google站内搜索开始-->
+<script type="text/javascript">
+function googlesearch () {
+var oSearch=document.getElementsByName("search")[0].value;
+var link='http://www.google.com/search?domains='+'www.w3school.com.cn'+'&sitesearch='+'www.w3school.com.cn'+'&q='+oSearch;
+window.open(link);}
+</script>
+<input type="text" name="search"/><input type="submit" onclick="javascript:googlesearch()" value="Google 搜索" />
+<!--Google站内搜索结束-->
+</body>
+</html>

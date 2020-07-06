@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+	
+	<script>
+		'use strict';
+
+		var c = document.getElementById( 'c' );
+		var cxt = c.getContext( '2d' );
+
+		var img = new Image();
+
+		img.onload = function(){
+
+			//填充对象，平铺类型
+			var pattern = cxt.createPattern( img, 'repeat' );
+
+			cxt.fillStyle = pattern;
+
+			cxt.fillRect( 20, 20, 200, 240 );
+
+			cxt.font = '40px 微软雅黑';
+			cxt.fillText( 'Pattern Text', 240, 140 );
+
+			cxt.strokeStyle = 'gray';
+			cxt.strokeText( 'Pattern Text', 240, 140 );
+
+		};
+
+		img.src = 'http://www.w3school.com.cn/i/ct_html5_canvas_image.gif';
+		
+	</script>
+</body>
+</html>

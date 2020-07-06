@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+			color: #fff;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<p>请在白色区域上作画</p>
+	<canvas id="c" width="500px" height="300px"></canvas>
+
+	<script>
+		'use strict';
+
+		var canvas = document.getElementById( 'c' );
+		var gc = canvas.getContext( '2d' );
+
+		canvas.onmousedown = function( e ){
+
+			var left = canvas.offsetLeft,
+				top = canvas.offsetTop;
+
+			gc.moveTo( e.clientX - left, e.clientY - top );
+
+			document.onmousemove = function( e ){
+
+				gc.lineTo( e.clientX - left, e.clientY - top );
+				gc.stroke();
+
+			}
+			document.onmouseup = function(){
+
+				this.onmousemove = this.onmouseup = null;
+
+			}
+
+			return false;
+		};
+
+	</script>
+</body>
+</html>

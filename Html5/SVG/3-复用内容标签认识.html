@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			html,body{width: 100%; height: 100%; margin: 0;}
+			use:nth-of-type(1){cursor: pointer; transition: .4s;}
+			use:nth-of-type(1):hover{opacity: .5;}
+			image:hover{filter:url(#filter-blur-2)}
+		</style>
+	</head>
+	<body>
+		<svg width=100% height=100% style="border:1px solid #ccc">
+			<defs>
+				<filter id="filter-blur">
+			        <feGaussianBlur stdDeviation="0,6" />
+			    </filter>	<!--高斯模糊  0,6-上下模； 6,0-左右模糊； 6,6-都模糊（两个一样可写一个）-->
+				<filter id="filter-blur-2">
+			        <feGaussianBlur stdDeviation="0" />
+			    </filter>	<!--高斯模糊-->
+			    
+				<linearGradient id=redYellow>
+					<stop offset=0 stop-color=red></stop>
+					<stop offset=.5 stop-color=indigo></stop>
+					<stop offset=1 stop-color=yellow></stop>
+				</linearGradient>	<!--线性渐变-->
+				
+				<radialGradient id="radialGradient-1">
+			        <stop offset="0" stop-color="white"/>
+			        <stop offset="1" stop-color="black"/>
+		        </radialGradient>	<!--放射性渐变-->
+				
+				<g id=shareGroup>
+					<rect width=200 height=100 fill=url(#redYellow)></rect> <!--滤镜使用-->
+					<circle cx=200 cy=100 r=50 stroke=red stroke-width=2 fill=white></circle>
+				</g>	<!--复用-->
+				
+				<clipPath id="clipRect">
+					<rect width="300" height="60"></rect>
+				</clipPath>	<!--裁剪-->
+				
+				<mask id="mask1">
+					<rect x=660 y=100 width="60" height="60" fill="#fff"></rect>
+				</mask> <!--遮罩-->
+				
+				<pattern id=pat-1 x=2 width=0.3 height=0.4>
+					<rect width=50 height=50></rect>
+					<circle cx=50 cy=50 r=30 fill=green fill-opacity=0.6></circle>
+				</pattern>	<!--图案填充-->
+			</defs>
+			
+			<symbol id=sym-1>
+				<circle cx=50 cy=50 r=50 fill=url(#radialGradient-1)></circle>
+			</symbol>
+			<use xlink:href=#sym-1 x=10 y=10></use>
+			
+			
+			<!--复用使用-->
+			<use xlink:href=#shareGroup transform="translate(200,300) scale(.6) skewX(-20)"></use>
+			<use xlink:href=#shareGroup transform="translate(100,100) scale(.4)"></use>
+			<!--自定义复用图形样式-->
+			
+			<rect width="200" height="100" x="660" y="100" mask="url(#mask1)"></rect>	<!--遮罩-->
+			
+			<rect fill=url(#pat-1) width=200 height=200 x=600 y=400 stroke=red></rect>	<!--图案填充-->
+			<path d="M500.5 400.5h200Z M600.5 300.5v200Z" stroke=BLUE></path><!--图案填充基线-->
+			
+			<image xlink:href=main.png x=350 y=470 width=100 height=103 filter=url(#filter-blur)></image>
+			<!--镜像模糊-->
+			
+		</svg>
+	</body>
+</html>

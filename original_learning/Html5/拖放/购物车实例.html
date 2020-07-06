@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			*{margin: 0; padding: 0;}
+			body{padding: 20px 0 0 20px;}
+			li{list-style: none;}
+			p{border-bottom: 1px dashed #666; line-height: 30px;}
+			#list{overflow: hidden;}
+			#list li{float: left; margin-right: 10px; border: 1px solid #666;}
+			#list li p{padding-left: 10px;}
+			#list li p:last-child{border-bottom: none;}
+			#calc-box{border: 1px solid #000; margin-top: 20px; padding-bottom: 50px; width: 700px;}
+			#calc-box span{text-align: center; display: inline-block;}
+			#calc-box p span:nth-of-type(1){width: 100px;}
+			#calc-box p span:nth-of-type(2){width: 500px;}
+			#calc-box p span:nth-of-type(3){width: 100px;}
+			#calc{text-align: right; padding-right: 10px; line-height: 30px;}
+		</style>
+	</head>
+	<body>
+		<ul id="list">
+			<li draggable="true">
+				<img src="1.jpg" alt="" />
+				<p>JavaScript DOM 编程艺术</p>
+				<p>￥76</p>
+			</li>
+			<li draggable="true">
+				<img src="2.jpg" alt="" />
+				<p>JavaScript语言精粹</p>
+				<p>￥32</p>
+			</li>
+			<li draggable="true">
+				<img src="3.jpg" alt="" />
+				<p>深入浅出Node.js</p>
+				<p>￥54</p>
+			</li>
+			<li draggable="true">
+				<img src="4.jpg" alt="" />
+				<p>JavaScript设计模式</p>
+				<p>￥61</p>
+			</li>
+		</ul>
+		
+		<section id="calc-box">
+			<!--<p>
+				<span>1</span><span>JavaScript DOM 编程艺术</span><span>￥76</span>
+			</p>
+			<p>
+				<span>1</span><span>JavaScript DOM 编程艺术</span><span>￥76</span>
+			</p>
+			<div id="calc">总计：152￥</div>-->
+		</section>
+		<script>
+			var oCBox=document.getElementById('calc-box'),
+				oUl=document.getElementById('list'),
+				aLi=oUl.getElementsByTagName('li');
+				
+				oJson={};
+			
+				oAllMoney=document.createElement('div');
+				oAllMoney.setAttribute('id','calc');
+			
+			for(var i=0; i<aLi.length; i++){
+				aLi[i].ondragstart=function(ev){
+					oP=this.getElementsByTagName('p');
+					oED=ev.dataTransfer;
+					oED.setData('title',oP[0].innerHTML);
+					oED.setData('price',oP[1].innerHTML);
+					oED.setDragImage(this,0,0);
+				}
+			}
+			
+			oCBox.ondragover=function(ev){
+				ev.preventDefault();
+			}
+			oCBox.ondrop=function(ev){
+				ev.preventDefault();
+				
+				sTitle=ev.dataTransfer.getData('title');
+				sPrice=ev.dataTransfer.getData('price');
+				
+				if(!oJson[sTitle]){
+					oP=document.createElement('p');
+					
+					oSpan=document.createElement('span');
+					oSpan.innerHTML=1;
+					oP.appendChild(oSpan);
+					
+					oSpan=document.createElement('span');
+					oSpan.innerHTML=sTitle;
+					oSpan.className='title';
+					oP.appendChild(oSpan);
+					
+					oSpan=document.createElement('span');
+					oSpan.innerHTML=sPrice;
+					oP.appendChild(oSpan);
+					
+					this.appendChild(oP);
+					
+					oJson[sTitle]=1;
+				}else{
+					//console.log(oJson);
+					oSpanTitle=document.getElementsByClassName('title');
+					
+					for(var i=0; i<oSpanTitle.length; i++){
+						if(oSpanTitle[i].innerHTML==sTitle){
+							oSpanTitle[i].previousElementSibling.innerHTML=oSpanTitle[i].previousElementSibling.innerHTML-''+1;
+						}
+					}
+				}
+				
+				oP=oCBox.getElementsByTagName('p');
+				iAllMoney=0;
+				
+				for(var i=0; i<oP.length; i++){
+					aSpan=oP[i].getElementsByTagName('span');
+					iAllMoney+=parseInt( aSpan[0].innerHTML )*aSpan[2].innerHTML.substring(1);
+				}
+				
+				oAllMoney.innerHTML=iAllMoney+'￥';
+				oCBox.appendChild(oAllMoney);
+			}
+			
+			
+		</script>
+	</body>
+</html>

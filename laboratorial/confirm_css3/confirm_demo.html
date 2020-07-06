@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>jQuery插件css3动画模拟confirm弹窗</title>
+		<link rel="stylesheet" href="css/WeiConfirm.css" />
+		<script type="text/javascript" src="js/jquery.js" ></script>
+		<script type="text/javascript" src="js/WeiConfirm.js" ></script>
+	</head>
+	<body style="background: url(http://p8.qhimg.com/t01f9ee1b0873023e36.jpg); height: 1000px; margin: 0;">
+		<script>
+		
+			$(function(){
+				//参数是1个，参数为信息内容
+				$.confirm('我是漂亮的confirm弹窗');
+				
+				//参数是2个，前一个为内容，后一个为点击确定后执行的函数
+				$.confirm('我是漂亮的confirm弹窗',function(){
+					alert('点击确定执行的函数')
+				});
+				
+				//参数是3个，第一个为内容，第二个为点击确定后执行的函数，第三个为点击取消后执行的函数
+				$.confirm('我是漂亮的confirm弹窗',function(){
+					alert('点击确定执行的函数')
+				},function(){
+					alert('点击取消后执行的函数')
+				});
+				
+				//参数是4个，第一个为内容，第二个替换默认为【确定】的值，第三个为点击确定后执行的函数，第四个为点击取消后执行的函数
+				$.confirm('我是漂亮的confirm弹窗','还是确定',function(){
+					alert('点击还是确定执行的函数')
+				},function(){
+					alert('点击取消后执行的函数')
+				});
+				
+				//剩下就是参数为6个，不解释了，看下面，很好理解
+				$.confirm('标题哈哈','内容哈哈','确定哈哈','取消哈哈',function(){
+					alert('你单击的是确定哈哈');
+				},function(){
+					alert('你单击的是取消哈哈');
+				});
+				
+				$.confirm('我是漂亮的confirm弹窗,带css3动画哦',function(){
+					$.confirm('你单击的确定')
+				})
+			});
+		</script>
+	</body>
+</html>

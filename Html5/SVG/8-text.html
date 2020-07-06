@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<svg width=800 height=600>
+			<defs>
+				<path id=text-path d="M80 80L80 260L200 260"></path>
+				<text id=text-define fill=black>Define some text</text>
+			</defs>
+			
+			<text fill=black y=100 x=200>hello world</text>
+			<text direction=rtl unicode-bidi=bidi-override fill=black y=130 x=200>hello world</text>
+			<!--加上unicode-bidi：bidi-override（推到，不顾），则严格按照direction指定的方向排序文字-->
+			
+			<text fill=red>
+				<textPath xlink:href=#text-path>HELLO WORD ! LOVE SVG TO YOUR LIFE</textPath>
+			</text>
+			
+			<text x=100 y=500>
+				<tref xlink:href=#text-define></tref>
+				<!--对文字的引用，目前所有浏览器都不支持-->
+			</text>
+			
+			<text x=200 y=400 font-size=2em textLength=400>some text</text>
+			<text x=200 y=450 font-size=2em textLength=400 lengthAdjust=spacing>some text</text>
+			<text x=200 y=500 font-size=2em textLength=400 lengthAdjust=spacingAndGlyphs>some text</text>
+		</svg>
+		
+	</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>jQuery图片延时加载插件imgLazyLoad</title>
+		<style>
+			h1{
+				color: green;
+			}
+			h1,
+			#slide,
+			#box{
+				width: 960px;
+				margin: 50px auto;
+			}
+			#slide{
+				height: 500px;
+			}
+			#slide:after,
+			#box:after{
+				content: "";
+				display: block;
+				clear: both;
+			}
+			#slide img,
+			#box img{
+				width: 300px;
+				margin: 0 30px 40px 0;
+				float: left;
+			}
+			#slide img:nth-of-type(3n),
+			#box img:nth-of-type(3n){
+				margin-right: 0;
+			}
+
+			#wrap{
+				width: 400px;
+				height: 400px;
+				margin: 0 auto 100px;
+				border: 1px solid #ccc;
+				overflow: auto;
+			}
+			#wrap img{
+				width: 300px;
+				margin: 30px 30px 40px 0;
+			}
+		</style>
+	</head>
+	<body>
+
+		<a href="https://github.com/Barrior/imgLazyLoad" target="_blank">
+			<img style="position: absolute; top: -7px; right: 0; border: 0"
+				 src="https://i.alipayobjects.com/e/201211/1dbSqT9ykm.png"
+				 width="149" height="149" alt="Fork me on GitHub">
+		</a>
+
+		<a href="#top" style="width: 50px; height: 50px; padding-top: 10px; text-align: center; border: 1px solid #ccc; position: fixed; right: 20px; bottom: 20px;">
+			返回 顶部
+		</a>
+
+		<h1>jQuery图片延时加载插件imgLazyLoad演示：</h1>
+
+		<div id="box">
+			<img data-src="img/1.jpg" src="loading.svg" />
+			<img data-src="img/2.jpg" src="loading.svg" />
+			<img data-src="img/3.jpg" src="loading.svg" />
+			<img data-src="img/4.jpg" src="loading.svg" />
+			<img data-src="img/5.jpg" src="loading.svg" />
+			<img data-src="img/1.jpg" src="loading.svg" />
+			<img data-src="img/2.jpg" src="loading.svg" />
+			<img data-src="img/3.jpg" src="loading.svg" />
+			<img data-src="img/4.jpg" src="loading.svg" />
+			<img data-src="img/5.jpg" src="loading.svg" />
+			<img data-src="img/1.jpg" src="loading.svg" />
+			<img data-src="img/2.jpg" src="loading.svg" />
+			<img data-src="img/3.jpg" src="loading.svg" />
+			<img data-src="img/4.jpg" src="loading.svg" />
+			<img data-src="img/5.jpg" src="loading.svg" />
+			<img data-src="img/1.jpg" src="loading.svg" />
+			<img data-src="img/2.jpg" src="loading.svg" />
+			<img data-src="img/3.jpg" src="loading.svg" />
+			<img data-src="img/4.jpg" src="loading.svg" />
+			<img data-src="img/5.jpg" src="loading.svg" />
+			<img data-src="img/1.jpg" src="loading.svg" />
+			<img data-src="img/2.jpg" src="loading.svg" />
+			<img data-src="img/3.jpg" src="loading.svg" />
+			<img data-src="img/4.jpg" src="loading.svg" />
+			<img data-src="img/5.jpg" src="loading.svg" />
+			<img data-src="img/1.jpg" src="loading.svg" />
+			<img data-src="img/2.jpg" src="loading.svg" />
+		</div>
+
+		<div id="wrap">
+			<img data-src="img/1.jpg" src="loading.svg" />
+			<img data-src="img/2.jpg" src="loading.svg" />
+			<img data-src="img/3.jpg" src="loading.svg" />
+			<img data-src="img/4.jpg" src="loading.svg" />
+			<img data-src="img/5.jpg" src="loading.svg" />
+		</div>
+		
+		<div id="slide">
+			<img data-src="img/1.jpg" src="loading.svg" />
+			<img data-src="img/2.jpg" src="loading.svg" />
+			<img data-src="img/3.jpg" src="loading.svg" />
+			<img data-src="img/4.jpg" src="loading.svg" />
+			<img data-src="img/5.jpg" src="loading.svg" />
+			<img data-src="img/1.jpg" src="loading.svg" />
+		</div>
+		
+		<!-- 引入jQuery -->
+		<script src="jquery.js"></script>
+		<!-- 引入插件js -->
+		<script src="imglazyload.js"></script>
+		<script>
+
+			// 插件使用方法：
+			$('#box img').imgLazyLoad({
+				// 触发滚动事件的容器，默认为window，参数为jQuery选择器字符串或对象
+				container: window,
+				// 默认'fadeIn(淡入)',参数为jQuery默认效果，如show，slideDown等
+				effect: 'fadeIn',
+				// 动画运行时间，默认600ms，参数为jQuery效果的速度
+				speed: 600,
+				// 当用户看到图片时，是否立即加载图片，默认延迟400ms(即滚动延迟400ms)，参数类型为number
+				delay: 400,
+				// 每次图片显示完毕后的回调函数
+				callback: function(){
+
+					$( this ).css( 'opacity', .99 );
+
+				}
+			});
+
+			$( '#wrap img' ).imgLazyLoad({
+
+				container: '#wrap'
+
+			});
+
+			$( '#slide img' ).imgLazyLoad({
+
+				effect: 'slideDown'
+
+			});
+
+		</script>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

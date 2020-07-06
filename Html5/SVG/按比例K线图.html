@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>绘制图表折线</title>
+		<style>
+			body{background-color: gray; font-family: Arial "微软雅黑";}
+			#box{width: 90%; height: 400px; background-color: #FFFFFF; margin: 40px auto;}
+		</style>
+		<script type="text/javascript" src="jquery-1.8.3.min.js" ></script>
+		<script>
+			$(function(){
+				
+				$.ajax({
+					url:'http://yunvs.com/index.php?m=foxx&c=b_sql&a=get_json?m=foxx&c=b_sql&a=get_json',
+					success:function(oData){
+						alert(oData);
+					},
+					error:function(){
+						alert(0)
+					}
+				});
+				
+				function creatTag(sTag,oAttr){
+					var oTag=document.createElementNS(ns,sTag);
+					for(var i in oAttr){
+						oTag.setAttribute(i,oAttr[i]);
+					}
+					return $(oTag);
+				}
+				
+				var ns='http://www.w3.org/2000/svg',
+					oSvg=$('#svg'),
+					iSH=oSvg.height(),
+					iSW=oSvg.width(),
+					
+					iNum=4,
+					//iYTextLen=100,
+					arrNum=[380,300,320,260,280,180,190,60];
+				
+				var iGH=parseInt(iSH)*'80%',
+					iGW=parseInt(iSW)*'80%';
+				
+				oGLine=creatTag('g',{
+					width: iGW,
+					height: iGH
+				});
+				
+				if(arrNum.length>=6)iNum=6;
+				for(var i=1; i<=iNum; i++){
+					oLineX=creatTag('line',{
+						x1:0,
+						y1:iSH/(iNum+2)*i,
+						x2:'80%',
+						y2:iSH/(iNum+2)*i,
+						stroke:'#000',
+						'stroke-width':1,
+						opacity:.3
+					});
+					oGLine.append(oLineX);
+				}
+				/*for(var i=1; i<arrNum.length; i++){
+					oLineY=creatTag('line',{
+						x1:iSW/(iNum+2)*i,
+						y1:0,
+						x2:iSW/(iNum+2)*i,
+						y2:'80%',
+						stroke:'#000',
+						'stroke-width':1,
+						opacity:.3
+					});
+					oGLine.append(oLineY);
+				}*/
+				oGLine.attr({
+					style:'transform:translate(80px,40px)'
+				});
+				
+				
+				var iD;
+				for(var i=0; i<arrNum.length; i++){
+					if(iD){
+						iD+='L'+i*100+' '+arrNum[i];
+					}else{
+						iD='M'+i+' '+arrNum[i];
+					}
+				}
+				oPath=creatTag('path',{
+					d:iD, //M0 380L100 300L200 320
+					stroke:'red',
+					fill:'none'
+				});
+				oGLine.append(oPath);
+				
+				//oSvg.append(oPath);
+				oSvg.append(oGLine);
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			<svg id="svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+				<defs>
+					<linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+						<stop offset="0%" style="stop-color:#3F8CD8; stop-opacity:1"/>
+						<stop offset="100%" style="stop-color:#3F8CD8; stop-opacity:0"/>
+					</linearGradient>
+				</defs>
+			</svg>
+		</div>
+	</body>
+</html>

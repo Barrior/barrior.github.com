@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			svg{border: 1px solid #000;}
+		</style>
+	</head>
+	<body>
+		<svg width=500 height=400></svg>
+		
+		<script>
+			var svg={
+				ns:'http://www.w3.org/2000/svg',
+				xmlns:'http://www.w3.org/2000/xmlns/',
+				xlink:'http://www.w3.org/1999/xlink'
+			};
+				
+			var oSvg=document.querySelector('svg');
+				oImg=document.createElementNS(svg.ns,'image');
+			
+			oImg.setAttributeNS(svg.xlink,'xlink:href','main.png');
+			
+			oImg.setAttribute('width','100');
+			oImg.setAttribute('height','103');
+			oImg.setAttribute('x','10');
+			oImg.setAttribute('y','10');
+			
+			oSvg.appendChild(oImg);
+		</script>
+	</body>
+</html>

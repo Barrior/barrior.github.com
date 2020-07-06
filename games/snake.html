@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	html,body{
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		background: #171717;
+		color: #E0E0E0;
+		text-align: center;
+	}
+	#game-name{
+		padding: 50px 0 20px;
+		margin: 0;
+	}
+	#box{
+		width: 600px;
+		height: 400px;
+		margin: 0 auto;
+		position: relative;
+	}
+	#level{
+		min-width: 100px;
+		text-align: left;
+		font-size: 12px;
+		color: red;
+		position: absolute;
+		left: 102%;
+		top: 0;
+	}
+	#gird,
+	#c{
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	#gird{
+		background-color: #333;
+	}
+	#ctrl{
+		margin-top: 12px;
+	}
+	#ctrl b{
+		margin-right: 20px;
+	}
+	#game-over{
+		display: none;
+		width: 100%;
+		height: 100%;
+		background-color: rgba( 0, 0, 0, .8 );
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	#game-over h1{
+		margin: 100px 0 10px;
+	}
+	#game-over h3{
+		margin: 0 0 20px;
+		font: bold 70px cursive;
+	}
+	#game-again{
+		display: inline-block;
+		padding: 6px 20px;
+		border: 1px solid #ccc;
+		font-size: 20px;
+		border-radius: 2px;
+		cursor: pointer;
+		transition: 600ms;
+	}
+	#game-again:hover{
+		background-color: #ddd;
+		border-color: #ddd;
+		color: #333;
+	}
+	</style>
+</head>
+<body>
+	<h1 id="game-name">经典贪吃蛇，看你能玩多少分！</h1>
+	<div id="box">
+		<canvas id="gird" width="600" height="400"></canvas>
+		<canvas id="c" width="600" height="400"></canvas>
+		<div id="game-over">
+			<h1>游戏结束，<small>得分：</small></h1>
+			<h3>0</h3>
+			<span id="game-again">再玩一次</span>
+		</div>
+		<div id="level">
+			<p>得分：<b id="score">0</b></p>
+			<p>速度等级：<b id="speed">340</b></p>
+			<p>fps：<b id="fps">- -</b></p>
+		</div>
+	</div>
+	<div id="ctrl">
+		<b>[ 空格键 ] 开始或暂停</b>
+		↑：<small>上</small>
+		↓：<small>下</small>
+		←：<small>左</small>
+		→：<small>右</small>
+	</div>
+
+
+	<script type="text/javascript">
+	function $( str ){
+		return document.getElementById( str );
+	}
+	function showGameOver(){
+		gameOver.style.display = 'block';
+		scoreNum.innerHTML = score.innerHTML;
+	}
+	function hideGameOver(){
+		gameOver.style.display = 'none';
+		scoreNum.innerHTML = score.innerHTML = 0;
+		speedDomNum.innerHTML = speed = 340;
+		speedV = 1;
+	}
+	var c = $( 'c' ),
+		cxt = c.getContext( '2d' ),
+		cGird = $( 'gird' ),
+		cxtGird = cGird.getContext( '2d' ),
+
+		cw = c.width,
+		ch = c.height;
+
+	var score = $( 'score' );
+	var speedDomNum = $( 'speed' );
+	var gameOver = $( 'game-over' );
+	var scoreNum = gameOver.getElementsByTagName( 'h3' )[0];
+	var gameAgain = $( 'game-again' );
+	var fps = $( 'fps' );
+
+	var girdSize = 20;
+	var xGirdNum = cw / girdSize;
+	var yGirdNum = ch / girdSize;
+	var snakeColor = '#E0E0E0';
+	var snake;
+	var dir;
+	var oldDir;
+	var food = {
+		x: 0,
+		y: 0
+	};
+	
+	cxt.fillStyle = snakeColor;
+
+	function drawGird(){
+		for( var i = 1; i < xGirdNum; i++){
+			cxtGird.moveTo( i * girdSize + .5, 0 );
+			cxtGird.lineTo( i * girdSize + .5, ch );
+		}
+		for( var i = 1; i < yGirdNum; i++){
+			cxtGird.moveTo( 0, i * girdSize + .5 );
+			cxtGird.lineTo( cw, i * girdSize + .5 );
+		}
+		cxtGird.strokeStyle = '#393939';
+		cxtGird.stroke();
+	}
+	drawGird();
+	function randomPointX(){
+		return Math.floor( Math.random() * xGirdNum );
+	}
+	function randomPointY(){
+		return Math.floor( Math.random() * yGirdNum );
+	}
+	function initSnake(){
+		snake = [];
+		dir = oldDir = 'r';
+		var x = Math.floor( Math.random() * (xGirdNum - 3) * .3 ) + 3;
+		var y = Math.floor( Math.random() * yGirdNum );
+		for( var i = 0; i < 3; i++ ){
+			snake.push({
+				//多了一个初始化时就有的r
+				x: x - i - 1,
+				y: y
+			});
+		}
+		food.x = Math.floor( Math.random() * (xGirdNum - xGirdNum * .5) + xGirdNum * .5 );
+		food.y = Math.floor( Math.random() * yGirdNum );
+	}
+	function createFood(){
+		var x = Math.floor( Math.random() * xGirdNum );
+		var y = Math.floor( Math.random() * yGirdNum );
+		var enabel = true;
+		for( var i = 0, len = snake.length; i < len; i++ ){
+			var v = snake[i];
+			if( v.x === x && v.y === y ){
+				enabel = false;
+				break;
+			}
+		}
+		if( enabel ){
+			food.x = x;
+			food.y = y;
+			drawFood();
+		}else{
+			createFood();
+		}
+	}
+	function drawFood(){
+		cxt.save();
+		cxt.fillStyle = 'red';
+		cxt.fillRect(
+			food.x * girdSize + 1, food.y * girdSize + 1,
+			girdSize - 1, girdSize - 1
+		);
+		cxt.restore();
+	}
+	function eatBody(){
+		var snakeHead = snake[0];
+		for( var i = snake.length-1; i > 0; i-- ){
+			var cur = snake[ i ];
+			if( cur.x === snakeHead.x && cur.y === snakeHead.y ){
+				return true;
+			}
+		}
+		return false;
+	}
+	function createSnake(){
+		cxt.clearRect( 0, 0, cw, ch );
+		drawFood();
+
+		var saveLastSnake = {
+			x: snake[ snake.length-1 ].x,
+			y: snake[ snake.length-1 ].y
+		};
+		//蛇身
+		for( var i = snake.length-1; i > 0; i-- ){
+			var cur = snake[ i ];
+			cur.x = snake[ i-1 ].x;
+			cur.y = snake[ i-1 ].y;
+			cxt.fillRect(
+				cur.x * girdSize + 1, cur.y * girdSize + 1,
+				girdSize - 1, girdSize - 1
+			);
+		}
+		//蛇头
+		var snakeHead = snake[ 0 ];
+		switch( dir ){
+			case 'l':
+				snakeHead.x--;
+				break;
+			case 'r':
+				snakeHead.x++;
+				break;
+			case 't':
+				snakeHead.y--;
+				break;
+			case 'b':
+				snakeHead.y++;
+				break;
+		}
+		//吃到墙壁或蛇身Game Over
+		if( snakeHead.x < 0 || snakeHead.x >= xGirdNum ||
+			snakeHead.y < 0 || snakeHead.y >= yGirdNum || eatBody() ){
+			paused = true;
+			showGameOver();
+			return;
+		//吃掉食物
+		}else if( snakeHead.x == food.x && snakeHead.y == food.y ){
+			snake.push( saveLastSnake );
+			//绘制新添加的尾巴
+			cxt.fillRect(
+				saveLastSnake.x * girdSize + 1, saveLastSnake.y * girdSize + 1,
+				girdSize - 1, girdSize - 1
+			);
+			createFood();
+
+			if( speed <= 100 ){
+				speed = 100;
+			}else{
+				speedV += Math.random() > .5 ? 1 : 0;
+				speed -= speedV;
+				if( speed < 100 ){
+					speed = 100;
+				}
+			}
+			score.innerHTML++;
+			speedDomNum.innerHTML = speed;
+		}
+		//绘制蛇头
+		cxt.fillRect(
+			snakeHead.x * girdSize + 1, snakeHead.y * girdSize + 1,
+			girdSize - 1, girdSize - 1
+		);
+		oldDir = dir;
+	}
+	function startSnake(){
+		// var startTime = Date.now();
+		createSnake();
+		// fps.innerHTML = 1000 / ( Date.now() - startTime );
+		!paused && moveSnake();
+	}
+	function moveSnake(){
+		setTimeout( startSnake, speed );
+	}
+
+	initSnake();
+	createSnake();
+
+	var paused = true;
+	var speed = 340;
+	var speedV = 1;
+
+	document.onkeyup = function( e ){
+		switch( e.keyCode ){
+			//上
+			case 38:
+				if( oldDir !== 'b' ){
+					dir = 't';
+				}
+				break;
+			//下
+			case 40:
+				if( oldDir !== 't' ){
+					dir = 'b';
+				}
+				break;
+			//左
+			case 37:
+				if( oldDir !== 'r' ){
+					dir = 'l';
+				}
+				break;
+			//右
+			case 39:
+				if( oldDir !== 'l' ){
+					dir = 'r';
+				}
+				break;
+			//空格
+			case 32:
+				if( gameOver.style.display === 'block' ){
+					gameAaginFn();
+				}else if( paused ){
+					paused = false;
+					startSnake();
+				}else{
+					paused = true;
+				}
+				break;
+		}
+	}
+
+	function gameAaginFn(){
+		paused = false;
+		hideGameOver();
+		initSnake();
+		startSnake();
+	}
+	gameAgain.onclick = gameAaginFn;
+
+	</script>
+</body>
+</html>

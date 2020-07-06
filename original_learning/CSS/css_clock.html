@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<style id="css">
+			#box{width: 200px; height: 200px; margin: 50px auto; border: 2px solid #000; border-radius: 50%; position: relative;}
+			#box ul li{height: 8px; width: 2px; background-color: #000; list-style: none; position: absolute; left: 99px; top: 0; transform-origin: center 100px;}
+			/*#box ul li:nth-child(1){transform: rotate(0deg);}
+			#box ul li:nth-child(2){transform: rotate(6deg);}
+			#box ul li:nth-child(3){transform: rotate(12deg);}
+			#box ul li:nth-child(4){transform: rotate(18deg);}
+			#box ul li:nth-child(5){transform: rotate(24deg);}
+			#box ul li:nth-child(6){transform: rotate(30deg);}
+			#box ul li:nth-child(7){transform: rotate(36deg);}*/
+			#box ul li:nth-child(5n+1){height: 12px;}
+			#hour, #min, #sec{position: absolute; transform-origin: bottom;}
+			#hour{width: 6px; height: 45px; background-color: #5A5A5A; top: 55px; left: 97px; border-radius: 10px 10px 0 0;}
+			#min{width: 4px; height: 60px; background-color: #8c8c8c; top: 40px; left: 98px;border-radius: 10px 10px 0 0;}
+			#sec{width: 2px; height: 75px; background-color: #D1EE54; top: 25px; left: 99px;}
+			#circle{width: 16px; height: 16px; background-color: #5A5A5A; border-radius: 50%; position: absolute; left: 92px; top: 92px;}
+			#c2{width: 10px; height: 10px; background-image: linear-gradient(#fff,#F6F6F6); border-radius: 50%; position: absolute; left: 95px; top: 95px;}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul></ul>
+			<div id="hour"></div>
+			<div id="min"></div>
+			<div id="sec"></div>
+			<div id="circle"></div>
+			<div id="c2"></div>
+		</div>
+		<script>
+			var oBox=document.getElementById('box'),
+				oUl=oBox.getElementsByTagName('ul')[0],
+				oH=document.getElementById('hour'),
+				oM=document.getElementById('min'),
+				oS=document.getElementById('sec'),
+				oCss=document.getElementById('css'),
+				
+				aLi='';
+				
+			for(var i=0; i<60; i++){
+				aLi+='<li></li>';
+				oCss.innerHTML+='#box ul li:nth-child('+(i+1)+'){transform: rotate('+i*6+'deg);}';
+			}
+			oUl.innerHTML=aLi;
+			
+			function toTime(){
+				var oDate=new Date(),
+				oSec=oDate.getSeconds(),
+				oMin=oDate.getMinutes()+oSec/60,
+				oHour=oDate.getHours()+oMin/60;
+				
+				oH.style.transform='rotate('+oHour*30+'deg)';
+				oM.style.transform='rotate('+oMin*6+'deg)';
+				oS.style.transform='rotate('+oSec*6+'deg)';
+			}toTime();
+			
+			setInterval(toTime,1000);
+		</script>
+	</body>
+</html>

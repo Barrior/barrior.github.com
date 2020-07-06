@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+		<title></title>
+		<style>
+			html,body{width: 100%; height:100%; overflow: hidden;}
+			body{margin: 0; padding: 40px 0 0 20px;}
+			#container{width: 90%; height: 50%; font-family: "微软雅黑"; font-size: 12px;}
+			/*#container{width: 600px; height: 400px; font-family: "微软雅黑"; font-size: 12px;}*/
+			/*path{
+			  stroke-dasharray: 4000;
+			  stroke-dashoffset: 4000;
+			  -webkit-animation: dash 3s ease-out forwards;
+			  animation: dash 3s ease-out forwards;
+			}
+			
+			@-webkit-keyframes dash {
+			  to {
+			    stroke-dashoffset: 0;
+			  }
+			}
+			@keyframes dash {
+			  to {
+			    stroke-dashoffset: 0;
+			  }
+			}*/
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		
+		<!--<div class="wei-tip">
+			<h3 class="title">
+				<strong>标题标题</strong>
+				<span>今天14：20</span>
+			</h3>
+			<div class="content">很多很多很多很多很多很多很多很多很多很多很多很多很多很多很多很多内容很多很多很多很多很多很多很多很多很多很多很多很多很多很多很多很多内容很多很多很多很多很多很多很多很多很多很多很多很多很多很多很多很多内容很多很多很多很多很多很多很多很多很多很多很多很多很多很多很多很多内容</div>
+			<div class="close">
+				<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+					<path d="M0 0L10 10M10 0L0 10" stroke="#C3C3C3" stroke-width="2"></path>
+				</svg>
+			</div>
+		</div>-->
+		
+		<link rel="stylesheet" href="tip.css" />
+		<script src="tip.js"></script>
+		<script src="snap.svg-min.js" ></script>
+		<script src="ycharts.js" ></script>
+		<script src="data1.js" ></script>
+		<script>
+			(function(){
+				
+				Y.timeChart('#container',data);
+				
+				window.onresize=function(){
+					Snap('svg').remove();
+					Y.timeChart('#container',data);
+				}
+				
+				/*var i=1;
+				window.timer=setInterval(function(){
+					dataClone=data.concat();
+					i+=4;
+					console.log(i)
+					if(i>241){
+						clearInterval(window.timer);
+					}else{
+						dataClone.length=i;
+					
+						if(Snap('svg')){
+							Snap('svg').remove();
+						}
+						Y.timeChart('#container',dataClone);
+					};
+				},30);*/
+				
+			})();
+		</script>
+	</body>
+</html>

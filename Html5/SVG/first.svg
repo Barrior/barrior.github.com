@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- 该语句意味着本文档是XML文档，且如果想在SVG文件中使用中文的话，必须加上encoding="utf-8" -->
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- 这是文档类型的注释语句，说明了此XML文档中<SVG>标记的出处和定义，用来验证SVG文档结构的正确性。 -->
+
+<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+	<!-- xmlns表示SVG中所有的元素都来自http://www.w3.org/2000/svg 命名空间  -->
+
+	<circle cx='100' cy='100' r='50' fill='transparent' stroke='red' stroke-width='10'  />
+	
+	<circle cx='100' cy='210' r='60' fill='transparent' stroke='red' stroke-width='10'></circle>
+	
+	/*
+	
+	circle:圆	单双标签都行
+	cx:圆的中心点坐标x
+	cy:圆的中心点坐标y
+	r:半径
+	fill:内部填充颜色，transparent--透明填充，none--不填充
+	stroke:边框颜色，stroke-width：边框大小
+	
+	*/
+
+</svg>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="1000px" height="700px"></canvas>
+
+  <script>
+    function degreesToRadians(deg) {
+      return deg * (Math.PI / 180)
+    }
+
+    function toFixed(number, digits = 0) {
+      return parseFloat(Number(number).toFixed(digits))
+    }
+
+    function preciseNumber(number, digits) {
+      return toFixed(number, digits) - 0.5
+    }
+  </script>
+	<script>
+		const canvas = document.getElementById( 'c' )
+		const ctx = canvas.getContext( '2d' )
+    const cw = canvas.width
+    const ch = canvas.height
+    const fontSize = 60
+
+    let x = 320
+    let y = 300
+
+    const firstLineText = '以  梦  为  马'
+    const secondLineText = '劈柴、烧火、喂马'
+
+    class Renderer {
+		  constructor() {
+		    this.angle = 0
+		    this.renderAll()
+      }
+
+		  renderAll() {
+        ctx.font = `${fontSize}px FZFEIFT_XIJW--GB1-0`
+        ctx.textBaseline = 'top'
+
+		    this.clearCanvas()
+		    this.calcTextAttrs()
+        this.calcGradient()
+        this.drawText()
+        this.drawTextBoxLines()
+        this.drawExtendedLine()
+        this.drawCornerLines()
+        this.drawColorBlock()
+        this.drawPoints()
+        this.drawTips()
+      }
+
+      reRender(angle) {
+        this.angle = angle % 360
+        this.renderAll()
+      }
+
+      clearCanvas() {
+		    ctx.clearRect(0, 0, cw, ch)
+      }
+
+      calcTextAttrs() {
+        const { width, actualBoundingBoxDescent } = ctx.measureText(secondLineText)
+        this.diffX = (width - ctx.measureText(firstLineText).width) / 2
+
+        this.textWidth = width
+        this.textHeight = fontSize * 1.5 + actualBoundingBoxDescent + 1.5
+        this.centerX = x + this.textWidth / 2
+        this.centerY = y + this.textHeight / 2
+      }
+
+      calcGradient() {
+        this.radian = degreesToRadians(this.angle)
+        this.gradientLineLength =
+          Math.abs(this.textWidth * Math.cos(this.radian)) +
+          Math.abs(this.textHeight * Math.sin(this.radian))
+        this.halfLength = this.gradientLineLength / 2
+
+        this.xDiff = this.halfLength * Math.cos(this.radian)
+        this.yDiff = this.halfLength * Math.sin(this.radian)
+
+        this.x0 = Math.floor(this.centerX - this.xDiff)
+        this.y0 = Math.floor(this.centerY + this.yDiff)
+        this.x1 = Math.ceil(this.centerX + this.xDiff)
+        this.y1 = Math.ceil(this.centerY - this.yDiff)
+
+        this.gradient = ctx.createLinearGradient(this.x0, this.y0, this.x1, this.y1)
+        this.gradient.addColorStop(0, 'red')
+        this.gradient.addColorStop(1, 'blue')
+      }
+
+      // Linear Gradient Text
+      drawText() {
+        ctx.save()
+        ctx.fillText(firstLineText, x + this.diffX, y)
+        ctx.fillText(secondLineText, x, y + fontSize * 1.5)
+        ctx.globalCompositeOperation = 'source-atop'
+        ctx.fillStyle = this.gradient
+        ctx.fillRect(x, y, this.textWidth, this.textHeight)
+        ctx.restore()
+      }
+
+      drawTextBoxLines() {
+        ctx.beginPath()
+        ctx.setLineDash([5, 5])
+
+        // horizontal lines
+        ctx.moveTo(x, preciseNumber(y))
+        ctx.lineTo(x + this.textWidth, preciseNumber(y))
+
+        ctx.moveTo(x, preciseNumber(y + this.textHeight))
+        ctx.lineTo(x + this.textWidth, preciseNumber(y + this.textHeight))
+
+        // vertical lines
+        ctx.moveTo(preciseNumber(x), y)
+        ctx.lineTo(preciseNumber(x), y + this.textHeight)
+
+        ctx.moveTo(preciseNumber(x + this.textWidth), y)
+        ctx.lineTo(preciseNumber(x + this.textWidth), y + this.textHeight)
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)'
+        ctx.stroke()
+      }
+
+      // Extended Line of Point
+      drawExtendedLine() {
+        const xLength = 60 * Math.cos(this.radian)
+        const yLength = 60 * Math.sin(this.radian)
+        ctx.beginPath()
+        ctx.setLineDash([])
+        ctx.moveTo(this.x0 - xLength, this.y0 + yLength)
+        ctx.lineTo(this.x1 + xLength, this.y1 - yLength)
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)'
+        ctx.stroke()
+      }
+
+      // Start Point & End Point & Center Point
+      drawPoints() {
+        ctx.beginPath()
+        ctx.arc(this.x0, this.y0, 3, 0, 2 * Math.PI)
+        ctx.closePath()
+
+        ctx.arc(this.x1, this.y1, 3, 0, 2 * Math.PI)
+        ctx.closePath()
+
+        ctx.arc(this.centerX, this.centerY, 3, 0, 2 * Math.PI)
+        ctx.fill()
+      }
+
+      drawColorBlock() {
+		    const blockWidth = 14
+        const halfBlockWidth = blockWidth / 2
+        const xLength = 30 * Math.cos(this.radian)
+        const yLength = 30 * Math.sin(this.radian)
+
+        ctx.save()
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.15)'
+        ctx.shadowBlur = 5
+
+        ctx.lineWidth = 4
+        ctx.strokeStyle = '#fff'
+
+		    // Start Point Color
+        ctx.save()
+        const rect1X = this.x0 - xLength
+        const rect1Y = this.y0 + yLength
+
+        ctx.translate(rect1X, rect1Y)
+        ctx.rotate(degreesToRadians(90 - this.angle))
+
+        ctx.strokeRect(-halfBlockWidth, -halfBlockWidth, blockWidth, blockWidth)
+
+        ctx.fillStyle = 'red'
+        ctx.fillRect(-halfBlockWidth, -halfBlockWidth, blockWidth, blockWidth)
+        ctx.restore()
+
+        // End Point Color
+        ctx.save()
+        const rect2X = this.x1 + xLength
+        const rect2Y = this.y1 - yLength
+
+        ctx.translate(rect2X, rect2Y)
+        ctx.rotate(degreesToRadians(90 - this.angle))
+
+        ctx.strokeRect(-halfBlockWidth, -halfBlockWidth, blockWidth, blockWidth)
+
+        ctx.fillStyle = 'blue'
+        ctx.fillRect(-halfBlockWidth, -halfBlockWidth, blockWidth, blockWidth)
+        ctx.restore()
+        ctx.restore()
+      }
+
+      drawCornerLines() {
+		    const topLeft = { x, y }
+        const topRight = { x: x + this.textWidth, y }
+        const bottomLeft = { x, y: y + this.textHeight }
+        const bottomRight = { x: x + this.textWidth, y: y + this.textHeight }
+
+        if (this.angle > 0 && this.angle <= 90) {
+          ctx.beginPath()
+          ctx.moveTo(bottomLeft.x, bottomLeft.y)
+          ctx.lineTo(this.x0, this.y0)
+          ctx.closePath()
+
+          ctx.moveTo(topRight.x, topRight.y)
+          ctx.lineTo(this.x1, this.y1)
+        } else if (this.angle > 90 && this.angle <= 180) {
+          ctx.beginPath()
+          ctx.moveTo(bottomRight.x, bottomRight.y)
+          ctx.lineTo(this.x0, this.y0)
+          ctx.closePath()
+
+          ctx.moveTo(topLeft.x, topLeft.y)
+          ctx.lineTo(this.x1, this.y1)
+        } else if (this.angle > 180 && this.angle <= 270) {
+          ctx.beginPath()
+          ctx.moveTo(topRight.x, topRight.y)
+          ctx.lineTo(this.x0, this.y0)
+          ctx.closePath()
+
+          ctx.moveTo(bottomLeft.x, bottomLeft.y)
+          ctx.lineTo(this.x1, this.y1)
+        } else if (this.angle > 270 && this.angle <= 360) {
+          ctx.beginPath()
+          ctx.moveTo(topLeft.x, topLeft.y)
+          ctx.lineTo(this.x0, this.y0)
+          ctx.closePath()
+
+          ctx.moveTo(bottomRight.x, bottomRight.y)
+          ctx.lineTo(this.x1, this.y1)
+        }
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)'
+        ctx.stroke()
+      }
+
+      drawTips() {
+		    const text = `角度：${this.angle}°`
+        ctx.font = `30px FZFEIFT_XIJW--GB1-0`
+		    const { width } = ctx.measureText(text)
+		    ctx.fillText(text, x + (this.textWidth - width) / 2, y - fontSize * 1.5)
+      }
+    }
+
+    const renderer = new Renderer()
+
+    let angle = 0
+    let timer = setInterval(() => {
+      if (angle > 360) {
+        clearInterval(timer)
+        return
+      }
+      renderer.reRender(angle)
+      angle += 10
+    }, 500)
+	</script>
+</body>
+</html>

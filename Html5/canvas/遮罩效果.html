@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c"></canvas>
+	
+	<script type="text/javascript">
+
+		var c = document.getElementById( 'c' );
+		var cxt = c.getContext( '2d' );
+
+		var img = new Image();
+
+		img.onload = function(){
+
+			handler();
+			
+			c.width = this.width;
+			c.height = this.height;
+			draw( 0, 0, true );
+
+		};
+
+		img.src = 'https://barrior.art/storage/love.jpg';
+
+
+		var maskWidth = 200;
+		var maskHeight = 200;
+
+		function draw( x, y, noLight ){
+
+			var cw = c.width;
+			var ch = c.height;
+
+			cxt.clearRect( 0, 0, cw, ch );
+			cxt.drawImage( img, 0, 0, cw, ch );
+
+			
+			cxt.fillStyle = 'rgba( 0, 0, 0, .5 )';
+			cxt.fillRect( 0, 0, cw, ch );
+
+			if( noLight ){
+
+				return;
+
+			}
+
+			cxt.drawImage(
+				img,
+				x, y,
+				maskWidth, maskHeight,
+				x, y,
+				maskWidth, maskHeight
+			);
+		}
+
+		function handler(){
+
+			c.onmouseover = function(){
+
+				document.onmousemove = function( e ){
+
+					var x = e.pageX - c.offsetLeft - maskHeight / 2,
+						y = e.pageY - c.offsetTop - maskWidth / 2;
+
+					x <= 0 && ( x = 0 );
+					x >= c.width - maskWidth && ( x = c.width - maskWidth );
+					y <= 0 && ( y = 0 );
+					y >= c.height - maskHeight && ( y = c.height - maskHeight );
+
+					draw( x, y );
+
+				}
+
+			};
+
+			c.onmouseout = function( e ){
+
+				document.onmousemove = null;
+				draw( 0, 0, true );
+
+			};
+
+		}
+	</script>
+</body>
+</html>

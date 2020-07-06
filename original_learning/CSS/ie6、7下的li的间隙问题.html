@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+ul{margin:0; padding:0; list-style:none;}
+a{text-decoration:none;}
+.wrap{width:400px;}
+.wrap li{height:30px; border:1px solid #000; vertical-align:top; line-height:30px;}
+.wrap li a{float:left;}
+.wrap li span{float:right;}
+
+
+/*
+
+1、在ie6、7下有浮动的元素要并在同一行都要加浮动
+
+2、在ie6、7下li本身没有浮动，但是内容有浮动，li就会多出几px的间隙。
+
+解决问题：
+  2、给li加浮动(float)并加宽度(width)
+  3、给li加vertical-align:top|midden|bottom;
+
+*/
+
+
+
+</style>
+</head>
+
+<body>
+<ul class="wrap">
+    <li>
+       <a href="#">文字文字文字文字文字文字文字</a>
+       <span>作者</span>
+    </li>
+    <li>
+       <a href="#">文字文字文字文字文字文字文字</a>
+       <span>作者</span>
+    </li>
+    <li>
+       <a href="#">文字文字文字文字文字文字文字</a>
+       <span>作者</span>
+    </li>
+    <li>
+       <a href="#">文字文字文字文字文字文字文字</a>
+       <span>作者</span>
+    </li>
+    <li>
+       <a href="#">文字文字文字文字文字文字文字</a>
+       <span>作者</span>
+    </li>
+    <li>
+       <a href="#">文字文字文字文字文字文字文字</a>
+       <span>作者</span>
+    </li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>百度搜索风云榜兴趣图谱</title>
+		<style>
+			body{background-color: gray; font-family: Arial "微软雅黑";}
+			#box{width: 780px; height: 400px; background-image: url(bg.jpg); margin: 40px auto;}
+		</style>
+		<script type="text/javascript" src="jquery-1.8.3.min.js" ></script>
+		<script type="text/javascript" src="easing.1.3.js" ></script>
+		<script>
+			$(function(){
+				function createTag(sTag,oAttr){
+					var oTag=document.createElementNS(ns,sTag);
+					for(var i in oAttr){
+						oTag.setAttribute(i,oAttr[i]);
+						if(i=='href'){
+							oTag.removeAttribute(i);
+							oTag.setAttributeNS('http://www.w3.org/1999/xlink',i,oAttr[i]);
+						}
+					}
+					return $(oTag);
+				}
+				
+				var ns='http://www.w3.org/2000/svg',
+					oDiv=$('#box');
+				
+				var oS=createTag('svg',{xmlns:ns,width:'100%',height:'100%'}),
+					oG=createTag('g',{style:'cursor:pointer;'}),
+					oLine=createTag('line',{x1:'100', y1:'100',x2:'390',y2:'200',style:'stroke:#E7F6FD; stroke-width:2;'}),
+					oRect=createTag('rect',{x:'237',y:'142',rx:'2',width:'16',height:'16',style:'fill:#D1EFFE'}),
+					oText=createTag('text',{x:'245',y:'154',style:'font-size: 12px; fill: #fff; text-anchor: middle; text-shadow: 0 1px 0 #ccc;'}),
+					oLine2=createTag('line',{x1:'100', y1:'100',x2:'390',y2:'200',style:'stroke:transparent; stroke-width:8;'});
+				
+				oText.html('?');
+				oG.append(oLine,oRect,oText,oLine2);
+				oS.append(oG);
+				oDiv.append(oS);
+				
+				
+					
+				var	oG2=createTag('g',{style:'cursor:pointer;'}),
+					oCircle=createTag('circle',{cx:'100',cy:'100',r:'35',style:'stroke: #F56095; stroke-width: 1; fill: #fff;'}),
+					oText2=createTag('text',{x:'100',y:'107',style:'font-size: 14px; fill: #F32770; text-anchor: middle;'});
+				
+				oText2.html('个人资料');
+				oG2.append(oCircle,oText2);
+				oS.append(oG2);
+				
+				var	oG3=createTag('g'),
+					oImage=createTag('image',{'x':"340", 'y':"148", 'width':"100", 'height':"103", 'href':"main.png"}),
+					oText3=createTag('text',{x:'390',y:'206',style:'font-size: 20px; font-weight: bold; fill: #fff; text-anchor: middle;'});
+				
+				oText3.html('刘诗诗');
+				oG3.append(oImage,oText3);
+				oS.append(oG3);
+				
+			});
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			<!--<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+				<g style="cursor: pointer;">
+					<line x1="100" y1="100" x2="390" y2="200" style="stroke: #E7F6FD; stroke-width: 2;"></line>
+					<rect x="237" y="142" width="16" height="16" rx="2" fill="#D1EFFE"></rect>
+					<text x="245" y="154" style="font-size: 12px; fill: #fff; text-anchor: middle; text-shadow: 0 1px 0 #ccc;">?</text>
+					<line x1="100" y1="100" x2="390" y2="200" style="stroke: transparent; stroke-width: 8;"></line>
+				</g>
+				<g style="cursor: pointer;">
+					<circle cx="100" cy="100" r="35" style="stroke: #F56095; stroke-width: 1; fill: #fff;"></circle>
+					<text x="100" y="107" style="font-size: 14px; fill: #F32770; text-anchor: middle;">个人资料</text>
+				</g>
+				<g>
+					<image x="340" y="148" width="100" height="103" xlink:href="main.png"></image>
+					<text x="390" y="206" style="font-size: 20px; font-weight: bold; fill: #fff; text-anchor: middle;">刘诗诗</text>
+				</g>
+			</svg>-->
+		</div>
+	</body>
+</html>

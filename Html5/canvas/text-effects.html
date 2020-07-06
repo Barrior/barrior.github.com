@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body {
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c {
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="1050px"></canvas>
+	<script>
+		const canvas = document.getElementById('c')
+		const ctx = canvas.getContext('2d')
+
+    ctx.save()
+    ctx.font = 'bold 26px 微软雅黑'
+    ctx.fillStyle = 'black'
+    const effects = ['渐变', '阴影', '边框', '发光', '浮雕', '图案']
+    for (let i = 0; i < effects.length; i++) {
+      ctx.fillText(`${effects[i]}：`, 60, 110 + (i * 160))
+    }
+    ctx.restore()
+
+    const x = 200
+    const y = 60
+    const text = '甜糯米'
+
+    // [font style][font weight][font size][font face] 同 CSS 一样，少了字体大小和字体名字都不行
+    ctx.font = 'bold 80px 微软雅黑'
+    ctx.textBaseline = 'top'
+
+    // 渐变，注意：x, y, x1, y1 是相对 Canvas 画布计算的，不是填充的元素
+    ctx.save()
+    const textWidth = ctx.measureText(text).width
+    const textHeight = parseInt(ctx.font.match(/\d+/), 10)
+    const lg = ctx.createLinearGradient(x, y, x + textWidth, y + textHeight)
+    lg.addColorStop(0, '#9728ff')
+    lg.addColorStop(1, '#1f28ff')
+    ctx.fillStyle = lg
+    ctx.fillText(text, x, y)
+    ctx.restore()
+
+    // 阴影
+    ctx.save()
+    ctx.shadowColor = '#ececec'
+    ctx.shadowOffsetX = 15
+    ctx.shadowOffsetY = 15
+    ctx.shadowBlur = 5
+    ctx.strokeStyle = '#0773fc'
+    ctx.lineWidth = 2.5 * 2
+    ctx.fillStyle = '#ececec'
+    ctx.fillText(text, x, y + 160)
+    ctx.strokeText(text, x, y + 160)
+    ctx.restore()
+
+    ctx.fillStyle = 'white'
+    ctx.fillText(text, x, y + 160)
+
+    // 边框
+    ctx.save()
+    ctx.strokeStyle = 'skyblue'
+    ctx.lineWidth = 5.5 * 2
+    ctx.strokeText(text, x, y + 160 * 2)
+
+    ctx.strokeStyle = 'white'
+    ctx.lineWidth = 0.5 * 2
+    ctx.strokeText(text, x, y + 160 * 2)
+    ctx.restore()
+
+    // 发光
+    ctx.save()
+    ctx.save()
+    const lineWidth = 20
+    ctx.filter = `blur(${lineWidth}px)`
+    ctx.strokeStyle = 'rgb(255, 224, 0, 0.7)'
+    ctx.lineWidth = lineWidth
+    ctx.strokeText(text, x, y + 160 * 3)
+    ctx.restore()
+
+    ctx.strokeStyle = 'rgb(255, 224, 0)'
+    ctx.lineWidth = 6.5 * 2
+    ctx.strokeText(text, x, y + 160 * 3)
+
+    ctx.strokeStyle = 'white'
+    ctx.lineWidth = 4.5 * 2
+    ctx.strokeText(text, x, y + 160 * 3)
+
+    ctx.fillStyle = 'rgb(255, 224, 0)'
+    ctx.fillText(text, x, y + 160 * 3)
+    ctx.restore()
+
+    // 浮雕
+    for (let i = 0; i < 10; i++) {
+      // 普通浮雕
+      // ctx.fillStyle = '#017f39'
+      // ctx.fillText(text, x, y + i + 160 * 4)
+
+      // 边框浮雕
+      ctx.save()
+      ctx.shadowColor = '#017f39'
+      ctx.shadowOffsetX = 0
+      ctx.shadowOffsetY = i
+      ctx.shadowBlur = 0
+
+      ctx.strokeStyle = 'rgb(38, 182, 88)'
+      ctx.lineWidth = 4.5 * 2
+      ctx.strokeText(text, x, y  + 160 * 4)
+      ctx.restore()
+    }
+
+    ctx.fillStyle = 'white'
+    ctx.fillText(text, x, y + 160 * 4)
+
+    // 图案
+    const patternImg = new Image()
+
+    patternImg.onload = function(){
+      ctx.fillStyle = ctx.createPattern(patternImg, 'repeat')
+      ctx.fillText(text, x, y + 160 * 5)
+    }
+
+    patternImg.src = 'https://img10.360buyimg.com/ling/jfs/t1/92054/15/3970/24549/5de47f01Eff6e7001/7849faffae4c4d39.png'
+	</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>桌球碰撞反弹</title>
+    <style>
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="600px" height="380px"></canvas>
+    <script>
+        // reference http://www.cnblogs.com/mumuxinfei/p/4414281.html
+        const c = document.querySelector('#canvas');
+        const cxt = c.getContext('2d');
+        const twicePI = Math.PI * 2;
+        let w = c.width;
+        let h = c.height;
+        let paused = false;
+
+        const dots = [
+            {r: 50, x: 50, y: 90, vx: 2, vy: 3, color: 'red'},
+            {r: 50, x: 400, y: 50, vx: 3, vy: -3, color: 'green'},
+            {r: 40, x: 250, y: 200, vx: 3, vy: -3, color: 'blue'},
+            {r: 40, x: 100, y: 200, vx: 3, vy: -3, color: 'yellow'},
+        ]
+
+        function draw() {
+            cxt.clearRect(0, 0, w, h);
+
+            dots.forEach((dot, index) => {
+                for (let i = index + 1; i < dots.length; i++) {
+                    const sib = dots[i];
+                    const a = Math.abs(dot.x - sib.x);
+                    const b = Math.abs(dot.y - sib.y);
+                    const c = Math.sqrt(a * a + b * b);
+                    const realC = dot.r + sib.r;
+
+                    // collision
+                    if (c <= realC) {
+                        /*const m1 = dot.r / 20;
+                        const m2 = sib.r / 20;
+                        dot.v = ((m1 - m2) * dot.v + 2 * m2 * sib.v) / (m1 + m2);
+                        sib.v = ((m2 - m1) * sib.v + 2 * m1 * dot.v) / (m1 + m2);*/
+                        const vx = dot.vx;
+                        dot.vx = sib.vx;
+                        sib.vx = vx;
+
+                        /*const vy = dot.vy;
+                        dot.vy = sib.vy;
+                        sib.vy = vy;*/
+                    }
+                }
+
+                // dot.x = dot.x + dot.v * Math.cos(dot.angle * twicePI / 360);
+                // dot.y = dot.y + dot.v * Math.sin(dot.angle * twicePI / 360);
+
+                dot.x += dot.vx;
+                dot.y += dot.vy;
+
+                if (dot.x - dot.r <= 0) {
+                    dot.vx = Math.abs(dot.vx);
+                    dot.x = dot.r;
+                } else if (dot.x + dot.r >= w) {
+                    dot.vx = -Math.abs(dot.vx);
+                    dot.x = w - dot.r;
+                }
+
+                if (dot.y - dot.r <= 0) {
+                    dot.vy = Math.abs(dot.vy);
+                    dot.y = dot.r;
+                } else if (dot.y + dot.r >= h) {
+                    dot.vy = -Math.abs(dot.vy);
+                    dot.y = h - dot.r;
+                }
+
+                cxt.save();
+                cxt.beginPath();
+                cxt.arc(
+                    dot.x,
+                    dot.y,
+                    dot.r,
+                    0,
+                    twicePI
+                );
+                cxt.fillStyle = dot.color;
+                cxt.fill();
+                cxt.restore();
+            });
+
+            !paused && requestAnimationFrame(draw);
+        }
+
+        draw();
+
+        document.onclick = () => {
+            paused = !paused;
+            draw();
+        };
+    </script>
+</body>
+</html>

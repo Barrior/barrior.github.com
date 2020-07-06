@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+	
+	<script>
+		'use strict';
+
+		var canvas = document.getElementById( 'c' );
+		var gc = canvas.getContext( '2d' );
+
+		//各个translation的值会叠加
+		//比如，两次用rotate();
+
+		gc.save();
+		//包括其位置也相应有缩放
+		//scale( x, y ) x轴缩放，y轴缩放比例
+		gc.scale( .8, .5 );
+		gc.fillRect( 400, 50, 100, 100 );
+		gc.restore();
+
+		gc.save();
+		//gc.translate(x,y);
+		gc.translate( 100, 50 );
+		gc.fillRect( 0, 0, 100, 100 );
+		gc.restore();
+
+		gc.save();
+		//gc.rotate(angle) 以弧度计的角度值
+		//以画布(0,0)整个画布旋转45度后，元素对应的位置
+		gc.rotate( 45 * Math.PI / 180 );
+
+		gc.strokeRect( 200, 0, 100, 50 );
+		gc.arc( 200, 0, 6, 0, 2 * Math.PI );
+		gc.fillStyle = 'red';
+		gc.fill();
+
+		gc.restore();
+
+	</script>
+</body>
+</html>

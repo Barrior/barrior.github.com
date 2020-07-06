@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script>
+			/*
+			 * appCodeName:	返回浏览器的代码名称（Mozilla）
+			 * appName:	返回浏览器的名称（Netscape）
+			 * appVersion:	返回浏览器的平台和版本信息，Firefox只返回操作平台
+			 * cookieEnabled:	返回指明浏览器是否启用cookie的布尔值
+			 * platform:	返回运行浏览器的操作系统平台（Win32）
+			 * userAgent:	返回由客户机发送给服务器的user-agent头部的值，用户代理
+			 *
+			 */
+			
+			alert(navigator.appVersion)
+			
+			var oSys=navigator.appVersion;
+				reg=/android|iphone|ipad|ipod|windows phone|symbianos|blackberry|meego/i;
+				isMobile=reg.test(oSys);
+			
+			if(isMobile){
+				alert('您用的是手机')
+			}else if(oSys.toLowerCase().indexOf('window')){
+				alert('您用的是window系统')
+			}
+			
+		</script>
+	</body>
+</html>

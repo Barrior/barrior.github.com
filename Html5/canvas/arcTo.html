@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+
+	<script>
+		'use strict';
+
+		var canvas = document.getElementById( 'c' );
+		var gc = canvas.getContext( '2d' );
+
+		gc.beginPath();
+		gc.moveTo( 100, 240 );
+		gc.arcTo( 200, 100, 300, 200, 50 );
+		gc.stroke();
+
+
+
+	</script>
+</body>
+</html>

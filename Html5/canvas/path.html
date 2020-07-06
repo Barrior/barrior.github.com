@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+
+	<script>
+		'use strict';
+
+		var canvas = document.getElementById( 'c' );
+		var gc = canvas.getContext( '2d' );
+
+		gc.beginPath();
+			gc.moveTo( 40, 80 );
+			gc.lineTo( 100, 120 );
+			gc.lineTo( 140, 80 );
+		gc.closePath();
+
+		gc.moveTo( 40, 80 + 100 );
+		gc.lineTo( 100, 120 + 100 );
+		gc.lineTo( 140, 80 + 100 );
+		//这里没有closePath，fill，和stroke继续向上填充或描边第一个图形
+
+		
+		// 保存路径和恢复路径，让里面形成一个小型作用域，
+		// 类似lineWidth的属性将不被路径外的方法引用，
+		// 而closePath是闭合类似stroke()这样的方法向上作用。
+		// 作用到beginPath即结束
+		gc.save();
+			gc.strokeStyle = 'rgba( 255, 0, 0, .5 )';
+			gc.lineWidth = 6;
+			gc.lineJoin = 'round';
+			//描边
+			gc.stroke();
+		gc.restore();
+		
+		//填充
+		gc.fillStyle = 'rgba( 0, 120, 215, .5 )';
+		gc.fill();
+		
+		gc.beginPath();
+			gc.moveTo( 200, 120 );
+			gc.lineTo( 200, 200 );
+			gc.arc( 250, 200, 50, 180 * Math.PI / 180, 0, true );
+
+			gc.lineTo( 300, 100 );
+
+			//x1,y1,x2,y2,r
+			gc.arcTo( 300, 50, 400, 80, 30 );
+		// gc.closePath();
+		gc.stroke();
+	</script>
+</body>
+</html>

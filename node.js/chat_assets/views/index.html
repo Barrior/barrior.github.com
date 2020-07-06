@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天室</title>
+    <link rel="stylesheet" href="../public/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/css/index.css">
+</head>
+<body>
+    <section id="container" class="clearfix">
+        <div class="pull-left">
+            <header class="header clearfix btn-primary">
+                <div class="pull-left">
+                    <span class="glyphicon glyphicon-user"></span>
+                    在线成员
+                </div>
+                <div class="pull-right">当前人数：5</div>
+            </header>
+            <ul class="member list-unstyled">
+                <li data-id="0">
+                    <img src="../public/img/0.jpg" alt="nickname">
+                    <b>nickname</b>
+                </li>
+                <li data-id="1">
+                    <img src="../public/img/2.jpg" alt="Sunnies">
+                    <b>Sunnies</b>
+                </li>
+                <li data-id="2">
+                    <img src="../public/img/10.jpg" alt="Hibrro">
+                    <b>Hibrro</b>
+                </li>
+                <li data-id="3">
+                    <img src="../public/img/14.jpg" alt="Cico">
+                    <b>Cico</b>
+                </li>
+                <li data-id="4">
+                    <img src="../public/img/18.jpg" alt="merki">
+                    <b>merki</b>
+                </li>
+            </ul>
+        </div>
+        <div class="pull-right">
+            <header class="content header clearfix btn-primary">
+                <div class="pull-left">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    聊天室， 快快乐乐的闲聊，开开心心过大年~(*^__^*)~~
+                </div>
+                <div class="pull-right">
+                    欢迎您！
+                    <b>nickname</b>
+                </div>
+            </header>
+
+            <section id="chat-content">
+                <div class="friends">
+                    <img class="pull-left" src="../public/img/2.jpg" alt="Sunnies">
+                    <p>Sunnies</p>
+                    <div class="msg">
+                        <span>
+                            Hello nice day!
+                            If you can't win, lose like a champion.
+                            --如果你无法赢，那么就输得像个冠军一样。
+                        </span>
+                    </div>
+                </div>
+                <div class="friends">
+                    <img class="pull-left" src="../public/img/14.jpg" alt="Cico">
+                    <p>Cico</p>
+                    <div class="msg">
+                        <span>
+                            今天不小心滑了一跤，呜呜~~~~(>_<)~~~~
+                        </span>
+                    </div>
+                </div>
+                <div class="self">
+                    <img class="pull-right" src="../public/img/0.jpg" alt="nickname">
+                    <div class="msg">
+                        <span>
+                            今天天气真不错啊！~~\(^o^)/~
+                        </span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <span>
+                        <i id="clear-online-hint" class="pull-right">×</i>
+                        xxx上线了，快找TA一起Hight吧~~\(^o^)/~
+                    </span>
+                </div>
+                <div class="self">
+                    <img class="pull-right" src="../public/img/0.jpg" alt="nickname">
+                    <div class="msg">
+                        <span>
+                            等下一起出去High吧~~(●'◡'●)~~~
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <footer id="send-msg" class="text-center">
+                <form class="form-inline">
+                    <div class="input-group">
+                        <div class="input-group-addon">☺</div>
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-picture"></span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="鸡冻的感慨一下~~\(≧▽≦)/" required>
+                        <div class="input-group-addon btn-primary">
+                            <input type="submit" value="发送/Send">
+                        </div>
+                    </div>
+                </form>
+            </footer>
+        </div>
+    </section>
+    <footer class="info text-right">
+        ©2016 create by
+        <a href="https://github.com/Barrior">@Barrior</a>
+    </footer>
+
+    <!--模态框-->
+    <div id="modal-user" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">用户</h4>
+                </div>
+                <div class="modal-body clearfix create-user">
+                    <div class="pull-left">
+                        <p><img src="../public/img/16.jpg" alt=""></p>
+                        <p class="text-center">
+                            <em class="glyphicon glyphicon-arrow-up"></em>
+                            点击头像更换
+                        </p>
+                    </div>
+                    <section>
+                        <h3>来一个风一样的昵称：</h3>
+                        <div class="form-group">
+                            <input id="init-username" class="form-control" type="text" placeholder="n(*≧▽≦*)n">
+                        </div>
+                        <div id="no-init-username-hint" class="hidden">来一个风一样的昵称吧(～￣▽￣)～</div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" data-close-modal>想好了~</button>
+                        </div>
+                    </section>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script src="../public/js/jquery-2.1.3.min.js"></script>
+    <script src="../public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../public/js/index.js"></script>
+</body>
+</html>

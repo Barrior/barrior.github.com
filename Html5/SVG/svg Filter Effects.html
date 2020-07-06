@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			html,body{width: 100%; height: 100%; margin: 0; overflow: hidden;}
+		</style>
+	</head>
+	<body>
+		<!--
+        	SVG Fiter Effects在线手册/生成：
+        		http://ie.microsoft.com/testdrive/graphics/hands-on-css3/hands-on_svg-filter-effects.htm
+        	
+        	PS：用AI,CDR来搞定复杂滤镜咯
+        -->
+		<svg width=100% height=100% >
+			<defs>
+				<filter id="blur">
+					<feGaussianBlur in="SourceGraphic" stdDeviation="0,6" />
+				</filter>
+				<!--
+					feGaussianBlur：高斯模糊
+					stdDeviation:属性定义模糊量，0,6-上下模糊； 6,0-左右模糊； 6,6-都模糊（两个一样可写一个）
+                -->
+                
+                <filter id="gray">
+			        <feColorMatrix type="saturate" values="0" />
+			    </filter>
+                <filter id="huer">
+			        <feColorMatrix type="hueRotate" values="280">
+			        	<animate
+			        		attributeName=values
+			        		dur="4s"
+			        		from="0"
+			        		to="360"
+			        		repeatCount="indefinite">
+			        	</animate>
+			        </feColorMatrix>
+			    </filter>
+				<!--
+					feColorMatrix：颜色矩阵
+					type="saturate"：饱和度
+					values="0(去色) | 1(正常) | 1以上(愈加饱和)"，会玩Photoshop就浅而易懂咯
+					
+					type:						values:
+						hueRotate(色相旋转)			0和360就是本来图片的颜色，略过
+				
+					MDN参考：https://developer.mozilla.org/en-US/docs/Web/SVG/Element/feColorMatrix
+                -->
+                <filter id="shadown">
+                	<feOffset dx="30" dy="30" result="offset2" />
+                	<feGaussianBlur in="offset2" stdDeviation="6"/>
+                </filter>
+			</defs>
+			
+			<rect width=200 height=200 x=50 y=50 filter=url(#blur)></rect>
+			<rect width=200 height=200 x=300 y=50 filter=url(#shadown)></rect>
+			
+			<image
+				xlink:href="earth.png"
+				width=200 height=200
+				x=50 y=300
+				filter=url(#gray)>
+			</image>
+			
+			<image
+				xlink:href="earth.png"
+				width=200 height=200
+				x=300 y=300
+				filter=url(#huer)>
+			</image>
+			
+		</svg>
+	</body>
+</html>

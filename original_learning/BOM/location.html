@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			div{height: 500px;}
+			#self{background: red;}
+			#poem{background: yellow;}
+			#effect{background: green;}
+			#ul1{
+				width: 100px;
+				border: 1px solid #000;
+				position: fixed;
+				left: 50px;
+				top: 50%;
+				padding: 0;
+			}
+			li{line-height: 50px; cursor: pointer; list-style: none; padding-left: 30px;}
+			li:hover{background: white;}
+		</style>
+	</head>
+	<body>
+		<div id="self">self</div>
+		<div id="poem">poem</div>
+		<div id="effect">effect</div>
+		<ul id="ul1">
+			<li>self</li>
+			<li>poem</li>
+			<li>effect</li>
+		</ul>
+		<script>
+		/*
+		 	属性：
+				hash:	设置或返回从井号(#)开始的url
+				host:	设置或返回主机名和当前url的端口号
+				hostName:	设置或返回当前文档的主机名
+				href:	返回或设置当前文档的url
+				...
+				search:	设置或返回从问号(?)开始的url
+			方法：
+				assign(url):	加载新的文档
+				reload():	重新加载文档
+				replace(newURL):	用新的文档替换当前文档
+				
+				与a或href的差别是没有历史记录，无法后退
+		*/
+		
+		var aLi=document.querySelectorAll('#ul1 li');
+		
+		for(i=0; i<aLi.length; i++){
+			aLi[i].onclick=function(){
+				location.hash=this.textContent;
+			}
+		}
+		
+		</script>
+	</body>
+</html>

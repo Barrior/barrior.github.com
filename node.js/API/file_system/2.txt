@@ -1,0 +1,9 @@
+text-Barrior-Barrior-Barrior-Barrior
+<script src="./abc.js"></script>
+<script>
+    require( [ '../assets/static/config.js' ], function( ex ){
+
+        ex( 'mystock.js' );
+
+    });
+</script>

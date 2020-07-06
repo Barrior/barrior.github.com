@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+      html {
+        display: flex;
+        justify-content: center;
+        background: #000;
+      }
+      #c {
+        background: #fff;
+      }
+  </style>
+</head>
+<body>
+<canvas id="c" width="500px" height="800px"></canvas>
+
+<script>
+  const canvas = document.getElementById('c')
+  const ctx = canvas.getContext('2d')
+
+  const img = new Image()
+
+  img.onload = function () {
+    // 阴影实现 drop-shadow 滤镜功能，兼容性更好
+    // ctx.filter = 'drop-shadow(10px 10px 5px #ccc)'
+    ctx.shadowColor = '#ccc'
+    ctx.shadowOffsetX = 10
+    ctx.shadowOffsetY = 10
+    ctx.shadowBlur = 5
+    ctx.drawImage(this, 20, 50, this.naturalWidth / 2, this.naturalHeight / 2)
+  }
+
+  img.src = 'https://img12.360buyimg.com/ling/jfs/t1/107163/13/11834/440610/5e8ef306Ea30b0ac0/5aa8c8e67eab55ab.png'
+</script>
+</body>
+</html>

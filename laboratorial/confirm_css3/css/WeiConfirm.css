@@ -1,0 +1,60 @@
+/*
+ *作者:没有上半身
+ *时间:2014-10-26
+ *QQ：1144981399
+ *网址:www.weidong.xyz
+*/
+#Wei-layer{width: 100%; height: 100%; background-color: #000; background-color: rgba(0,0,0,.3); position: fixed; top: 0; left: 0; z-index: 9998; font: 12px/1.5 "\5FAE\8F6F\96C5\9ED1";}
+#Wei-layer .confirm{background-color: #fff; padding: 1px; position: fixed; border: 1px solid #ccc\9; border-radius: 2px; box-shadow: 0 0 10px #666, 0 0 3px #333; display: none;}
+#Wei-layer .title{line-height: 40px; font-size: 13px; margin: 0; background-color: #F3F3F3; text-indent: 20px; border-bottom: 1px solid #E0E0E0; border-radius: 3px 3px 0 0; text-shadow: 0 1px 1px #fff; cursor: move;}
+#Wei-layer .info{min-width: 280px; line-height: 150px; text-align: center; padding: 0 50px;}
+#Wei-layer .bottom{background-color: #F1F1F1; height: 36px; padding: 14px 20px 0 0; border-top: 1px solid #ccc; box-shadow: 0 1px 0 #fff inset; border-radius: 0 0 3px 3px;}
+#Wei-layer p{float: right; margin: 0;}
+#Wei-layer p a{line-height: 22px; padding: 0 12px; border: 1px solid #888; border-radius: 3px; text-shadow: 0 1px 1px #fff; float: left; text-decoration: none; color: #000; outline: none;
+background-image: -o-linear-gradient( #FFF, #f0f0f0);
+background-image: -moz-linear-gradient( #FFF, #f0f0f0);
+background-image: -webkit-linear-gradient( #FFF, #f0f0f0);
+background-image: linear-gradient( #FFF, #f0f0f0);
+-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#ffffff,endColorstr=#f0f0f0)";
+}
+#Wei-layer p a.true{margin-right: 6px;}
+#Wei-layer p a:active{box-shadow: 0 0 2px #666 inset;}
+
+#Wei-layer .confirm-animate{display: block;
+-o-animation: confirm 1s ease-out;
+-moz-animation: confirm 1s ease-out;
+-webkit-animation: confirm 1s ease-out;
+animation: confirm 1s ease-out;
+}
+@-o-keyframes confirm{
+	0%{-o-transform: scale(1);}
+	20%{-o-transform: scale(0.9);}
+	40%{-o-transform: scale(1.08);}
+	60%{-o-transform: scale(0.93);}
+	80%{-o-transform: scale(1.04);}
+	100%{-o-transform: scale(1);}
+}
+@-moz-keyframes confirm{
+	0%{-moz-transform: scale(1);}
+	20%{-moz-transform: scale(0.9);}
+	40%{-moz-transform: scale(1.08);}
+	60%{-moz-transform: scale(0.93);}
+	80%{-moz-transform: scale(1.04);}
+	100%{-moz-transform: scale(1);}
+}
+@-webkit-keyframes confirm{
+	0%{-webkit-transform: scale(1);}
+	20%{-webkit-transform: scale(0.9);}
+	40%{-webkit-transform: scale(1.08);}
+	60%{-webkit-transform: scale(0.93);}
+	80%{-webkit-transform: scale(1.04);}
+	100%{-webkit-transform: scale(1);}
+}
+@keyframes confirm{
+	0%{transform: scale(1);}
+	20%{transform: scale(0.9);}
+	40%{transform: scale(1.08);}
+	60%{transform: scale(0.93);}
+	80%{transform: scale(1.04);}
+	100%{transform: scale(1);}
+}

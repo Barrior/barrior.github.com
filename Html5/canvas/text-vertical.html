@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+  <style type="text/css">
+    @keyframes flash {
+      from { opacity: 1 }
+      to { opacity: 0 }
+    }
+  </style>
+	<style type="text/css">
+		body {
+			padding-top: 40px;
+			background: #000;
+      color: #fff;
+			display: flex;
+      justify-content: center;
+		}
+    #canvas-box {
+      position: relative;
+    }
+		#canvas {
+			background: #fff;
+		}
+    #canvas.icon-rotation {
+      cursor: url(http://storage.jd.com/llstorage/mouse_rotation.svg), default;
+    }
+    #cursor {
+      display: none;
+      position: absolute;
+      left: 127px;
+      top: 240px;
+      width: 30px;
+      height: 2px;
+      background: #000;
+      animation: flash 1s infinite;
+    }
+    #ta {
+      display: none;
+      position: absolute;
+      z-index: -999;
+      left: 127px;
+      top: 240px;
+    }
+    #actions {
+      display: flex;
+      flex-direction: column;
+      margin-left: 30px;
+      font-size: 20px;
+    }
+    #actions .item {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+    }
+    #actions input {
+      margin: 0 10px;
+      font-size: 20px;
+    }
+    #actions .display {
+      width: 80px;
+    }
+    #actions label {
+      display: flex;
+      align-items: baseline;
+    }
+	</style>
+</head>
+<body>
+  <div id="canvas-box">
+    <canvas id="canvas" width="600px" height="800px"></canvas>
+    <div id="cursor"></div>
+    <textarea id="ta"></textarea>
+  </div>
+  <section id="actions">
+    <div class="item">
+      行间距：
+      <input
+        id="lh"
+        type="range"
+        min="0"
+        max="5"
+        step="0.1"
+        data-key="lineHeight"
+        data-keep-canvas-text-status
+      />
+      <div class="display">
+        <span id="lh-value"></span> 倍数
+      </div>
+    </div>
+    <div class="item">
+      字间距：
+      <input
+        id="ls"
+        type="range"
+        data-key="letterSpacing"
+        data-keep-canvas-text-status
+      />
+      <div class="display">
+        <span id="ls-value"></span> px
+      </div>
+    </div>
+    <div class="item">
+      字体大小：
+      <input
+        id="size"
+        type="range"
+        min="12"
+        max="50"
+        data-key="fontSize"
+        data-keep-canvas-text-status
+      />
+      <div class="display">
+        <span id="size-value"></span> px
+      </div>
+    </div>
+    <div class="item" id="font-style">
+      字体样式：
+      <label>
+        <input
+          type="checkbox"
+          name="font-style"
+          value="bold"
+          data-key="fontWeight"
+        >
+        加粗
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="font-style"
+          value="italic"
+          data-key="fontStyle"
+        >
+        斜体
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="font-style"
+          value="true"
+          data-key="textUnderLine"
+        >
+        下划线
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          name="font-style"
+          value="true"
+          data-key="textLineThrough"
+        >
+        删除线
+      </label>
+    </div>
+    <div class="item" id="text-align">
+      对齐方式：
+      <label>
+        <input
+          type="radio"
+          name="align"
+          value="left"
+          data-key="textAlign"
+          checked
+          data-keep-canvas-text-status
+        >
+        左对齐
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="align"
+          value="center"
+          data-key="textAlign"
+          data-keep-canvas-text-status
+        >
+        居中
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="align"
+          value="right"
+          data-key="textAlign"
+          data-keep-canvas-text-status
+        >
+        右对齐
+      </label>
+    </div>
+    <div class="item" id="writing-mode">
+      书写模式：
+      <label>
+        <input
+          type="radio"
+          name="writing-mode"
+          value="horizontal-tb"
+          data-key="writingMode"
+          checked
+        >
+        横向文本
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="writing-mode"
+          value="vertical-rl"
+          data-key="writingMode"
+        >
+        竖向文本
+      </label>
+    </div>
+    <div class="item">
+      颜色：
+      <input
+        id="color"
+        type="color"
+        data-key="color"
+        data-keep-canvas-text-status
+      />
+    </div>
+  </section>
+
+  <script src="https://cdn.staticfile.org/tinycolor/1.4.1/tinycolor.min.js"></script>
+  <script>
+    const rotateIconPath = 'M0.60934364,3.15876458 C0.60934364,3.15876458 1.70125487,1.47382717 3.4290186,0.569698818 C5.15676952,-0.334391136 7.28539789,-0.0741171864 8.68140802,0.802574161 C10.0774182,1.67931672 10.5474067,2.41901504 10.5474067,2.41901504 L11.7498854,1.73410112 C11.7498854,1.73410112 11.998739,1.610833 11.998739,1.89849276 L11.998739,6.19993294 C11.998739,6.19993294 11.998739,6.58350061 11.708429,6.44648198 C11.4642229,6.33127981 8.82335584,4.82955458 7.99116802,4.35580196 C7.53417465,4.15196403 7.93567945,3.98636889 7.93567945,3.98636889 L9.09607439,3.32314341 C9.09607439,3.32314341 8.43418042,2.49420758 7.46540928,2.05520254 C6.42842329,1.51492509 5.45759083,1.45085845 4.26840175,1.89981147 C3.49294442,2.19250284 2.57996911,2.94203392 1.92237698,4.04916803 L0.60934364,3.15876458 L0.60934364,3.15876458 L0.60934364,3.15876458 Z M11.3905539,8.84361666 C11.3905539,8.84361666 10.2986427,10.5285797 8.57085337,11.4326568 C6.84308964,12.3367596 4.71449969,12.0765368 3.31847675,11.1998327 C1.92238978,10.3230645 1.45249091,9.58332779 1.45249091,9.58332779 L0.249948191,10.2682417 C0.249948191,10.2682417 0.00114580932,10.3915866 0.00114580932,10.1038501 L0.00114580932,5.80244831 C0.00114580932,5.80244831 0.00114580932,5.41891906 0.291378979,5.55587367 C0.535597856,5.67113986 3.17652892,7.17280107 4.00871675,7.64660489 C4.46571011,7.85044283 4.06421813,8.01598674 4.06421813,8.01598674 L2.90381039,8.67923784 C2.90381039,8.67923784 3.56572996,9.50813527 4.53448831,9.94717871 C5.57143589,10.4874177 6.54222993,10.55151 7.73148303,10.1025442 C8.50688916,9.80984 9.41987725,9.06038572 10.0774182,7.9531876 L11.3905539,8.84361666 L11.3905539,8.84361666 L11.3905539,8.84361666 Z'
+    const rotateIconRawWidth = 12
+    const rotateIconRawHeight = 12
+
+    function degreeToRadian(degree) {
+      return (degree * Math.PI) / 180
+    }
+
+    function generateFontForm(fontProps) {
+      const validProps = ['fontStyle', 'fontWeight', 'fontSize', 'fontFamily']
+      const fontForm = []
+      validProps.forEach((prop) => {
+        let value = fontProps[prop]
+        if (value) {
+          if (prop === 'fontSize' && typeof value === 'number') {
+            value += 'px'
+          }
+          fontForm.push(value)
+        }
+      })
+      return fontForm.join(' ')
+    }
+
+    function toFixed(number, digits = 0) {
+      return parseFloat(Number(number).toFixed(digits))
+    }
+
+    function createOffscreenCanvas(width, height) {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      canvas.width = width
+      canvas.height = height
+      return { canvas, ctx }
+    }
+
+    class IText {
+      static rotatedCharSet = '《》【】（）“”‘’〖〗﹝﹞「」『』±‰—…'
+
+      constructor(text, layerData) {
+        this.canvas = document.getElementById('canvas')
+        this.ctx = canvas.getContext('2d')
+        this.cw = this.rawCw = canvas.width
+        this.ch = this.rawCh = canvas.height
+        this.text = text
+        this.layerData = layerData
+
+        /**
+         * 文字计算完成的数据存储器
+         * 数据结构:
+         * [
+         *     // 第一行
+         *     [
+         *         // 每个字的数据，w: 字实际所占宽（非 measureWidth），ls: 字间距所占空间
+         *         // r: 是否旋转
+         *         { l: 'E', x: 0, y: 0, w: 10, h: 10, ls: 10, r: true },
+         *         { l: 'n', x: 0, y: 0, w: 10, h: 10, ls: 10, r: true },
+         *     ],
+         *     // 第二行
+         *     [...]
+         * ]
+         */
+        this.computedLetters = []
+
+        /**
+         * 行文本数据存储器
+         */
+        this.computedTextLines = []
+
+        // 设置分辨率
+        this.setupDpr()
+
+        // 离屏 Canvas 列表
+        this.offCanvas = {
+          // 文本画布
+          textCanvas: {
+            ...createOffscreenCanvas(this.cw, this.ch),
+            rerender: false,
+            offsetLeft: 0,
+            offsetTop: 0
+          },
+          // 文本框画布
+          textBox: {
+            ...createOffscreenCanvas(this.cw, this.ch),
+            rerender: false,
+            offsetLeft: 0,
+            offsetTop: 0
+          }
+        }
+
+        // 文本框状态对象
+        this.textBoxStatus = {
+          visible: false,
+          selected: false,
+        }
+
+        this.$rotateIcon = new Path2D(rotateIconPath)
+
+        this.firstRenderAll()
+        this.addEvent()
+      }
+
+      firstRenderAll() {
+        this.prepareWindowData()
+        this.renderTextBox({ firstRender: true })
+        this.renderText({ firstRender: true })
+      }
+
+      renderAll() {
+        const { ctx, cw, ch } = this
+        ctx.clearRect(0, 0, cw, ch)
+        this.setupDpr()
+        this.prepareWindowData()
+        this.renderTextBox()
+        this.renderText()
+      }
+
+      setupDpr() {
+        const dpr = window.devicePixelRatio || 1
+        if (dpr !== this.dpr) {
+          this.dpr = dpr
+          this.cw = this.rawCw * dpr
+          this.ch = this.rawCh * dpr
+          this.canvas.width = this.cw
+          this.canvas.height = this.ch
+          this.canvas.style.width = this.rawCw + 'px'
+          this.canvas.style.height = this.rawCh + 'px'
+
+          // 每次 DPR 改变的时候更新离屏 Canvas
+          this.updateOffCanvasDimension()
+        }
+      }
+
+      updateOffCanvasDimension() {
+        const { offCanvas } = this
+        for (const canvasName in offCanvas) {
+          const oc = offCanvas[canvasName]
+
+          // 首次渲染时，因为调用 setupDpr 在先, 所以没有离屏画布被更新
+          if (oc) {
+            oc.canvas.width = this.cw
+            oc.canvas.height = this.ch
+            oc.rerender = true
+          }
+        }
+      }
+
+      prepareWindowData() {
+        const { layerData } = this
+        const { fontSize, lineHeight, letterSpacing } = layerData.textStyle
+
+        // 文本窗口起始坐标
+        this.winX = toFixed(layerData.left * this.dpr)
+        this.winY = toFixed(layerData.top * this.dpr)
+
+        // 窗口末端坐标
+        this.winEX = toFixed((layerData.left + layerData.width) * this.dpr)
+        this.winEY = toFixed((layerData.top + layerData.height) * this.dpr)
+
+        // 窗口宽高
+        this.winWidth = toFixed(layerData.width * this.dpr)
+        this.winHeight = toFixed(layerData.height * this.dpr)
+
+        // 行间距的一半
+        this.halfLineSpace = (fontSize * (lineHeight - 1) / 2) * this.dpr
+
+        // 设置数值属性 DPR
+        this.textStyle = {
+          fontSize: toFixed(fontSize * this.dpr),
+          letterSpacing: toFixed(letterSpacing * this.dpr),
+          // 装饰线（下划线、删除线）线宽
+          textLineWidth: toFixed(Math.max(fontSize / 15, 1) * this.dpr)
+        }
+
+        // 添加 Font 属性
+        this.textStyle.font = generateFontForm({
+          ...layerData.textStyle,
+          ...this.textStyle,
+        })
+      }
+
+      // 绘制文本线框
+      renderTextBox(options = {}) {
+        const { offCanvas, cw, ch } = this
+        const { canvas, ctx, rerender, offsetLeft, offsetTop } = offCanvas.textBox
+        const { visible, selected } = this.textBoxStatus
+
+        // 设置文本框对象，因此事件处理才可定位到该元素
+        this.$textBox = new Path2D()
+        this.$textBox.rect(this.winX, this.winY, this.winWidth, this.winHeight)
+
+        if (!options.firstRender) {
+          if (!rerender) {
+            if (visible) {
+              const dx = offsetLeft * this.dpr
+              const dy = offsetTop * this.dpr
+              this.ctx.drawImage(canvas, 0, 0, cw, ch, dx, dy, cw, ch)
+            }
+            return
+          }
+        }
+
+        const lineDashValue = toFixed(5 * this.dpr)
+
+        ctx.clearRect(0, 0, cw, ch)
+        ctx.strokeStyle = '#333'
+        ctx.lineWidth = toFixed(2 * this.dpr)
+        ctx.setLineDash([lineDashValue, lineDashValue])
+        ctx.stroke(this.$textBox)
+
+        // 无选中不绘制四角
+        if (!selected) {
+          if (visible) {
+            this.ctx.drawImage(canvas, 0, 0)
+          }
+          return
+        }
+
+        // 四个角坐标
+        const corners = [
+          [this.winX, this.winY],    // 左上角
+          [this.winEX, this.winY],   // 右上角
+          [this.winX, this.winEY],   // 左下角
+          [this.winEX, this.winEY],  // 右下角
+        ]
+        const cornerWidth = toFixed(10 * this.dpr)
+        const cornerHeight = toFixed(10 * this.dpr)
+
+        // 恢复蚂蚁线
+        ctx.setLineDash([])
+
+        // 绘制四个角
+        ctx.fillStyle = 'white'
+        ctx.lineWidth = toFixed(4 * this.dpr)
+        for (let i = 0; i < corners.length; i++) {
+          const corner = corners[i]
+          const x = toFixed(corner[0] - cornerWidth / 2)
+          const y = toFixed(corner[1] - cornerHeight / 2)
+          ctx.strokeRect(x, y, cornerWidth, cornerHeight)
+          ctx.rect(x, y, cornerWidth, cornerHeight)
+        }
+        ctx.fill()
+
+        // 绘制旋转按钮
+        const iconWidth = 20 * this.dpr
+        const scaleValue = (iconWidth / (rotateIconRawWidth * this.dpr)) * this.dpr
+        const iconX = this.winX + this.winWidth / 2
+        const iconY = this.winEY + 30 * this.dpr
+        ctx.save()
+        ctx.translate(-iconWidth / 2, 0)
+        ctx.save()
+        ctx.translate(iconX, iconY)
+        ctx.scale(scaleValue, scaleValue)
+        ctx.fillStyle = '#333'
+        ctx.fill(this.$rotateIcon)
+        ctx.restore()
+        ctx.restore()
+
+        if (visible) {
+          this.ctx.drawImage(canvas, 0, 0)
+        }
+      }
+
+      // 计算【竖】向文本坐标等值
+      calcVerticalRlLetters({ lineNumber, letters, startX, startY }) {
+        const { winHeight, offCanvas } = this
+        const { ctx } = offCanvas.textCanvas
+        const { font, fontSize, letterSpacing } = this.textStyle
+        const rotatedCharSet = IText.rotatedCharSet
+        const lettersLength = letters.length
+
+        // 存储文字属性数据
+        const letterAttrs = []
+
+        // 行文本高度（含字间距）
+        let textHeight = 0
+
+        // 当前行实际绘制的文字
+        let actualLetters = ''
+
+        for (let i = 0; i < lettersLength; i++) {
+          const letter = letters[i]
+          let fontHeight = fontSize
+
+          // 字的坐标
+          let x = startX
+          let y = startY + textHeight
+
+          // 是否旋转
+          let rotation = false
+
+          // 【特定字符集】与【英文字符】旋转 90 度
+          if (rotatedCharSet.includes(letter) || letter.charCodeAt(0) <= 256) {
+            ctx.save()
+            ctx.font = font
+            fontHeight = ctx.measureText(letter).width
+            ctx.restore()
+            rotation = true
+          } else {
+            // 中文文字位移 X 轴
+            x = startX - fontSize
+          }
+
+          // 当前行文本高度
+          const curTextHeight = textHeight + fontHeight + letterSpacing
+
+          // 文字超出窗口，自动换行
+          if (curTextHeight > winHeight) {
+            this.textLines.splice(lineNumber + 1, 0, letters.slice(i))
+            break
+          }
+
+          textHeight = curTextHeight
+          actualLetters += letter
+
+          letterAttrs.push({
+            l: letter,
+            x,
+            y,
+            w: fontSize,
+            h: fontHeight,
+            r: rotation,
+          })
+        }
+
+        return {
+          letterAttrs,
+          actualLetters,
+          // 实际所占高度，减去末字字间距
+          textHeight: textHeight - letterSpacing,
+          textHeightWithSpacing: textHeight,
+        }
+      }
+
+      // 绘制【竖】向文本
+      renderVerticalRlLetters({ lineNumber, letters }) {
+        const { layerData, offCanvas } = this
+        const { ctx } = offCanvas.textCanvas
+        const { color } = layerData.textStyle
+        const { font } = this.textStyle
+        const computedLetters = this.computedLetters[lineNumber]
+        const lettersLength = letters.length
+
+        for (let i = 0; i < lettersLength; i++) {
+          const letter = letters[i]
+          const computedAttrs = computedLetters[i]
+
+          // 基础设置
+          ctx.save()
+          ctx.fillStyle = color
+          ctx.font = font
+          ctx.textBaseline = 'top'
+          ctx.textAlign = 'start'
+
+          // 确定绘制坐标
+          ctx.translate(computedAttrs.x, computedAttrs.y)
+
+          // 【特定字符集】与【英文字符】旋转 90 度
+          if (computedAttrs.r) {
+            ctx.rotate(degreeToRadian(90))
+          }
+
+          // 绘制文字与还原画布
+          ctx.fillText(letter, 0, 0)
+          ctx.restore()
+        }
+      }
+
+      // 绘制【竖】向文本装饰
+      renderVerticalRlTextDecoration({ startX, startY, textHeightWithSpacing }) {
+        const { layerData, offCanvas } = this
+        const { color, textUnderLine, textLineThrough } = layerData.textStyle
+        const { fontSize, textLineWidth } = this.textStyle
+        const { ctx } = offCanvas.textCanvas
+
+        // 装饰线起始 Y 坐标
+        const throughLineStartY = startY
+        const throughLineEndY = startY + textHeightWithSpacing
+
+        ctx.beginPath()
+
+        // 绘制下划线
+        if (textUnderLine) {
+          let x = toFixed(startX - fontSize - 1)
+          if (textLineWidth === 1) {
+            x += 0.5
+          }
+          ctx.moveTo(x, throughLineStartY)
+          ctx.lineTo(x, throughLineEndY)
+        }
+
+        // 绘制删除线
+        if (textLineThrough) {
+          let x = toFixed(startX - fontSize / 2)
+          if (textLineWidth === 1) {
+            x += 0.5
+          }
+          ctx.moveTo(x, throughLineStartY)
+          ctx.lineTo(x, throughLineEndY)
+        }
+
+        ctx.lineWidth = textLineWidth
+        ctx.strokeStyle = color
+        ctx.stroke()
+        ctx.closePath()
+      }
+
+      // 绘制【竖】向文本入口
+      renderTextVerticalRl() {
+        const { layerData, text, offCanvas } = this
+        const { textAlign } = layerData.textStyle
+        const { fontSize } = this.textStyle
+        const { ctx } = offCanvas.textCanvas
+
+        // 文本行
+        this.textLines = text.split('\n')
+
+        // 计算每行文本，lineNumber: 行号
+        for (let lineNumber = 0; lineNumber < this.textLines.length; lineNumber++) {
+          const letters = this.textLines[lineNumber]
+
+          // 每行的起始坐标
+          const startX = toFixed(
+            this.winEX - fontSize * lineNumber - this.halfLineSpace * (lineNumber * 2 + 1)
+          )
+          const startY = this.winY
+
+          // 文本溢出窗口，取消绘制
+          if (startX - fontSize < this.winX) {
+            break
+          }
+
+          // 计算每行文字，textHeight: 文本实际所占高度（减去末字字间距）
+          const {
+            letterAttrs,
+            actualLetters,
+            textHeight,
+            textHeightWithSpacing,
+          } = this.calcVerticalRlLetters({
+            lineNumber,
+            letters,
+            startX,
+            startY
+          })
+
+          // 存储计算数据
+          this.computedLetters[lineNumber] = letterAttrs
+          this.computedTextLines[lineNumber] = {
+            startX,
+            startY,
+            height: textHeight,
+            heightWithSpacing: textHeightWithSpacing,
+            text: actualLetters,
+          }
+
+          // 默认左（上）对齐
+          let ty = 0
+          switch (textAlign) {
+            case 'center':
+              ty = (this.winHeight - textHeight) / 2
+              break
+            case 'right':
+              ty = this.winHeight - textHeight
+              break
+          }
+
+          ctx.save()
+
+          // 设置对齐方式
+          ctx.translate(0, ty)
+
+          // 绘制装饰线（下划线、删除线）
+          this.renderVerticalRlTextDecoration({
+            startX,
+            startY,
+            textHeightWithSpacing,
+          })
+
+          // 绘制每行文字
+          this.renderVerticalRlLetters({
+            lineNumber,
+            letters: actualLetters,
+          })
+
+          ctx.restore()
+        }
+      }
+
+      // 计算【横】向文本坐标等值
+      calcHorizontalTbLetters({ lineNumber, letters, startX, startY }) {
+        const { winWidth, offCanvas } = this
+        const { ctx } = offCanvas.textCanvas
+        const { font, fontSize, letterSpacing } = this.textStyle
+        const lettersLength = letters.length
+
+        // 存储文字属性数据
+        const letterAttrs = []
+
+        // 行文本高度（含字间距）
+        let textWidth = 0
+
+        // 当前行实际绘制的文字
+        let actualLetters = ''
+
+        for (let i = 0; i < lettersLength; i++) {
+          const letter = letters[i]
+          const x = startX + textWidth
+          const y = startY
+
+          ctx.save()
+          ctx.font = font
+          const letterWidth = ctx.measureText(letter).width
+          ctx.restore()
+
+          // 当前行文本宽度
+          const curTextWidth = textWidth + letterWidth + letterSpacing
+
+          // 文字超出窗口，自动换行
+          if (curTextWidth > winWidth) {
+            this.textLines.splice(lineNumber + 1, 0, letters.slice(i))
+            break
+          }
+
+          textWidth = curTextWidth
+          actualLetters += letter
+
+          letterAttrs.push({
+            l: letter,
+            x,
+            y,
+            w: letterWidth,
+            h: fontSize,
+          })
+        }
+
+        return {
+          letterAttrs,
+          actualLetters,
+          // 实际所占高度，减去末字字间距
+          textWidth: textWidth - letterSpacing,
+          textWidthWithSpacing: textWidth,
+        }
+      }
+
+      // 绘制【横】向文本
+      renderHorizontalTbLetters({ lineNumber, letters }) {
+        const { layerData, offCanvas } = this
+        const { ctx } = offCanvas.textCanvas
+        const { color } = layerData.textStyle
+        const { font } = this.textStyle
+        const computedLetters = this.computedLetters[lineNumber]
+        const lettersLength = letters.length
+
+        for (let i = 0; i < lettersLength; i++) {
+          const letter = letters[i]
+          const computedAttrs = computedLetters[i]
+
+          // 基础设置
+          ctx.save()
+          ctx.fillStyle = color
+          ctx.font = font
+          ctx.textBaseline = 'top'
+          ctx.textAlign = 'start'
+
+          // 确定绘制坐标
+          ctx.translate(computedAttrs.x, computedAttrs.y)
+
+          // 绘制文字与还原画布
+          ctx.fillText(letter, 0, 0)
+          ctx.restore()
+        }
+      }
+
+      // 绘制【横】向文本装饰
+      renderHorizontalTbTextDecoration({ startX, startY, textWidthWithSpacing }) {
+        const { layerData, offCanvas } = this
+        const { color, textUnderLine, textLineThrough } = layerData.textStyle
+        const { fontSize, textLineWidth } = this.textStyle
+        const { ctx } = offCanvas.textCanvas
+
+        // 装饰线起始 X 坐标
+        const throughLineStartX = startX
+        const throughLineEndX = startX + textWidthWithSpacing
+
+        ctx.beginPath()
+
+        // 绘制下划线
+        if (textUnderLine) {
+          let y = toFixed(startY + fontSize + 1)
+          if (textLineWidth === 1) {
+            y += 0.5
+          }
+          ctx.moveTo(throughLineStartX, y)
+          ctx.lineTo(throughLineEndX, y)
+        }
+
+        // 绘制删除线
+        if (textLineThrough) {
+          let y = toFixed(startY + fontSize / 2)
+          if (textLineWidth === 1) {
+            y += 0.5
+          }
+          ctx.moveTo(throughLineStartX, y)
+          ctx.lineTo(throughLineEndX, y)
+        }
+
+        ctx.lineWidth = textLineWidth
+        ctx.strokeStyle = color
+        ctx.stroke()
+        ctx.closePath()
+      }
+
+      // 绘制【横】向文本入口
+      renderTextHorizontalTb() {
+        const { layerData, text, offCanvas } = this
+        const { textAlign } = layerData.textStyle
+        const { fontSize } = this.textStyle
+        const { ctx } = offCanvas.textCanvas
+
+        // 文本行
+        this.textLines = text.split('\n')
+
+        // 计算每行文本，lineNumber: 行号
+        for (let lineNumber = 0; lineNumber < this.textLines.length; lineNumber++) {
+          const letters = this.textLines[lineNumber]
+
+          // 每行的起始坐标
+          const startX = this.winX
+          const startY = toFixed(
+            this.winY + fontSize * lineNumber + this.halfLineSpace * (lineNumber * 2 + 1)
+          )
+
+          // 文本溢出窗口，取消绘制
+          if (startY + fontSize > this.winEY) {
+            break
+          }
+
+          // 计算每行文字，textWidth: 文本实际所占高度（减去末字字间距）
+          const {
+            letterAttrs,
+            actualLetters,
+            textWidth,
+            textWidthWithSpacing,
+          } = this.calcHorizontalTbLetters({
+            lineNumber,
+            letters,
+            startX,
+            startY
+          })
+
+          // 存储计算数据
+          this.computedLetters[lineNumber] = letterAttrs
+          this.computedTextLines[lineNumber] = {
+            startX,
+            startY,
+            width: textWidth,
+            widthWithSpacing: textWidthWithSpacing,
+            text: actualLetters,
+          }
+
+          // 默认左对齐
+          let tx = 0
+          switch (textAlign) {
+            case 'center':
+              tx = (this.winWidth - textWidth) / 2
+              break
+            case 'right':
+              tx = this.winWidth - textWidth
+              break
+          }
+
+          ctx.save()
+
+          // 设置对齐方式
+          ctx.translate(tx, 0)
+
+          // 绘制装饰线（下划线、删除线）
+          this.renderHorizontalTbTextDecoration({
+            startX,
+            startY,
+            textWidthWithSpacing,
+          })
+
+          // 绘制每行文字
+          this.renderHorizontalTbLetters({
+            lineNumber,
+            letters: actualLetters,
+          })
+
+          ctx.restore()
+        }
+      }
+
+      renderText(options = {}) {
+        const { layerData, offCanvas, cw, ch } = this
+        const { writingMode } = layerData.textStyle
+        const { canvas, ctx, rerender, offsetLeft, offsetTop } = offCanvas.textCanvas
+        const dx = offsetLeft * this.dpr
+        const dy = offsetTop * this.dpr
+
+        if (!options.firstRender) {
+          if (!rerender) {
+            this.ctx.drawImage(canvas, 0, 0, cw, ch, dx, dy, cw, ch)
+            return
+          }
+        }
+
+        // 清空离屏文本
+        ctx.clearRect(0, 0, this.cw, this.ch)
+
+        // 在离屏画布绘制文本
+        switch (writingMode) {
+          case 'horizontal-tb':
+            this.renderTextHorizontalTb()
+            break
+          case 'vertical-rl':
+            this.renderTextVerticalRl()
+            break
+        }
+
+        // 渲染离屏文本
+        this.ctx.drawImage(canvas, 0, 0)
+      }
+
+      setAndRender(textAttrs = {}) {
+        Object.assign(this.layerData.textStyle, textAttrs)
+        this.offCanvas.textCanvas.rerender = true
+        this.offCanvas.textBox.rerender = false
+        this.renderAll()
+      }
+
+      addEvent() {
+        const { canvas, ctx } = this
+
+        // TODO:
+        // 多倍 DPR 事件的 isPointInPath 坐标不对
+
+        // 文本框 Hover 事件
+        canvas.addEventListener('mousemove', e => {
+          const { visible, selected } = this.textBoxStatus
+          if (!selected) {
+            const hoverState = ctx.isPointInPath(this.$textBox, e.offsetX, e.offsetY, 'nonzero')
+            if (hoverState !== visible) {
+              this.textBoxStatus.visible = hoverState
+              this.offCanvas.textBox.rerender = false
+              this.offCanvas.textCanvas.rerender = false
+              this.renderAll()
+            }
+          }
+        })
+
+        const clickRender = (selected) => {
+          Object.assign(this.textBoxStatus, {
+            visible: selected,
+            selected,
+          })
+          this.offCanvas.textBox.rerender = true
+          this.offCanvas.textCanvas.rerender = false
+          this.renderAll()
+        }
+
+        // 文本框点击选中与取消
+        document.addEventListener('click', e => {
+          const { selected } = this.textBoxStatus
+          let visible
+
+          if (e.target === canvas) {
+            visible = ctx.isPointInPath(this.$textBox, e.offsetX, e.offsetY, 'nonzero')
+          } else {
+            visible = e.target.dataset.hasOwnProperty('keepCanvasTextStatus')
+          }
+
+          if (visible) {
+            if (!selected) {
+              clickRender(true)
+            }
+          } else {
+            if (selected) {
+              clickRender(false)
+            }
+          }
+        })
+
+        // 文本框移动
+        canvas.addEventListener('mousedown', e => {
+          const { visible } = this.textBoxStatus
+          if (visible) {
+            const { textBox, textCanvas } = this.offCanvas
+            let prePageX = e.pageX
+            let prePageY = e.pageY
+
+            // 显示选中状态的边框
+            Object.assign(this.textBoxStatus, {
+              visible: true,
+              selected: true,
+            })
+            textBox.rerender = true
+            textCanvas.rerender = false
+            this.renderAll()
+
+            const handleMove = e => {
+              const left = toFixed(e.pageX - prePageX)
+              const top = toFixed(e.pageY - prePageY)
+              prePageX = e.pageX
+              prePageY = e.pageY
+
+              this.layerData.left += left
+              this.layerData.top += top
+
+              textBox.offsetLeft += left
+              textBox.offsetTop += top
+              textBox.rerender = false
+
+              textCanvas.offsetLeft += left
+              textCanvas.offsetTop += top
+              textCanvas.rerender = false
+
+              this.renderAll()
+            }
+            const handleUp = () => {
+              document.removeEventListener('mousemove', handleMove)
+              document.removeEventListener('mouseup', handleUp)
+
+              // 重新渲染以保持坐标一致
+              textBox.offsetLeft = 0
+              textBox.offsetTop = 0
+              textBox.rerender = true
+
+              textCanvas.offsetLeft = 0
+              textCanvas.offsetTop = 0
+              textCanvas.rerender = true
+
+              this.renderAll()
+            }
+            document.addEventListener('mousemove', handleMove)
+            document.addEventListener('mouseup', handleUp)
+          }
+        })
+      }
+    }
+  </script>
+
+	<script>
+    const $lh = document.getElementById('lh')
+    const $ls = document.getElementById('ls')
+    const $size = document.getElementById('size')
+    const $lhValue = document.getElementById('lh-value')
+    const $lsValue = document.getElementById('ls-value')
+    const $sizeValue = document.getElementById('size-value')
+    const $color = document.getElementById('color')
+    const $textAlign = document.getElementById('text-align')
+    const $fontStyle = document.getElementById('font-style')
+    const $writingMode = document.getElementById('writing-mode')
+
+    const layerData = {
+      "opacity": 1,
+      "top": 100,
+      "left": 120,
+      "width": 360,
+      "height": 550,
+      "text": "Lucky English 中文 [ 88 + 5 - 2 / 1 * 3 = 87 ]\n《字符》，。【】（）“”‘’？—±‰%\nEnglish:0123456789——……\n天[然]有机，香甜糯玉米",
+      "textStyle": {
+        "color": "rgba(255, 0, 0, 1)",
+        "fontFamily": "PingFangHK",
+        "fontSize": 30,
+        // 字体厚度
+        // normal: 常规，不加粗
+        // bold: 加粗
+        "fontWeight": "normal",
+        // 字体样式
+        // normal: 常规体
+        // italic: 斜体
+        "fontStyle": "normal",
+        "lineHeight": 2.5,
+        "letterSpacing": 0,
+        "textAlign": "left",
+        // 大小写
+        // uppercase: 英文大写
+        // lowercase: 英文小写
+        "textTransform": "uppercase",
+        // 文本装饰：下划线
+        "textUnderLine": false,
+        // 文本装饰：删除线
+        "textLineThrough": false,
+        // 书写模式：
+        // horizontal-tb: 水平从左向右
+        // vertical-rl: 垂直从右向左
+        "writingMode": "horizontal-tb",
+      },
+    }
+
+    const iText = new IText(layerData.text, layerData)
+
+    // Initial values
+    $lhValue.innerText = $lh.value = layerData.textStyle.lineHeight
+    $lsValue.innerText = $ls.value = layerData.textStyle.letterSpacing
+    $sizeValue.innerText = $size.value = layerData.textStyle.fontSize
+    $color.value = tinycolor(layerData.textStyle.color).toHexString()
+
+    const $elements = [
+      { watcher: $size, textarea: $sizeValue },
+      { watcher: $lh, textarea: $lhValue },
+      { watcher: $ls, textarea: $lsValue },
+      { watcher: $color },
+      { watcher: $textAlign },
+      { watcher: $writingMode },
+    ]
+
+    $elements.forEach(({ watcher, textarea }) => {
+      watcher.addEventListener('input', e => {
+        const value = isNaN(+e.target.value) ? e.target.value : +e.target.value
+
+        if (textarea) {
+          textarea.innerText = value
+        }
+
+        iText.setAndRender({
+          [e.target.dataset.key]: value
+        })
+      })
+    })
+
+    $fontStyle.addEventListener('input', () => {
+      const $checkedElem = $fontStyle.querySelectorAll('input')
+      const attrs = {}
+
+      Array.prototype.forEach.call($checkedElem, ($elem) => {
+        const value = $elem.value === 'true' ? true : $elem.value
+        attrs[$elem.dataset.key] = $elem.checked ? value : ''
+      })
+
+      iText.setAndRender(attrs)
+    })
+	</script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+/*loading common*/
+.loading, .loading:before,
+.loading-fade, .loading-fade span,
+.loading-circle, .loading-circle span{font-size: 0; display: inline-block; border-radius: 50%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;}
+
+/*loading*/
+.loading,.loading:before{width: 60px; height: 60px; border: 2px solid transparent;}
+.loading{border-color: #ccc; position: relative;}
+.loading:before{content: ""; border-left-color: #666; position: absolute; left: -2px; top: -2px;
+	-webkit-animation: 800ms loading ease-in infinite;
+	-moz-animation: 800ms loading ease-in infinite;
+	-o-animation: 800ms loading ease-in infinite;
+	animation: 800ms loading ease-in infinite;
+}
+@-webkit-keyframes loading{
+	from{-webkit-transform: rotate(40deg);}
+	to{-webkit-transform: rotate(400deg);}
+}
+@-moz-keyframes loading{
+	from{-moz-transform: rotate(40deg);}
+	to{-moz-transform: rotate(400deg);}
+}
+@-o-keyframes loading{
+	from{-o-transform: rotate(40deg);}
+	to{-o-transform: rotate(400deg);}
+}
+@keyframes loading{
+	from{transform: rotate(40deg);}
+	to{transform: rotate(400deg);}
+}
+
+/*loading-fade*/
+.loading-fade span{width: 30px; height: 30px; margin-left: 10px; background-color: #999;
+	-webkit-animation: 1.4s loading-fade ease-in-out infinite;
+	-moz-animation: 1.4s loading-fade ease-in-out infinite;
+	-o-animation: 1.4s loading-fade ease-in-out infinite;
+	animation: 1.4s loading-fade ease-in-out infinite;
+}
+.loading-fade span:first-of-type{margin-left: 0;}
+.loading-fade span:nth-of-type(2){
+	-webkit-animation-delay: 200ms;
+	-moz-animation-delay: 200ms;
+	-o-animation-delay: 200ms;
+	animation-delay: 200ms;
+}
+.loading-fade span:last-of-type{
+	-webkit-animation-delay: 400ms;
+	-moz-animation-delay: 400ms;
+	-o-animation-delay: 400ms;
+	animation-delay: 400ms;
+}
+@-webkit-keyframes loading-fade{
+	0%{-webkit-transform: scale(1);}
+	50%{-webkit-transform: scale(0);}
+	100%{-webkit-transform: scale(1);}
+}
+@-moz-keyframes loading-fade{
+	0%{-moz-transform: scale(1);}
+	50%{-moz-transform: scale(0);}
+	100%{-moz-transform: scale(1);}
+}
+@-o-keyframes loading-fade{
+	0%{-o-transform: scale(1);}
+	50%{-o-transform: scale(0);}
+	100%{-o-transform: scale(1);}
+}
+@keyframes loading-fade{
+	0%{transform: scale(1);}
+	50%{transform: scale(0);}
+	100%{transform: scale(1);}
+}
+
+.loading-circle{width: 72px; height: 72px; position: relative;}
+.loading-circle span{width: 12px; height: 12px; background-color: #666; position: absolute;
+	-webkit-transform: scale(0.4);
+	-moz-transform: scale(0.4);
+	-o-transform: scale(0.4);
+	transform: scale(0.4);
+	-webkit-animation: 800ms loading-circle ease-in-out infinite;
+	-moz-animation: 800ms loading-circle ease-in-out infinite;
+	-o-animation: 800ms loading-circle ease-in-out infinite;
+	animation: 800ms loading-circle ease-in-out infinite;
+}
+.loading-circle span:first-of-type{left: 10px; top: 10px;}
+.loading-circle span:nth-of-type(2){left: 30px; top: 0;
+	-webkit-animation-delay: 100ms;
+	-moz-animation-delay: 100ms;
+	-o-animation-delay: 100ms;
+	animation-delay: 100ms;
+}
+.loading-circle span:nth-of-type(3){left: 49px; top: 10px;
+	-webkit-animation-delay: 200ms;
+	-moz-animation-delay: 200ms;
+	-o-animation-delay: 200ms;
+	animation-delay: 200ms;
+}
+.loading-circle span:nth-of-type(4){left: 60px; top: 30px;
+	-webkit-animation-delay: 300ms;
+	-moz-animation-delay: 300ms;
+	-o-animation-delay: 300ms;
+	animation-delay: 300ms;
+}
+.loading-circle span:nth-of-type(5){left: 49px; top: 49px;
+	-webkit-animation-delay: 400ms;
+	-moz-animation-delay: 400ms;
+	-o-animation-delay: 400ms;
+	animation-delay: 400ms;
+}
+.loading-circle span:nth-of-type(6){left: 30px; top: 60px;
+	-webkit-animation-delay: 500ms;
+	-moz-animation-delay: 500ms;
+	-o-animation-delay: 500ms;
+	animation-delay: 500ms;
+}
+.loading-circle span:nth-of-type(7){left: 10px; top: 49px;
+	-webkit-animation-delay: 600ms;
+	-moz-animation-delay: 600ms;
+	-o-animation-delay: 600ms;
+	animation-delay: 600ms;
+}
+.loading-circle span:last-of-type{left: 0; top: 30px;
+	-webkit-animation-delay: 700ms;
+	-moz-animation-delay: 700ms;
+	-o-animation-delay: 700ms;
+	animation-delay: 700ms;
+}
+
+@-webkit-keyframes loading-circle{
+	0%{-webkit-transform: scale(1);}
+	100%{-webkit-transform: scale(0.4);}
+}
+@-moz-keyframes loading-circle{
+	0%{-moz-transform: scale(1);}
+	100%{-moz-transform: scale(0.4);}
+}
+@-o-keyframes loading-circle{
+	0%{-o-transform: scale(1);}
+	100%{-o-transform: scale(0.4);}
+}
+@keyframes loading-circle{
+	0%{transform: scale(1);}
+	100%{transform: scale(0.4);}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

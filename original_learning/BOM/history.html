@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script>
+			/*
+			 * 
+			 * back():	返回前一个url
+			 * forward():	返回下一个url
+			 * go():	返回具体某个url
+			 *
+			 */
+			
+			var t=true;
+			
+			document.documentElement.onclick=function(){
+				if(t){
+					location.hash='aaa';
+				}else{
+					history.go(-1);	//等同于history.back()
+				}
+				t=!t;
+			}
+			
+		</script>
+	</body>
+</html>

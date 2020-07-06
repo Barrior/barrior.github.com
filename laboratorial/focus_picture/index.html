@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>类3D轮播图特效</title>
+		<style>
+			body,ul{margin: 0; padding: 0;}
+			li{list-style: none;}
+			body{background-color: #ECECEC;}
+			#wrap{width: 890px; height: 384px; position: relative; margin: 100px auto;}
+			#wrap .prev, #wrap .next, #wrap li, #wrap .line{position: absolute;}
+			#wrap .prev, #wrap .next{width: 45px; height: 60px; display: block; background: url(img/icon.png) no-repeat 0 0; top: 162px; z-index: 6;}
+			#wrap .prev{left: 84px;}
+			#wrap .next{background-position: -45px 0; right: 84px;}
+			#wrap .prev:hover,#wrap .next:hover{-o-animation: 0.6s linear infinite alternate; -moz-animation: 0.6s linear infinite alternate; -webkit-animation: 0.6s linear infinite alternate; animation: 0.6s linear infinite alternate;}
+			#wrap .prev:hover{-o-animation-name: prev; -moz-animation-name: prev; -webkit-animation-name: prev; animation-name: prev;}
+			#wrap .next:hover{-o-animation-name: next; -moz-animation-name: next; -webkit-animation-name: next; animation-name: next;}
+			@-o-keyframes prev{0%{left: 84px;}50%{left: 92px;}100%{left: 84px;}}
+			@-moz-keyframes prev{0%{left: 84px;}50%{left: 92px;}100%{left: 84px;}}
+			@-webkit-keyframes prev{0%{left: 84px;}50%{left: 92px;}100%{left: 84px;}}
+			@keyframes prev{0%{left: 84px;}50%{left: 92px;}100%{left: 84px;}}
+			@-o-keyframes next{0%{right: 84px;}50%{right: 92px;}100%{right: 84px;}}
+			@-moz-keyframes next{0%{right: 84px;}50%{right: 92px;}100%{right: 84px;}}
+			@-webkit-keyframes next{0%{right: 84px;}50%{right: 92px;}100%{right: 84px;}}
+			@keyframes next{0%{right: 84px;}50%{right: 92px;}100%{right: 84px;}}
+			#wrap .line{width: 600px; height: 384px; border: 6px solid #fff; top: -6px; left: 139px; z-index: 5; border-radius: 2px;}
+			
+			#wrap .pic-1{top: -20px; left: 0; z-index: 1;}
+			#wrap .pic-2{top: 83px; left: 0; z-index: 2;}
+			#wrap .pic-3{top: 32px; left: 50px; z-index: 3;}
+			#wrap .pic-4{top: 0; left: 145px; z-index: 4;}
+			#wrap .pic-5{top: 32px; left: 340px; z-index: 3;}
+			#wrap .pic-6{top: 83px; left: 550px; z-index: 2;}
+			#wrap .pic-7{top: -20px; left: 550px; z-index: 1;}
+			
+			#wrap .pic-1 img,#wrap .pic-2 img,#wrap .pic-6 img,#wrap .pic-7 img{width: 340px;}
+			#wrap .pic-3 img, #wrap .pic-5 img{width: 500px;}
+			#wrap .pic-4 img{width: 600px;}
+		</style>
+		<script type="text/javascript" src="jquery-1.11.0.min.js" ></script>
+		<script>
+			$(function(){
+				var oW=$('#wrap'),
+					oPrev=oW.find('.prev'),
+					oNext=oW.find('.next'),
+					oLine=oW.find('.line'),
+					aLi=oW.find('li'),
+					aImg=aLi.find('img'),
+					
+					arr=[];
+					
+					aLi.each(function(i){
+						if(i==0||i==6)$(this).css({opacity:0});
+						if(i==1||i==5)$(this).css({opacity:0.6});
+						if(i==2||i==4)$(this).css({opacity:0.8});
+						
+						arr.push([
+							$(this).css('left'),
+							$(this).css('top'),
+							$(this).css('opacity'),
+							$(this).css('z-index'),
+							aImg.eq(i).css('width')
+						]);
+					});
+					
+					oPrev.click(function(){
+						
+						arr.push(arr[0]);
+						arr.shift();
+						
+						side();
+					});
+					
+					oNext.click(function(){
+						
+						arr.unshift(arr[arr.length-1]);
+						arr.pop();
+						
+						side();
+					});
+					
+					oW.hover(function(){
+						clearInterval(timer);
+					},function(){
+						setTimer();
+					});
+					
+					function setTimer(){
+						timer=setInterval(function(){
+							oNext.click();
+						},4000);
+					}setTimer();
+					
+					function side(){
+						oLine.css({display:'none'});
+						aLi.each(function(i){
+							$(this).css({zIndex:arr[i][3]});
+							$(this).stop().animate({
+								left:arr[i][0],
+								top:arr[i][1],
+								opacity:arr[i][2]
+							});
+							aImg.eq(i).stop().animate({width:arr[i][4]},function(){
+								oLine.stop().fadeIn(200);
+							});
+						});
+					}
+					
+			})
+		</script>
+	</head>
+	<body>
+		<div id="wrap">
+			<ul class="tab">
+				<li class="pic-1"><img src="img/1.jpg" /></li>
+				<li class="pic-2"><img src="img/2.jpg" /></li>
+				<li class="pic-3"><img src="img/3.jpg" /></li>
+				<li class="pic-4"><img src="img/4.jpg" /></li>
+				<li class="pic-5"><img src="img/5.jpg" /></li>
+				<li class="pic-6"><img src="img/6.jpg" /></li>
+				<li class="pic-7"><img src="img/7.jpg" /></li>
+			</ul>
+			<div class="line"></div>
+			<a class="prev" href="javascript:;"></a>
+			<a class="next" href="javascript:;"></a>
+		</div>
+	</body>
+</html>

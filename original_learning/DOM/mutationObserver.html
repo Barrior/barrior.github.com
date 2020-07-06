@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #instance {
+            width: 200px;
+            margin: 50px auto;
+        }
+        #instance div, canvas {
+            width: 200px;
+            min-height: 50px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="instance">
+        <div id="test1">
+            <div id="test2">
+                <div id="test2-1-0">2-1-0</div>
+                <div id="test2-1-1">2-1-1</div>
+                <div id="test2-1-demo">2-1-demo</div>
+                <div id="test2-2">
+                    <div id="test2-2-1">2-2-1</div>
+                </div>
+            </div>
+            <div id="test3">
+                <div id="test3-1">3-1</div>
+            </div>
+        </div>
+        <div class="btn-box">
+            <button id="add" type="button">Add div</button>
+            <button id="remove" type="button">Remove div</button>
+        </div>
+    </div>
+
+    <script>
+        const observeElementRemoved = (function () {
+            const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+            const checkElementRemoved = function (node, element) {
+                console.log(node.id);
+                if (node === element) {
+                    return true;
+                } else {
+                    const children = node.children;
+                    let length = children.length;
+                    while (length--) {
+                        if (checkElementRemoved(children[length], element)) {
+                            return true;
+                        }
+                    }
+                }
+            };
+            const useMutation = function (element, callback) {
+                const observer = new MutationObserver(function (mutations, observer) {
+                    console.log(mutations)
+                    let i = mutations.length;
+                    while (i--) {
+                        const removeNodes = mutations[i].removedNodes;
+                        let j = removeNodes.length;
+                        while (j--) {
+                            if (checkElementRemoved(removeNodes[j], element)) {
+                                observer.disconnect();
+                                return callback();
+                            }
+                        }
+                    }
+                });
+                observer.observe(document, {
+                    childList: true,
+                    subtree: true
+                });
+            };
+            const useDOMNodeRemoved = function (element, callback) {
+                const DOMNodeRemoved = function (e) {
+                    console.log('DOMNodeRemoved: ', e);
+                    if (checkElementRemoved(e.target, element)) {
+                        document.removeEventListener('DOMNodeRemoved', DOMNodeRemoved);
+                        callback();
+                    }
+                };
+                document.addEventListener('DOMNodeRemoved', DOMNodeRemoved);
+            };
+            return MutationObserver ? useMutation : useDOMNodeRemoved;
+        })();
+
+        var targetNode = document.getElementById('instance');
+        var test1 = window.test1 = document.getElementById('test1');
+        var demo = window.demo = document.getElementById('test2-1-demo');
+        var canvas = window.canvas = document.createElement('canvas');
+        demo.appendChild(canvas);
+
+        observeElementRemoved(canvas, function () {
+            console.warn('canvas has been removed!!!')
+        });
+
+        setTimeout(function () {
+            console.log('remove---');
+            test1.parentNode.removeChild(test1);
+        }, 3000);
+
+        setTimeout(function () {
+            console.log('append---');
+            var newNode = window.newNode = document.createElement('div');
+            targetNode.appendChild(newNode);
+        }, 5000);
+
+        setTimeout(function () {
+            console.log('append-to-remove---');
+            window.newNode.parentNode.removeChild(window.newNode);
+        }, 6000);
+    </script>
+</body>
+</html>

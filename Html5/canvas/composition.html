@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="500px"></canvas>
+
+	<script type="text/javascript">
+
+		var c = document.getElementById( 'c' );
+		var cxt = c.getContext( '2d' );
+
+		cxt.fillRect( 100, 100, 200, 200 );
+
+		//后画的图形是源图像，之前的图形是目标图像
+		cxt.globalCompositeOperation = 'xor';
+
+		cxt.fillStyle = 'red';
+		cxt.fillRect( 200, 200, 200, 200 );
+
+		cxt.fillStyle = 'green';
+		cxt.fillRect( 250, 150, 100, 100 );
+
+	</script>
+</body>
+</html>

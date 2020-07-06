@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body {
+			padding-top: 40px;
+			background: #000;
+			display: flex;
+      justify-content: center;
+		}
+		#c {
+			background: #fff;
+		}
+    #actions {
+      display: flex;
+      flex-direction: column;
+      margin-left: 30px;
+    }
+    #actions button {
+      height: 30px;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+	</style>
+</head>
+<body>
+	<canvas id="c" width="500px" height="300px"></canvas>
+  <div id="actions">
+    <button id="btn">增加文本大小、颜色</button>
+    <button id="btn-style">增加样式效果</button>
+  </div>
+
+  <script src="https://cdn.staticfile.org/fabric.js/4.0.0-beta.5/fabric.js"></script>
+	<script>
+    const btn = document.getElementById('btn')
+    const btnStyle = document.getElementById('btn-style')
+    const canvas = new fabric.Canvas('c')
+
+    const iText = new fabric.IText('香甜可口\n尝一个啵', {
+      left: 100,
+      top: 70,
+      fontWeight: 'bold',
+      fontFamily: '微软雅黑',
+      fontSize: 50,
+      fill: '#333',
+      lineHeight: 1.2,
+      styles: {
+        0: {
+          2: {
+            fontSize: 70,
+            fill: 'yellowgreen',
+          },
+          3: {
+            fontSize: 70,
+            fill: 'yellowgreen',
+          },
+        },
+        1: {
+          0: {
+            stroke: 'rgb(255, 224, 0)',
+            strokeWidth: 3,
+          },
+        }
+      }
+    })
+
+    btn.addEventListener('click', function () {
+      const obj = canvas.getActiveObject()
+      if (obj && obj.setSelectionStyles && obj.isEditing) {
+        obj.setSelectionStyles({
+          fill: 'red',
+          fontSize: 70,
+        })
+        obj.dirty = true
+        canvas.renderAll()
+      }
+    })
+
+    btnStyle.addEventListener('click', () => {
+      const obj = canvas.getActiveObject()
+      if (obj) {
+        const newObj = fabric.util.object.clone(obj)
+        console.log(newObj)
+        newObj.set({
+          top: newObj.top - 2,
+          fill: '#000',
+          stroke: 'yellowgreen',
+          strokeWidth: 4,
+          shadow: 'rgba(0,0,0,0.3) 5px 5px 5px'
+        })
+        canvas.add(newObj)
+        canvas.setActiveObject(newObj)
+        canvas.renderAll()
+      }
+    })
+
+    canvas.add(iText)
+	</script>
+</body>
+</html>

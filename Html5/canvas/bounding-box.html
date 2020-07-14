@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			padding-top: 40px;
+			background: #000;
+			text-align: center;
+		}
+		#c{
+			background: #fff;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="c" width="1000px" height="700px"></canvas>
+
+  <script>
+    function degreesToRadians(deg) {
+      return deg * (Math.PI / 180)
+    }
+
+    function toFixed(number, digits = 0) {
+      return parseFloat(Number(number).toFixed(digits))
+    }
+
+    function preciseNumber(number, digits) {
+      return toFixed(number, digits) - 0.5
+    }
+
+    function getBoundingRect({ width, height, left, top, rotate }) {
+      const radian = degreesToRadians(rotate)
+
+      if (radian === 0) {
+        return {
+          width,
+          height,
+          left,
+          top,
+          right: left + width,
+          bottom: top + height,
+        }
+      }
+
+      const centerX = left + width / 2
+      const centerY = top + height / 2
+
+      // 未旋转的相对于中心点的四个角坐标
+      const corners = [
+        { x: left - centerX, y: top - centerY },
+        { x: left + width - centerX, y: top - centerY },
+        { x: left - centerX, y: top + height - centerY },
+        { x: left + width - centerX, y: top + height - centerY },
+      ]
+
+      // 旋转后的四个角坐标
+      let xMin, xMax, yMin, yMax
+
+      corners.forEach(({ x, y }, i) => {
+        // 参阅：https://blog.csdn.net/Jurbo/article/details/75010875#旋转变换
+        const x2 = x * Math.cos(radian) - y * Math.sin(radian)
+        const y2 = x * Math.sin(radian) + y * Math.cos(radian)
+
+        if (i === 0) {
+          xMin = xMax = x2
+          yMin = yMax = y2
+          return
+        }
+
+        if (x2 < xMin) {
+          xMin = x2
+        } else if (x2 > xMax) {
+          xMax = x2
+        }
+
+        if (y2 < yMin) {
+          yMin = y2
+        } else if (y2 > yMax) {
+          yMax = y2
+        }
+      })
+
+      return {
+        left: xMin + centerX,
+        top: yMin + centerY,
+        width: xMax - xMin,
+        height: yMax - yMin,
+        right: xMax + centerX,
+        bottom: yMax + centerY,
+      }
+    }
+
+    function calcAllBounding(boundingData) {
+      let left, right, top, bottom
+
+      boundingData.forEach(({ left: l, top: t, right: r, bottom: b }, i) => {
+        if (i === 0) {
+          left = l
+          right = r
+          top = t
+          bottom = b
+        } else {
+          if (l < left) left = l
+          if (r > right) right = r
+          if (t < top) top = t
+          if (b > bottom) bottom = b
+        }
+      })
+
+      return {
+        left,
+        right,
+        top,
+        bottom,
+        width: right - left,
+        height: bottom - top,
+      }
+    }
+  </script>
+	<script>
+    function handler(rotate = 30, rotate2 = 45) {
+      const canvas = document.getElementById('c')
+      const ctx = canvas.getContext('2d')
+
+      let left = 200
+      let top = 300
+      let width = 200
+      let height = 100
+      let halfWidth = width / 2
+      let halfHeight = height / 2
+      let centerX = left + halfWidth
+      let centerY = top + halfHeight
+
+      let x = 600
+      let y = 200
+      let centerX2 = x + halfWidth
+      let centerY2 = y + halfHeight
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      ctx.save()
+      ctx.fillStyle = 'rgba(0,0,0,1)'
+      ctx.translate(centerX, centerY)
+      ctx.rotate(degreesToRadians(rotate))
+      ctx.fillRect(-halfWidth, -halfHeight, width, height)
+      ctx.restore()
+
+      const bounding = getBoundingRect({ width, height, left, top, rotate })
+      ctx.strokeStyle = 'red'
+      ctx.strokeRect(
+        preciseNumber(bounding.left),
+        preciseNumber(bounding.top),
+        toFixed(bounding.width),
+        toFixed(bounding.height)
+      )
+
+      // Second Bounding
+      ctx.save()
+      ctx.fillStyle = 'rgba(0,0,0,1)'
+      ctx.translate(centerX2, centerY2)
+      ctx.rotate(degreesToRadians(rotate2))
+      ctx.fillRect(-halfWidth, -halfHeight, width, height)
+      ctx.restore()
+
+      const bounding2 = getBoundingRect({ width, height, left: x, top: y, rotate: rotate2 })
+      ctx.strokeRect(
+        preciseNumber(bounding2.left),
+        preciseNumber(bounding2.top),
+        toFixed(bounding2.width),
+        toFixed(bounding2.height)
+      )
+
+      // Big Bounding
+      const bigBounding = calcAllBounding([ bounding, bounding2 ])
+      ctx.strokeStyle = 'blue'
+      ctx.strokeRect(
+        preciseNumber(bigBounding.left),
+        preciseNumber(bigBounding.top),
+        toFixed(bigBounding.width),
+        toFixed(bigBounding.height)
+      )
+    }
+
+    handler(0, 0)
+
+    let rotate = 0
+    const timer = setInterval(() => {
+      if (rotate > 360) {
+        return clearInterval(timer)
+      }
+      rotate += 10
+      handler(rotate, -rotate)
+    }, 500)
+	</script>
+</body>
+</html>

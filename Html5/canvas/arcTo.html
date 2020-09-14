@@ -18,6 +18,36 @@
 	<canvas id="c" width="500px" height="500px"></canvas>
 
 	<script>
+    function createBorderRadius(ctx, { x, y, width, height, radius }) {
+      const halfWidth = width / 2
+      const halfHeight = height / 2
+      const left = { x, y: y + halfHeight }
+      const right = { x: x + width, y: y + halfHeight }
+      const top = { x: x + halfWidth, y }
+      const bottom = { x: x + halfWidth, y: y + height }
+
+      ctx.beginPath()
+
+      // 左上角
+      ctx.moveTo(left.x, left.y)
+      ctx.arcTo(x, y, top.x, top.y, radius)
+      ctx.lineTo(top.x, top.y)
+
+      // 右上角
+      ctx.arcTo(x + width, y, right.x, right.y, radius)
+      ctx.lineTo(right.x, right.y)
+
+      // 右下角
+      ctx.arcTo(x + width, y + height, bottom.x, bottom.y, radius)
+      ctx.lineTo(bottom.x, bottom.y)
+
+      // 左下角
+      ctx.arcTo(x, y + height, left.x, left.y, radius)
+      ctx.lineTo(left.x, left.y)
+
+      ctx.closePath()
+    }
+
     (function () {
       const canvas = document.getElementById( 'c' )
       const ctx = canvas.getContext( '2d' )
@@ -48,37 +78,11 @@
       const width = 200
       const height = 200
       const radius = 50
-      const halfWidth = width / 2
-      const halfHeight = height / 2
-      const left = { x, y: y + halfHeight }
-      const right = { x: x + width, y: y + halfHeight }
-      const top = { x: x + halfWidth, y }
-      const bottom = { x: x + halfWidth, y: y + height }
 
       ctx.fillStyle = '#90ee9085'
       ctx.fillRect(x, y, width, height)
 
-      ctx.save()
-      ctx.beginPath()
-
-      // 左上角
-      ctx.moveTo(left.x, left.y)
-      ctx.arcTo(x, y, top.x, top.y, radius)
-      ctx.lineTo(top.x, top.y)
-
-      // 右上角
-      ctx.arcTo(x + width, y, right.x, right.y, radius)
-      ctx.lineTo(right.x, right.y)
-
-      // 右下角
-      ctx.arcTo(x + width, y + height, bottom.x, bottom.y, radius)
-      ctx.lineTo(bottom.x, bottom.y)
-
-      // 左下角
-      ctx.arcTo(x, y + height, left.x, left.y, radius)
-      ctx.lineTo(left.x, left.y)
-
-      ctx.closePath()
+      createBorderRadius(ctx, { x, y, width, height, radius })
       ctx.strokeStyle = 'blue'
       ctx.stroke()
     })()

@@ -15,21 +15,73 @@
 	</style>
 </head>
 <body>
-	<canvas id="c" width="500px" height="300px"></canvas>
+	<canvas id="c" width="500px" height="500px"></canvas>
 
 	<script>
-		'use strict';
+    (function () {
+      const canvas = document.getElementById( 'c' )
+      const ctx = canvas.getContext( '2d' )
+      const cw = canvas.width
+      const ch = canvas.height
+      const gap = 50
 
-		var canvas = document.getElementById( 'c' );
-		var gc = canvas.getContext( '2d' );
+      // 绘制网格
+      ctx.beginPath()
+      ;[cw, ch].forEach((value, j) => {
+        for (let i = 0; i < value / gap; i++) {
+          if (j === 0) {
+            // 竖线
+            ctx.moveTo(i * gap + 0.5, 0)
+            ctx.lineTo(i * gap + 0.5, ch)
+          } else {
+            // 横线
+            ctx.moveTo(0, i * gap + 0.5)
+            ctx.lineTo(cw, i * gap + 0.5)
+          }
+        }
+      })
+      ctx.strokeStyle = '#ccc'
+      ctx.stroke()
 
-		gc.beginPath();
-		gc.moveTo( 100, 240 );
-		gc.arcTo( 200, 100, 300, 200, 50 );
-		gc.stroke();
+      const x = 150
+      const y = 150
+      const width = 200
+      const height = 200
+      const radius = 50
+      const halfWidth = width / 2
+      const halfHeight = height / 2
+      const left = { x, y: y + halfHeight }
+      const right = { x: x + width, y: y + halfHeight }
+      const top = { x: x + halfWidth, y }
+      const bottom = { x: x + halfWidth, y: y + height }
 
+      ctx.fillStyle = '#90ee9085'
+      ctx.fillRect(x, y, width, height)
 
+      ctx.save()
+      ctx.beginPath()
 
+      // 左上角
+      ctx.moveTo(left.x, left.y)
+      ctx.arcTo(x, y, top.x, top.y, radius)
+      ctx.lineTo(top.x, top.y)
+
+      // 右上角
+      ctx.arcTo(x + width, y, right.x, right.y, radius)
+      ctx.lineTo(right.x, right.y)
+
+      // 右下角
+      ctx.arcTo(x + width, y + height, bottom.x, bottom.y, radius)
+      ctx.lineTo(bottom.x, bottom.y)
+
+      // 左下角
+      ctx.arcTo(x, y + height, left.x, left.y, radius)
+      ctx.lineTo(left.x, left.y)
+
+      ctx.closePath()
+      ctx.strokeStyle = 'blue'
+      ctx.stroke()
+    })()
 	</script>
 </body>
 </html>

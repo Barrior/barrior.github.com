@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            width: 320px;
+        }
+
+        .box {
+            display: flex;
+            text-align: center;
+        }
+        
+        .item {
+            margin-right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="item">
+            <h3>avg</h3>
+            <canvas id="canvas1"></canvas>
+        </div>
+        <div class="item">
+            <h3>g</h3>
+            <canvas id="canvas2"></canvas>
+        </div>
+        <div class="item">
+            <h3>default</h3>
+            <canvas id="canvas3"></canvas>
+        </div>
+        <div class="item">
+            <h3>default2</h3>
+            <canvas id="canvas5"></canvas>
+        </div>
+        <div class="item">
+            <h3>位移</h3>
+            <canvas id="canvas4"></canvas>
+        </div>
+    </div>
+    <script>
+        function fn1 (imgPixels, width, height, grayType) {
+            for(var y = 0; y < height; y++){
+                for(var x = 0; x < width; x++){
+                    var i = (y * 4) * width + x * 4;
+                    if (imgPixels.data[i + 3] === 0) continue
+
+                    const r = imgPixels.data[i]
+                    const g = imgPixels.data[i + 1]
+                    const b = imgPixels.data[i + 2]
+                    let gary = 0
+
+                    // https://blog.csdn.net/u011835903/article/details/77742880/
+                    switch (grayType) {
+                        case 'avg':
+                            // 平均值
+                            gray = (r + g + b) / 3
+                            break;
+                        case 'g':
+                            // 仅取绿色
+                            gray = g
+                            break;
+                        case 'default':
+                            gray = (r * 30 + g * 59 + b * 11) / 100
+                            break;
+                        case 'default2':
+                            gray = r * 0.3 + g * 0.59 + b * 0.11
+                            break;
+                        case 'wy':
+                            gray = (r * 28 + g * 151 + b * 77) >> 8
+                            break;
+                    }
+
+                    imgPixels.data[i] = gray;
+                    imgPixels.data[i + 1] = gray;
+                    imgPixels.data[i + 2] = gray;
+                }
+            }
+        }
+        function fn2 (imgPixels, width, height, grayType) {
+            const length = imgPixels.data.length
+            for (var i = 0; i < length; i += 4) {
+                if (imgPixels.data[i + 3] === 0) continue
+
+                const r = imgPixels.data[i]
+                const g = imgPixels.data[i + 1]
+                const b = imgPixels.data[i + 2]
+                let gary = 0
+
+                // https://blog.csdn.net/u011835903/article/details/77742880/
+                switch (grayType) {
+                    case 'avg':
+                        // 平均值
+                        gray = (r + g + b) / 3
+                        break;
+                    case 'g':
+                        // 仅取绿色
+                        gray = g
+                        break;
+                    case 'default':
+                        gray = (r * 30 + g * 59 + b * 11) / 100
+                        break;
+                    case 'default2':
+                        gray = r * 0.3 + g * 0.59 + b * 0.11
+                        break;
+                    case 'wy':
+                        gray = (r * 28 + g * 151 + b * 77) >> 8
+                        break;
+                }
+
+                imgPixels.data[i] = gray;
+                imgPixels.data[i + 1] = gray;
+                imgPixels.data[i + 2] = gray;
+            }
+        }
+        function grayscale(image, canvasId, grayType){
+            const canvas = document.getElementById(canvasId)
+            var canvasContext = canvas.getContext('2d');
+            var imgW = image.width;
+            var imgH = image.height;
+            canvas.width = imgW;
+            canvas.height = imgH;
+
+            // console.time(canvas)
+            // canvasContext.filter = 'grayscale(100%)'
+            // canvasContext.drawImage(image, 0, 0);
+            // console.timeEnd(canvas)
+
+            console.time(canvas)
+            canvasContext.drawImage(image, 0, 0);
+
+            var imgPixels = canvasContext.getImageData(0, 0, imgW, imgH);
+            
+            fn2(imgPixels, imgPixels.width, imgPixels.height, grayType)
+            console.timeEnd(canvas)
+
+            canvasContext.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
+        }
+
+        function loadImage(src, cb) {
+            const image = new Image()
+            image.addEventListener('load', () => cb(image))
+            image.crossOrigin = "Anonymous";
+            image.src = src
+        }
+
+        loadImage('https://raw.githubusercontent.com/Barrior/assets/main/chrome-logo.svg', (image) => {
+            grayscale(image, 'canvas1', 'avg')
+            grayscale(image, 'canvas2', 'g')
+            grayscale(image, 'canvas3', 'default')
+            grayscale(image, 'canvas5', 'default2')
+            grayscale(image, 'canvas4', 'wy')
+        })
+    </script>
+</body>
+</html>

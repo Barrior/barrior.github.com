@@ -15,11 +15,10 @@
     <link rel="dns-prefetch" href="//tuchong.com">
     <link rel="dns-prefetch" href="//github.com">
 
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="apple-touch-icon" href="barrior/touch-icon-180.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="barrior/touch-icon-152.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="barrior/touch-icon-167.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="barrior/touch-icon-180.png">
+    <link rel="shortcut icon" href="public/touch-icon-100.png">
+    <link rel="apple-touch-icon" href="public/touch-icon-180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="public/touch-icon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="public/touch-icon-180.png">
 
     <style>
         * {
@@ -115,8 +114,8 @@
         </section>
     </section>
 
-    <script src="https://unpkg.com/jparticles@2.0.1/production/jparticles.js"></script>
-    <script src="https://unpkg.com/jparticles@2.0.1/production/particle.js"></script>
+    <script src="https://unpkg.com/jparticles@3.4.0/browser/jparticles.base.js"></script>
+    <script src="https://unpkg.com/jparticles@3.4.0/browser/particle.js"></script>
     <script>
         +function () {
             var config = {
@@ -130,7 +129,7 @@
                 config.proximity = .16;
                 config.range = .5;
             }
-            new JParticles.particle('.bg', config);
+            new JParticles.Particle('.bg', config);
         }();
     </script>
     <script>
